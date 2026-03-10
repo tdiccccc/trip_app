@@ -13,14 +13,30 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "Vue.volar",
-        "bmewburn.vscode-intelephense-client",
-        "bradlc.vscode-tailwindcss",
-        "qwtel.sqlite-viewer"
+          "bmewburn.vscode-intelephense-client",
+          "amiralizadeh9480.laravel-extra-intellisense",
+          "xdebug.php-debug",
+          "junstyle.php-cs-fixer",
+          "mhutchie.git-graph",
+          "eamodio.gitlens",
+          "yzhang.markdown-all-in-one",
+          "bierner.markdown-mermaid",
+          "bpruitt-goddard.mermaid-markdown-syntax-highlighting",
+          "GitHub.copilot",
+          "GitHub.copilot-chat",
+          "GitHub.vscode-pull-request-github",
+          "github.vscode-github-actions",
+          "cweijan.vscode-database-client2",
+          "mikestead.dotenv",
+          "mrmlnc.vscode-apache",
+          "formulahendry.code-runner",
+          "42Crunch.vscode-openapi",
+          "recca0120.vscode-phpunit"
       ],
       "settings": {
+        "editor.formatOnSave": true,
         "php.validate.executablePath": "/usr/local/bin/php"
-      }
+      },
     }
   }
 }

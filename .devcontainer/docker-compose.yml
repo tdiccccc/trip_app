@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ..:/workspace:cached
+    working_dir: /workspace
     ports:
       - "3900:3900"
       - "8900:8900"
