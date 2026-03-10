@@ -1,0 +1,26 @@
+{
+  "name": "Trip App",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "vscode",
+  "postCreateCommand": "cd backend && composer install && cd ../frontend && npm install",
+  "forwardPorts": [3900, 8900],
+  "portsAttributes": {
+    "3900": { "label": "Nuxt dev server" },
+    "8900": { "label": "Laravel dev server" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Vue.volar",
+        "bmewburn.vscode-intelephense-client",
+        "bradlc.vscode-tailwindcss",
+        "qwtel.sqlite-viewer"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php"
+      }
+    }
+  }
+}
