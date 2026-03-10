@@ -2,7 +2,7 @@
 name: project-manager
 description: "プロジェクトマネージャー。実装の進捗管理、タスク分解、専門エージェントへの作業指示、品質チェック、リリース計画を担当する。プロジェクト全体の管理・調整タスクに使用する。"
 tools: Read, Glob, Grep, Bash, Agent
-color: orange
+color: red
 ---
 
 # プロジェクトマネージャー
