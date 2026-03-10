@@ -2,17 +2,17 @@
 
 ## 技術スタック
 
-| レイヤー | 技術 | バージョン目安 |
-|----------|------|---------------|
-| **フロントエンド** | Nuxt 4 (Vue 3 + Nitro) + TypeScript | 4.x |
-| **UIフレームワーク** | Tailwind CSS | 4+ |
-| **バックエンド** | Laravel | 12 |
-| **DB** | SQLite | 3 |
-| **認証** | Laravel Sanctum (SPA認証) | — |
-| **写真ストレージ** | Cloudflare R2 (S3互換) | 無料枠 10GB |
-| **CI/CD** | GitHub Actions | — |
-| **ホスティング** | Google Cloud Run | 無料枠 |
-| **開発環境** | Docker + Dev Containers | — |
+| レイヤー             | 技術                                | バージョン目安 |
+| -------------------- | ----------------------------------- | -------------- |
+| **フロントエンド**   | Nuxt 4 (Vue 3 + Nitro) + TypeScript | 4.x            |
+| **UIフレームワーク** | Tailwind CSS                        | 4+             |
+| **バックエンド**     | Laravel                             | 12             |
+| **DB**               | SQLite                              | 3              |
+| **認証**             | Laravel Sanctum (SPA認証)           | —              |
+| **写真ストレージ**   | Cloudflare R2 (S3互換)              | 無料枠 10GB    |
+| **CI/CD**            | GitHub Actions                      | —              |
+| **ホスティング**     | Google Cloud Run                    | 無料枠         |
+| **開発環境**         | Docker + Dev Containers             | —              |
 
 ---
 
@@ -67,12 +67,12 @@ Laravel 12 側はオニオンアーキテクチャで設計する。依存の方
 
 #### 各層の責務
 
-| 層 | 責務 | 配置先 | 依存先 |
-|----|------|--------|--------|
-| **Domain** | ビジネスルール、エンティティ、リポジトリインターフェース | `packages/Domain/` | なし（最内層） |
-| **Application** | ユースケース（操作の流れ）、DTO | `packages/Application/` | Domain のみ |
-| **Infrastructure** | DB実装、外部API、フレームワーク連携 | `app/` (Laravel標準) | Application, Domain |
-| **Presentation** | コントローラー、リクエスト/レスポンス | `app/Http/` | Application |
+| 層                 | 責務                                                     | 配置先                  | 依存先              |
+| ------------------ | -------------------------------------------------------- | ----------------------- | ------------------- |
+| **Domain**         | ビジネスルール、エンティティ、リポジトリインターフェース | `packages/Domain/`      | なし（最内層）      |
+| **Application**    | ユースケース（操作の流れ）、DTO                          | `packages/Application/` | Domain のみ         |
+| **Infrastructure** | DB実装、外部API、フレームワーク連携                      | `app/` (Laravel標準)    | Application, Domain |
+| **Presentation**   | コントローラー、リクエスト/レスポンス                    | `app/Http/`             | Application         |
 
 #### 依存ルール
 - Domain 層は **何にも依存しない**（Pure PHP）
@@ -254,15 +254,15 @@ services:
     volumes:
       - ..:/workspace
     ports:
-      - "3000:3000"       # Nuxt dev server
-      - "8000:8000"       # Laravel dev server
+      - "3900:3900"       # Nuxt dev server
+      - "8900:8900"       # Laravel dev server
 ```
 
 ### devcontainer.json の方針
 - **ベースイメージ**: PHP 8.4 + Node.js 22（1コンテナで両方動かす）
 - **VS Code 拡張**: Vue - Official, PHP Intelephense, Tailwind CSS IntelliSense, SQLite Viewer
 - **postCreateCommand**: `cd backend && composer install && cd ../frontend && npm install`
-- **forwardPorts**: 3000 (Nuxt), 8000 (Laravel)
+- **forwardPorts**: 3900 (Nuxt), 8900 (Laravel)
 
 ### ローカル開発コマンド
 
@@ -343,15 +343,15 @@ expenses        # 費用記録
 
 ## Nuxt 4 の学習ポイント
 
-| 機能 | 説明 | 使いどころ |
-|------|------|-----------|
-| **ファイルベースルーティング** | `app/pages/` にファイルを置くだけでルート生成 | 全ページ |
-| **useFetch / $fetch** | SSR対応のデータフェッチ | Laravel API 呼び出し |
-| **useState** | SSR対応のグローバルステート | ユーザー情報保持 |
-| **Nitro サーバー** | `server/api/` でBFFレイヤー構築可能 | API Proxy、認証中継 |
-| **useHead / useSeoMeta** | メタタグ動的設定 | 各ページのタイトル |
-| **ミドルウェア** | `middleware/` でルートガード | 認証チェック |
-| **Nuxt UI / Nuxt Image** | 公式モジュールで UI 強化 | 画像最適化、UI部品 |
+| 機能                           | 説明                                          | 使いどころ           |
+| ------------------------------ | --------------------------------------------- | -------------------- |
+| **ファイルベースルーティング** | `app/pages/` にファイルを置くだけでルート生成 | 全ページ             |
+| **useFetch / $fetch**          | SSR対応のデータフェッチ                       | Laravel API 呼び出し |
+| **useState**                   | SSR対応のグローバルステート                   | ユーザー情報保持     |
+| **Nitro サーバー**             | `server/api/` でBFFレイヤー構築可能           | API Proxy、認証中継  |
+| **useHead / useSeoMeta**       | メタタグ動的設定                              | 各ページのタイトル   |
+| **ミドルウェア**               | `middleware/` でルートガード                  | 認証チェック         |
+| **Nuxt UI / Nuxt Image**       | 公式モジュールで UI 強化                      | 画像最適化、UI部品   |
 
 ---
 
@@ -371,10 +371,10 @@ expenses        # 費用記録
 
 ## 無料枠まとめ
 
-| サービス | 無料枠 | 用途 |
-|----------|--------|------|
-| Cloud Run | 200万リクエスト/月 | アプリホスティング |
-| Artifact Registry | 500MB | コンテナイメージ保存 |
-| Cloud Storage | 5GB | SQLite 複製先 (Litestream) |
-| Cloudflare R2 | 10GB + エグレス無料 | 写真ストレージ |
-| GitHub Actions | 2,000分/月 (private) | CI/CD |
+| サービス          | 無料枠               | 用途                       |
+| ----------------- | -------------------- | -------------------------- |
+| Cloud Run         | 200万リクエスト/月   | アプリホスティング         |
+| Artifact Registry | 500MB                | コンテナイメージ保存       |
+| Cloud Storage     | 5GB                  | SQLite 複製先 (Litestream) |
+| Cloudflare R2     | 10GB + エグレス無料  | 写真ストレージ             |
+| GitHub Actions    | 2,000分/月 (private) | CI/CD                      |

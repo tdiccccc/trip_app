@@ -28,7 +28,7 @@ color: cyan
 ```
 
 - **ベースイメージ**: PHP 8.4 + Node.js 22（1コンテナで両方動かす）
-- **ポート**: 3000（Nuxt dev server）、8000（Laravel dev server）
+- **ポート**: 3900（Nuxt dev server）、8900（Laravel dev server）
 - **ボリューム**: ワークスペース全体をマウント
 - **postCreateCommand**: `cd backend && composer install && cd ../frontend && npm install`
 - **VS Code 拡張**: Vue - Official, PHP Intelephense, Tailwind CSS IntelliSense, SQLite Viewer
@@ -95,13 +95,13 @@ jobs:
 
 ## 無料枠の制約
 
-| サービス | 無料枠 | 注意点 |
-|----------|--------|--------|
-| Cloud Run | 200万リクエスト/月 | min-instances=0 必須 |
-| Artifact Registry | 500MB | イメージサイズを抑える |
-| Cloud Storage | 5GB | SQLite 複製先（Litestream） |
-| Cloudflare R2 | 10GB + エグレス無料 | 写真ストレージ |
-| GitHub Actions | 2,000分/月（private） | ビルド時間を最適化 |
+| サービス          | 無料枠                | 注意点                      |
+| ----------------- | --------------------- | --------------------------- |
+| Cloud Run         | 200万リクエスト/月    | min-instances=0 必須        |
+| Artifact Registry | 500MB                 | イメージサイズを抑える      |
+| Cloud Storage     | 5GB                   | SQLite 複製先（Litestream） |
+| Cloudflare R2     | 10GB + エグレス無料   | 写真ストレージ              |
+| GitHub Actions    | 2,000分/月（private） | ビルド時間を最適化          |
 
 ## 参照ドキュメント
 
