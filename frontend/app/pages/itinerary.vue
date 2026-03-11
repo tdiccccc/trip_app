@@ -15,19 +15,12 @@ const { fetchItems, createItem, updateItem, deleteItem, reorderItems } = useItin
 const TRIP_DATES = ['2026-03-28', '2026-03-29']
 const selectedDate = ref(TRIP_DATES[0])
 
-// Fetch items for selected date
-const { data: response, refresh } = fetchItems(selectedDate.value)
+// Fetch items for selected date (reactively watches selectedDate)
+const { data: response, refresh } = fetchItems(selectedDate)
 
 const items = computed(() => {
   if (!response.value?.data) return []
   return [...response.value.data].sort((a, b) => a.sort_order - b.sort_order)
-})
-
-// Watch date change and refetch
-watch(selectedDate, async () => {
-  const result = fetchItems(selectedDate.value)
-  const { data: newData } = await result
-  response.value = newData.value
 })
 
 // Current time highlight

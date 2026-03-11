@@ -28,27 +28,16 @@ const categoryLabel = (key: string) => {
 // Filter
 const selectedCategory = ref<string>('')
 
-// Fetch data
-const { data: expensesResponse, refresh: refreshExpenses } = fetchExpenses()
+// Fetch data (reactively watches selectedCategory)
+const { data: expensesResponse, refresh: refreshExpenses } = fetchExpenses(selectedCategory)
 const { data: summaryResponse, refresh: refreshSummary } = fetchSummary()
 
 const expenses = computed<Expense[]>(() => {
-  if (!expensesResponse.value?.data) return []
-  const all = expensesResponse.value.data
-  if (!selectedCategory.value) return all
-  return all.filter((e) => e.category === selectedCategory.value)
+  return expensesResponse.value?.data ?? []
 })
 
 const summary = computed<ExpenseSummary | null>(() => {
   return summaryResponse.value?.data ?? null
-})
-
-// Watch filter and refetch
-watch(selectedCategory, async () => {
-  const query = selectedCategory.value ? `?category=${selectedCategory.value}` : ''
-  const result = useApiFetch<{ data: Expense[] }>(`/api/expenses${query}`)
-  const { data: newData } = await result
-  expensesResponse.value = newData.value
 })
 
 // Refresh both

@@ -18,15 +18,19 @@ interface FetchPhotosParams {
 export const useAlbum = () => {
   const { apiFetch } = useApiClient()
 
-  const fetchPhotos = (params?: FetchPhotosParams) => {
-    const query = new URLSearchParams()
-    if (params?.spot_id) query.set('spot_id', String(params.spot_id))
-    if (params?.sort) query.set('sort', params.sort)
-    if (params?.order) query.set('order', params.order)
-    if (params?.page) query.set('page', String(params.page))
-    if (params?.per_page) query.set('per_page', String(params.per_page))
-    const qs = query.toString()
-    return useApiFetch<PhotoListResponse>(`/api/photos${qs ? '?' + qs : ''}`)
+  const fetchPhotos = (params?: MaybeRefOrGetter<FetchPhotosParams | undefined>) => {
+    const url = computed(() => {
+      const p = toValue(params)
+      const query = new URLSearchParams()
+      if (p?.spot_id) query.set('spot_id', String(p.spot_id))
+      if (p?.sort) query.set('sort', p.sort)
+      if (p?.order) query.set('order', p.order)
+      if (p?.page) query.set('page', String(p.page))
+      if (p?.per_page) query.set('per_page', String(p.per_page))
+      const qs = query.toString()
+      return `/api/photos${qs ? '?' + qs : ''}`
+    })
+    return useApiFetch<PhotoListResponse>(url)
   }
 
   const uploadPhoto = async (

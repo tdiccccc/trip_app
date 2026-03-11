@@ -18,19 +18,12 @@ const selectedSpotId = ref<number | undefined>(undefined)
 const { data: spotsResponse } = fetchSpots()
 const spots = computed<Spot[]>(() => spotsResponse.value?.data ?? [])
 
-// Fetch photos
-const { data: photosResponse, refresh } = fetchPhotos(
+// Fetch photos (reactively watches selectedSpotId)
+const photoParams = computed(() =>
   selectedSpotId.value ? { spot_id: selectedSpotId.value } : undefined,
 )
+const { data: photosResponse, refresh } = fetchPhotos(photoParams)
 const photos = computed<Photo[]>(() => photosResponse.value?.data ?? [])
-
-// Watch filter change
-watch(selectedSpotId, async () => {
-  const params = selectedSpotId.value ? { spot_id: selectedSpotId.value } : undefined
-  const result = fetchPhotos(params)
-  const { data: newData } = await result
-  photosResponse.value = newData.value
-})
 
 // Upload
 const showUploader = ref(false)

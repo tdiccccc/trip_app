@@ -4,9 +4,12 @@ import type { ApiResponse } from '~/types/auth'
 export const useExpenses = () => {
   const { apiFetch } = useApiClient()
 
-  const fetchExpenses = (category?: string) => {
-    const query = category ? `?category=${category}` : ''
-    return useApiFetch<ApiResponse<Expense[]>>(`/api/expenses${query}`)
+  const fetchExpenses = (category?: MaybeRefOrGetter<string>) => {
+    const url = computed(() => {
+      const c = toValue(category)
+      return c ? `/api/expenses?category=${c}` : '/api/expenses'
+    })
+    return useApiFetch<ApiResponse<Expense[]>>(url)
   }
 
   const fetchSummary = () => {

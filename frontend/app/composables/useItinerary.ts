@@ -4,9 +4,12 @@ import type { ApiResponse } from '~/types/auth'
 export const useItinerary = () => {
   const { apiFetch } = useApiClient()
 
-  const fetchItems = (date?: string) => {
-    const query = date ? `?date=${date}` : ''
-    return useApiFetch<ApiResponse<ItineraryItem[]>>(`/api/itinerary${query}`)
+  const fetchItems = (date?: MaybeRefOrGetter<string>) => {
+    const url = computed(() => {
+      const d = toValue(date)
+      return d ? `/api/itinerary?date=${d}` : '/api/itinerary'
+    })
+    return useApiFetch<ApiResponse<ItineraryItem[]>>(url)
   }
 
   const createItem = async (input: CreateItineraryItemInput) => {
