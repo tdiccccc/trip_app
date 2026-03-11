@@ -1,8 +1,5 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="flex min-h-dvh flex-col bg-amber-50/30">
     <slot />
   </div>
 </template>
