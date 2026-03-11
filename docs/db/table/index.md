@@ -3,7 +3,7 @@
 ## 概要
 
 伊勢旅行アプリのデータベーステーブル一覧。
-全9テーブル、SQLite 3 で運用する。
+全11テーブル、SQLite 3 で運用する。
 
 ---
 
@@ -12,14 +12,16 @@
 | # | テーブル名 | 日本語名 | 概要 | 定義書 |
 |---|-----------|---------|------|--------|
 | 1 | users | ユーザー | アプリ利用者（2人分） | [users.md](./users.md) |
-| 2 | spots | 観光スポット | 伊勢旅行の観光スポット基本情報 | [spots.md](./spots.md) |
-| 3 | spot_memos | スポットメモ | スポットへの「行きたい！」メモ | [spot_memos.md](./spot_memos.md) |
-| 4 | itinerary_items | しおり項目 | タイムライン形式の旅行行程 | [itinerary_items.md](./itinerary_items.md) |
-| 5 | photos | 写真 | アップロード写真のメタデータ（R2パス） | [photos.md](./photos.md) |
-| 6 | board_posts | 掲示板投稿 | ふたりの掲示板メッセージ | [board_posts.md](./board_posts.md) |
-| 7 | reactions | リアクション | 掲示板投稿へのスタンプ | [reactions.md](./reactions.md) |
-| 8 | packing_items | パッキング項目 | 持ち物チェックリスト | [packing_items.md](./packing_items.md) |
-| 9 | expenses | 費用記録 | 旅行の支出記録・割り勘計算用 | [expenses.md](./expenses.md) |
+| 2 | trips | 旅行 | 旅行の基本情報（タイトル・期間・行先） | [trips.md](./trips.md) |
+| 3 | trip_members | 旅行メンバー | 旅行への参加者と役割 | [trip_members.md](./trip_members.md) |
+| 4 | spots | 観光スポット | 旅行ごとの観光スポット基本情報 | [spots.md](./spots.md) |
+| 5 | spot_memos | スポットメモ | スポットへの「行きたい！」メモ | [spot_memos.md](./spot_memos.md) |
+| 6 | itinerary_items | しおり項目 | 旅行ごとのタイムライン形式の行程 | [itinerary_items.md](./itinerary_items.md) |
+| 7 | photos | 写真 | 旅行ごとのアップロード写真メタデータ | [photos.md](./photos.md) |
+| 8 | board_posts | 掲示板投稿 | 旅行ごとのふたりの掲示板メッセージ | [board_posts.md](./board_posts.md) |
+| 9 | reactions | リアクション | 掲示板投稿へのスタンプ | [reactions.md](./reactions.md) |
+| 10 | packing_items | パッキング項目 | 旅行ごとの持ち物チェックリスト | [packing_items.md](./packing_items.md) |
+| 11 | expenses | 費用記録 | 旅行ごとの支出記録・割り勘計算用 | [expenses.md](./expenses.md) |
 
 ---
 
@@ -56,5 +58,6 @@ SQLite には ENUM 型がないため、以下のカラムはアプリ層（Lara
 |---------|--------|--------|
 | spots | category | sightseeing / food / hotel / other |
 | itinerary_items | transport | train / car / walk / bus / none |
+| trip_members | role | owner / member |
 | packing_items | assignee | self / partner / shared |
 | expenses | category | transport / food / souvenir / accommodation / other |

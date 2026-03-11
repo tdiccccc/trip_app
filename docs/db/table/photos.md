@@ -11,36 +11,40 @@
 | # | カラム名 | 型 | NULL | デフォルト | 説明 |
 |---|---------|-----|------|----------|------|
 | 1 | id | INTEGER | NO | AUTO INCREMENT | 主キー |
-| 2 | user_id | INTEGER | NO | - | アップロード者のユーザーID（外部キー） |
-| 3 | spot_id | INTEGER | YES | NULL | スポットID（外部キー、紐付けなしの場合NULL） |
-| 4 | storage_path | TEXT | NO | - | R2 ストレージ上のファイルパス |
-| 5 | thumbnail_path | TEXT | YES | NULL | サムネイル画像のストレージパス |
-| 6 | original_filename | TEXT | NO | - | 元のファイル名 |
-| 7 | mime_type | TEXT | NO | - | MIMEタイプ（image/jpeg, image/png 等） |
-| 8 | file_size | INTEGER | NO | - | ファイルサイズ（バイト） |
-| 9 | caption | TEXT | YES | NULL | キャプション・コメント |
-| 10 | taken_at | TEXT | YES | NULL | 撮影日時 |
-| 11 | created_at | TEXT | YES | NULL | 作成日時 |
-| 12 | updated_at | TEXT | YES | NULL | 更新日時 |
+| 2 | trip_id | INTEGER | NO | - | 旅行ID（外部キー） |
+| 3 | user_id | INTEGER | NO | - | アップロード者のユーザーID（外部キー） |
+| 4 | spot_id | INTEGER | YES | NULL | スポットID（外部キー、紐付けなしの場合NULL） |
+| 5 | storage_path | TEXT | NO | - | R2 ストレージ上のファイルパス |
+| 6 | thumbnail_path | TEXT | YES | NULL | サムネイル画像のストレージパス |
+| 7 | original_filename | TEXT | NO | - | 元のファイル名 |
+| 8 | mime_type | TEXT | NO | - | MIMEタイプ（image/jpeg, image/png 等） |
+| 9 | file_size | INTEGER | NO | - | ファイルサイズ（バイト） |
+| 10 | caption | TEXT | YES | NULL | キャプション・コメント |
+| 11 | taken_at | TEXT | YES | NULL | 撮影日時 |
+| 12 | created_at | TEXT | YES | NULL | 作成日時 |
+| 13 | updated_at | TEXT | YES | NULL | 更新日時 |
 
 ## インデックス
 
 | # | インデックス名 | カラム | 種別 |
 |---|--------------|--------|------|
 | 1 | PRIMARY | id | PRIMARY |
-| 2 | photos_user_id_index | user_id | INDEX ※ 小規模アプリのため省略 |
-| 3 | photos_spot_id_index | spot_id | INDEX ※ 小規模アプリのため省略 |
-| 4 | photos_taken_at_index | taken_at | INDEX |
+| 2 | photos_trip_id_index | trip_id | INDEX |
+| 3 | photos_user_id_index | user_id | INDEX ※ 小規模アプリのため省略 |
+| 4 | photos_spot_id_index | spot_id | INDEX ※ 小規模アプリのため省略 |
+| 5 | photos_taken_at_index | taken_at | INDEX |
 
 ## リレーション
 
 | カラム | 参照先 | 種別 | 説明 |
 |--------|--------|------|------|
+| trip_id | trips.id | belongsTo | 所属する旅行 |
 | user_id | users.id | belongsTo | アップロード者 |
 | spot_id | spots.id | belongsTo | 紐づくスポット（nullable） |
 
 ## 備考
 
+- trip_id の外部キー制約は ON DELETE CASCADE（旅行削除時に写真メタデータも削除）
 - storage_path は ValueObject `PhotoPath` にマッピングされる
 - R2 のファイルパスは `photos/{user_id}/{uuid}.{ext}` の形式を想定
 - taken_at により時系列ソートを実現（EXIF 情報から取得 or 手動設定）
