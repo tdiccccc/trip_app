@@ -28,8 +28,8 @@
 | # | インデックス名 | カラム | 種別 |
 |---|--------------|--------|------|
 | 1 | PRIMARY | id | PRIMARY |
-| 2 | photos_user_id_index | user_id | INDEX |
-| 3 | photos_spot_id_index | spot_id | INDEX |
+| 2 | photos_user_id_index | user_id | INDEX ※ 小規模アプリのため省略 |
+| 3 | photos_spot_id_index | spot_id | INDEX ※ 小規模アプリのため省略 |
 | 4 | photos_taken_at_index | taken_at | INDEX |
 
 ## リレーション

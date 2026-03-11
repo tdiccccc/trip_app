@@ -13,7 +13,7 @@
 | 2 | user_id | INTEGER | NO | - | 投稿者のユーザーID（外部キー） |
 | 3 | body | TEXT | NO | - | 投稿本文 |
 | 4 | photo_id | INTEGER | YES | NULL | ベストショット写真ID（外部キー、photos テーブル） |
-| 5 | is_best_shot | INTEGER | NO | 0 | 「今日のベストショット」フラグ（0: 通常投稿 / 1: ベストショット） |
+| 5 | is_best_shot | BOOLEAN (INTEGER 0/1) | NO | FALSE (0) | 「今日のベストショット」フラグ（0: 通常投稿 / 1: ベストショット） |
 | 6 | created_at | TEXT | YES | NULL | 作成日時 |
 | 7 | updated_at | TEXT | YES | NULL | 更新日時 |
 
@@ -22,8 +22,8 @@
 | # | インデックス名 | カラム | 種別 |
 |---|--------------|--------|------|
 | 1 | PRIMARY | id | PRIMARY |
-| 2 | board_posts_user_id_index | user_id | INDEX |
-| 3 | board_posts_photo_id_index | photo_id | INDEX |
+| 2 | board_posts_user_id_index | user_id | INDEX ※ 小規模アプリのため省略 |
+| 3 | board_posts_photo_id_index | photo_id | INDEX ※ 小規模アプリのため省略 |
 | 4 | board_posts_created_at_index | created_at | INDEX |
 
 ## リレーション
@@ -36,6 +36,6 @@
 
 ## 備考
 
-- SQLite には BOOLEAN 型がないため、is_best_shot は INTEGER（0/1）で管理する
+- is_best_shot は Laravel の boolean() を使用（SQLite では内部的に INTEGER 0/1）
 - created_at にインデックスを付与し、タイムライン表示（新しい順）の取得を高速化
 - ソフトデリートは不要（2人専用アプリのため、誤削除時は再投稿で対応）

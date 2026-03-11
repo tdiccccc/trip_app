@@ -12,7 +12,7 @@
 | 1 | id | INTEGER | NO | AUTO INCREMENT | 主キー |
 | 2 | user_id | INTEGER | NO | - | 作成者のユーザーID（外部キー） |
 | 3 | name | TEXT | NO | - | 持ち物名 |
-| 4 | is_checked | INTEGER | NO | 0 | チェック済みフラグ（0: 未チェック / 1: チェック済み） |
+| 4 | is_checked | BOOLEAN (INTEGER 0/1) | NO | FALSE (0) | チェック済みフラグ（0: 未チェック / 1: チェック済み） |
 | 5 | assignee | TEXT | NO | 'shared' | 担当（self / partner / shared） |
 | 6 | category | TEXT | YES | NULL | カテゴリ（衣類・洗面用具・電子機器など、自由記述） |
 | 7 | sort_order | INTEGER | NO | 0 | 表示順 |
@@ -35,7 +35,7 @@
 
 ## 備考
 
-- is_checked は SQLite に BOOLEAN がないため INTEGER（0/1）で管理する
+- is_checked は Laravel の boolean() を使用（SQLite では内部的に INTEGER 0/1）
 - assignee の値（self / partner / shared）はアプリ層でバリデーションする
 - テンプレートからの一括追加は API 層で複数レコードを INSERT する形で実現する
 - `PATCH /api/packing/:id` でチェック状態の切り替えと項目編集の両方に対応する

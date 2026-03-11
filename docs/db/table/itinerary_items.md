@@ -28,8 +28,8 @@
 | # | インデックス名 | カラム | 種別 |
 |---|--------------|--------|------|
 | 1 | PRIMARY | id | PRIMARY |
-| 2 | itinerary_items_user_id_index | user_id | INDEX |
-| 3 | itinerary_items_spot_id_index | spot_id | INDEX |
+| 2 | itinerary_items_user_id_index | user_id | INDEX ※ 小規模アプリのため省略 |
+| 3 | itinerary_items_spot_id_index | spot_id | INDEX ※ 小規模アプリのため省略 |
 | 4 | itinerary_items_date_sort_order_index | date, sort_order | INDEX (複合) |
 
 ## リレーション

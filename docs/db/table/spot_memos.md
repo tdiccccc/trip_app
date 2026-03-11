@@ -22,8 +22,8 @@ API エンドポイント `POST /api/spots/:id/memos` に対応。
 | # | インデックス名 | カラム | 種別 |
 |---|--------------|--------|------|
 | 1 | PRIMARY | id | PRIMARY |
-| 2 | spot_memos_spot_id_index | spot_id | INDEX |
-| 3 | spot_memos_user_id_index | user_id | INDEX |
+| 2 | spot_memos_spot_id_index | spot_id | INDEX ※ 小規模アプリのため省略 |
+| 3 | spot_memos_user_id_index | user_id | INDEX ※ 小規模アプリのため省略 |
 
 ## リレーション
 

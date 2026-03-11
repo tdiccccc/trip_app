@@ -21,8 +21,8 @@ API エンドポイント `POST /api/board/:id/reactions` に対応する。
 | # | インデックス名 | カラム | 種別 |
 |---|--------------|--------|------|
 | 1 | PRIMARY | id | PRIMARY |
-| 2 | reactions_board_post_id_index | board_post_id | INDEX |
-| 3 | reactions_user_id_index | user_id | INDEX |
+| 2 | reactions_board_post_id_index | board_post_id | INDEX ※ 小規模アプリのため省略 |
+| 3 | reactions_user_id_index | user_id | INDEX ※ 小規模アプリのため省略 |
 | 4 | reactions_post_user_emoji_unique | board_post_id, user_id, emoji | UNIQUE (複合) |
 
 ## リレーション
