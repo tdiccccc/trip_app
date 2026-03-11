@@ -12,11 +12,11 @@ const emit = defineEmits<{
 }>()
 
 const transportOptions: { value: TransportType; label: string }[] = [
-  { value: 'train', label: '\u96FB\u8ECA' },
-  { value: 'car', label: '\u8ECA' },
-  { value: 'walk', label: '\u5F92\u6B69' },
-  { value: 'bus', label: '\u30D0\u30B9' },
-  { value: 'none', label: '\u306A\u3057' },
+  { value: 'train', label: '電車' },
+  { value: 'car', label: '車' },
+  { value: 'walk', label: '徒歩' },
+  { value: 'bus', label: 'バス' },
+  { value: 'none', label: 'なし' },
 ]
 
 const form = reactive<CreateItineraryItemInput>({

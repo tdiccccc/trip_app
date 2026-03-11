@@ -7,7 +7,7 @@ definePageMeta({
 })
 
 useHead({
-  title: '\u30A2\u30EB\u30D0\u30E0 - Ise Trip',
+  title: 'アルバム - Ise Trip',
 })
 
 const { fetchPhotos, deletePhoto } = useAlbum()
@@ -49,7 +49,7 @@ const closeLightbox = () => {
 
 const handleDeletePhoto = async () => {
   if (!selectedPhoto.value) return
-  if (!confirm('\u3053\u306E\u5199\u771F\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F')) return
+  if (!confirm('この写真を削除しますか？')) return
   try {
     await deletePhoto(selectedPhoto.value.id)
     closeLightbox()

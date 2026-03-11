@@ -17,11 +17,11 @@ const icon = computed(() => {
 })
 
 const labelMap: Record<string, string> = {
-  train: '\u96FB\u8ECA',
-  car: '\u8ECA',
-  walk: '\u5F92\u6B69',
-  bus: '\u30D0\u30B9',
-  none: '\u306A\u3057',
+  train: '電車',
+  car: '車',
+  walk: '徒歩',
+  bus: 'バス',
+  none: 'なし',
 }
 
 const label = computed(() => {

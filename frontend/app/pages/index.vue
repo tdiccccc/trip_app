@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Ise Trip - \u30C8\u30C3\u30D7',
+  title: 'Ise Trip - トップ',
 })
 
 // Trip date: 2026-03-28
@@ -36,8 +36,8 @@ const countdown = computed(() => {
 })
 
 const quickLinks = [
-  { to: '/itinerary', label: '\u3057\u304A\u308A', description: '\u65C5\u884C\u306E\u4E88\u5B9A\u3092\u78BA\u8A8D' },
-  { to: '/album', label: '\u30A2\u30EB\u30D0\u30E0', description: '\u5199\u771F\u3092\u898B\u308B\u30FB\u8FFD\u52A0' },
+  { to: '/itinerary', label: 'しおり', description: '旅行の予定を確認' },
+  { to: '/album', label: 'アルバム', description: '写真を見る・追加' },
 ]
 </script>
 

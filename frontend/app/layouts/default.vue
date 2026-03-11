@@ -3,8 +3,8 @@ const { isAuthenticated, logout } = useAuth()
 const route = useRoute()
 
 const navItems = [
-  { to: '/itinerary', label: '\u3057\u304A\u308A', icon: 'calendar' },
-  { to: '/album', label: '\u30A2\u30EB\u30D0\u30E0', icon: 'photo' },
+  { to: '/itinerary', label: 'しおり', icon: 'calendar' },
+  { to: '/album', label: 'アルバム', icon: 'photo' },
 ]
 </script>
 

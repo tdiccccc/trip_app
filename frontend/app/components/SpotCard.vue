@@ -6,10 +6,10 @@ defineProps<{
 }>()
 
 const categoryLabels: Record<string, string> = {
-  sightseeing: '\u89B3\u5149',
-  food: '\u30B0\u30EB\u30E1',
-  hotel: '\u5BBF\u6CCA',
-  other: '\u305D\u306E\u4ED6',
+  sightseeing: '観光',
+  food: 'グルメ',
+  hotel: '宿泊',
+  other: 'その他',
 }
 
 const categoryColors: Record<string, string> = {

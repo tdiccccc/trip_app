@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useHead({
-  title: '\u30ED\u30B0\u30A4\u30F3 - Ise Trip',
+  title: 'ログイン - Ise Trip',
 })
 
 const { login, isAuthenticated } = useAuth()
@@ -35,7 +35,7 @@ const handleLogin = async () => {
     ) {
       errorMessage.value = (error.data as { message: string }).message
     } else {
-      errorMessage.value = '\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u30D1\u30B9\u30EF\u30FC\u30C9\u304C\u6B63\u3057\u304F\u3042\u308A\u307E\u305B\u3093\u3002'
+      errorMessage.value = 'メールアドレスまたはパスワードが正しくありません。'
     }
   } finally {
     isLoading.value = false
@@ -96,7 +96,7 @@ const handleLogin = async () => {
             type="password"
             required
             autocomplete="current-password"
-            placeholder="\u30D1\u30B9\u30EF\u30FC\u30C9"
+            placeholder="パスワード"
             class="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
           >
         </div>
@@ -106,8 +106,8 @@ const handleLogin = async () => {
           :disabled="isLoading"
           class="w-full rounded-xl bg-amber-500 py-3 text-base font-semibold text-white transition hover:bg-amber-600 active:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <span v-if="isLoading">\u30ED\u30B0\u30A4\u30F3\u4E2D...</span>
-          <span v-else>\u30ED\u30B0\u30A4\u30F3</span>
+          <span v-if="isLoading">ログイン中...</span>
+          <span v-else>ログイン</span>
         </button>
       </form>
     </div>

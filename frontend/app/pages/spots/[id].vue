@@ -12,7 +12,7 @@ const { data: response, refresh } = fetchSpot(spotId)
 const spot = computed(() => response.value?.data ?? null)
 
 useHead({
-  title: computed(() => spot.value ? `${spot.value.name} - Ise Trip` : '\u30B9\u30DD\u30C3\u30C8\u8A73\u7D30 - Ise Trip'),
+  title: computed(() => spot.value ? `${spot.value.name} - Ise Trip` : 'スポット詳細 - Ise Trip'),
 })
 
 // Memo form
@@ -34,10 +34,10 @@ const handleSendMemo = async () => {
 }
 
 const categoryLabels: Record<string, string> = {
-  sightseeing: '\u89B3\u5149',
-  food: '\u30B0\u30EB\u30E1',
-  hotel: '\u5BBF\u6CCA',
-  other: '\u305D\u306E\u4ED6',
+  sightseeing: '観光',
+  food: 'グルメ',
+  hotel: '宿泊',
+  other: 'その他',
 }
 
 const categoryColors: Record<string, string> = {
@@ -195,7 +195,7 @@ const categoryColors: Record<string, string> = {
             d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
           />
         </svg>
-        <span class="text-sm font-semibold">Google Maps \u3067\u958B\u304F</span>
+        <span class="text-sm font-semibold">Google Maps で開く</span>
       </a>
     </div>
 
@@ -245,7 +245,7 @@ const categoryColors: Record<string, string> = {
         <input
           v-model="newMemo"
           type="text"
-          placeholder="\u30E1\u30E2\u3092\u8FFD\u52A0..."
+          placeholder="メモを追加..."
           class="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
         >
         <button

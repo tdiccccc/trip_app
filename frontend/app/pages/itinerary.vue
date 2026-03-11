@@ -6,7 +6,7 @@ definePageMeta({
 })
 
 useHead({
-  title: '\u3057\u304A\u308A - Ise Trip',
+  title: 'しおり - Ise Trip',
 })
 
 const { fetchItems, createItem, updateItem, deleteItem } = useItinerary()
@@ -100,7 +100,7 @@ const handleSubmit = async (data: CreateItineraryItemInput) => {
 }
 
 const handleDelete = async (id: number) => {
-  if (!confirm('\u3053\u306E\u4E88\u5B9A\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F')) return
+  if (!confirm('この予定を削除しますか？')) return
   try {
     await deleteItem(id)
     await refresh()
@@ -113,7 +113,7 @@ const formatDateLabel = (date: string) => {
   const d = new Date(date + 'T00:00:00')
   const month = d.getMonth() + 1
   const day = d.getDate()
-  const weekday = ['\u65E5', '\u6708', '\u706B', '\u6C34', '\u6728', '\u91D1', '\u571F'][d.getDay()]
+  const weekday = ['日', '月', '火', '水', '木', '金', '土'][d.getDay()]
   return `${month}/${day}(${weekday})`
 }
 
@@ -212,7 +212,7 @@ const formInitialData = computed(() => {
         <div class="relative w-full max-w-lg rounded-t-2xl bg-white pb-safe">
           <div class="flex items-center justify-between border-b border-gray-100 px-4 py-3">
             <h2 class="text-base font-semibold text-gray-800">
-              {{ editingItem ? '\u4E88\u5B9A\u3092\u7DE8\u96C6' : '\u4E88\u5B9A\u3092\u8FFD\u52A0' }}
+              {{ editingItem ? '予定を編集' : '予定を追加' }}
             </h2>
             <button
               class="text-gray-400 hover:text-gray-600"
