@@ -11,6 +11,7 @@ final class Expense
 {
     public function __construct(
         public readonly int $id,
+        public readonly int $tripId,
         public readonly int $userId,
         public readonly string $description,
         public readonly Money $amount,

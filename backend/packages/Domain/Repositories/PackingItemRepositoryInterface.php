@@ -11,7 +11,7 @@ interface PackingItemRepositoryInterface
     /**
      * @return PackingItem[]
      */
-    public function findAll(?string $assignee = null): array;
+    public function findAll(int $tripId, ?string $assignee = null): array;
 
     public function findById(int $id): ?PackingItem;
 

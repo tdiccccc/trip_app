@@ -11,7 +11,7 @@ interface PhotoRepositoryInterface
     /**
      * @return Photo[]
      */
-    public function findAll(?int $spotId = null, string $sort = 'taken_at', string $order = 'desc'): array;
+    public function findAll(int $tripId, ?int $spotId = null, string $sort = 'taken_at', string $order = 'desc'): array;
 
     /**
      * @return Photo[]

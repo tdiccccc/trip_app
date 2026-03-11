@@ -10,6 +10,7 @@ final class PackingItem
 {
     public function __construct(
         public readonly int $id,
+        public readonly int $tripId,
         public readonly int $userId,
         public readonly string $name,
         public readonly bool $isChecked,

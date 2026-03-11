@@ -10,6 +10,7 @@ final class ItineraryItem
 {
     public function __construct(
         public readonly int $id,
+        public readonly int $tripId,
         public readonly int $userId,
         public readonly ?int $spotId,
         public readonly string $title,

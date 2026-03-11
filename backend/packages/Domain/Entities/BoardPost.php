@@ -8,6 +8,7 @@ final class BoardPost
 {
     public function __construct(
         public readonly int $id,
+        public readonly int $tripId,
         public readonly int $userId,
         public readonly string $body,
         public readonly ?int $photoId,

@@ -11,6 +11,7 @@ final class Spot
 {
     public function __construct(
         public readonly int $id,
+        public readonly int $tripId,
         public readonly string $name,
         public readonly ?string $description,
         public readonly string $address,

@@ -11,7 +11,7 @@ interface BoardPostRepositoryInterface
     /**
      * @return BoardPost[]
      */
-    public function findAll(): array;
+    public function findAll(int $tripId): array;
 
     public function findById(int $id): ?BoardPost;
 

@@ -11,7 +11,7 @@ interface ItineraryRepositoryInterface
     /**
      * @return ItineraryItem[]
      */
-    public function findAll(?string $date = null): array;
+    public function findAll(int $tripId, ?string $date = null): array;
 
     public function findById(int $id): ?ItineraryItem;
 

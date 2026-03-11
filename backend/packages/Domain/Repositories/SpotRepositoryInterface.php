@@ -12,7 +12,7 @@ interface SpotRepositoryInterface
     /**
      * @return Spot[]
      */
-    public function findAll(?SpotCategory $category = null): array;
+    public function findAll(int $tripId, ?SpotCategory $category = null): array;
 
     public function findById(int $id): ?Spot;
 }
