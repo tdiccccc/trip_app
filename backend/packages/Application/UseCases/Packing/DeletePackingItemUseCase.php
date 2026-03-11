@@ -13,7 +13,7 @@ final class DeletePackingItemUseCase
     ) {
     }
 
-    public function execute(int $id): void
+    public function execute(int $tripId, int $id): void
     {
         $this->packingItemRepository->delete($id);
     }

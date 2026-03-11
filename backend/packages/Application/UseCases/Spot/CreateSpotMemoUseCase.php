@@ -15,7 +15,7 @@ final class CreateSpotMemoUseCase
     ) {
     }
 
-    public function execute(int $spotId, int $userId, string $body): SpotMemoDto
+    public function execute(int $tripId, int $spotId, int $userId, string $body): SpotMemoDto
     {
         $memo = new SpotMemo(
             id: 0,

@@ -16,7 +16,7 @@ final class ReorderItineraryUseCase
     /**
      * @param array<array{id: int, sort_order: int}> $items
      */
-    public function execute(array $items): void
+    public function execute(int $tripId, array $items): void
     {
         $this->itineraryRepository->updateSortOrders($items);
     }

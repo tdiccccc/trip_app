@@ -19,7 +19,7 @@ final class UpdateItineraryItemUseCase
     /**
      * @param array<string, mixed> $data
      */
-    public function execute(int $id, array $data): ?ItineraryItemDto
+    public function execute(int $tripId, int $id, array $data): ?ItineraryItemDto
     {
         $existing = $this->itineraryRepository->findById($id);
 
@@ -34,6 +34,7 @@ final class UpdateItineraryItemUseCase
 
         $updated = new ItineraryItem(
             id: $existing->id,
+            tripId: $existing->tripId,
             userId: $existing->userId,
             spotId: array_key_exists('spot_id', $data) ? $data['spot_id'] : $existing->spotId,
             title: $data['title'] ?? $existing->title,

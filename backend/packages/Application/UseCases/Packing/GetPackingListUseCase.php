@@ -17,9 +17,9 @@ final class GetPackingListUseCase
     /**
      * @return PackingItemDto[]
      */
-    public function execute(?string $assignee = null): array
+    public function execute(int $tripId, ?string $assignee = null): array
     {
-        $items = $this->packingItemRepository->findAll($assignee);
+        $items = $this->packingItemRepository->findAll($tripId, $assignee);
 
         return array_map(
             fn ($item) => PackingItemDto::fromEntity($item),

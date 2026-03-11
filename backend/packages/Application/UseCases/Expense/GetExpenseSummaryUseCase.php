@@ -16,9 +16,9 @@ final class GetExpenseSummaryUseCase
     /**
      * @return array<string, mixed>
      */
-    public function execute(): array
+    public function execute(int $tripId): array
     {
-        $expenses = $this->expenseRepository->findAll();
+        $expenses = $this->expenseRepository->findAll($tripId);
 
         $totalAmount = 0;
         $sharedTotal = 0;

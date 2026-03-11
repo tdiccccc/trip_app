@@ -17,9 +17,9 @@ final class GetAlbumUseCase
     /**
      * @return PhotoDto[]
      */
-    public function execute(?int $spotId = null, string $sort = 'taken_at', string $order = 'desc'): array
+    public function execute(int $tripId, ?int $spotId = null, string $sort = 'taken_at', string $order = 'desc'): array
     {
-        $photos = $this->photoRepository->findAll($spotId, $sort, $order);
+        $photos = $this->photoRepository->findAll($tripId, $spotId, $sort, $order);
 
         return array_map(
             fn ($photo) => PhotoDto::fromEntity($photo),

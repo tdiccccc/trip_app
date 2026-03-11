@@ -17,6 +17,7 @@ final class CreatePackingItemUseCase
     }
 
     public function execute(
+        int $tripId,
         int $userId,
         string $name,
         string $assignee,
@@ -25,6 +26,7 @@ final class CreatePackingItemUseCase
     ): PackingItemDto {
         $item = new PackingItem(
             id: 0,
+            tripId: $tripId,
             userId: $userId,
             name: $name,
             isChecked: false,

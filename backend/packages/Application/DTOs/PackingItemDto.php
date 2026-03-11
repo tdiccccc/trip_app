@@ -10,6 +10,7 @@ final readonly class PackingItemDto
 {
     public function __construct(
         public int $id,
+        public int $tripId,
         public int $userId,
         public string $name,
         public bool $isChecked,
@@ -23,6 +24,7 @@ final readonly class PackingItemDto
     {
         return new self(
             id: $item->id,
+            tripId: $item->tripId,
             userId: $item->userId,
             name: $item->name,
             isChecked: $item->isChecked,
@@ -39,6 +41,7 @@ final readonly class PackingItemDto
     {
         return [
             'id' => $this->id,
+            'trip_id' => $this->tripId,
             'user_id' => $this->userId,
             'name' => $this->name,
             'is_checked' => $this->isChecked,

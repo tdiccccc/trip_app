@@ -13,7 +13,7 @@ final class DeletePhotoUseCase
     ) {
     }
 
-    public function execute(int $id): void
+    public function execute(int $tripId, int $id): void
     {
         $this->photoRepository->delete($id);
     }

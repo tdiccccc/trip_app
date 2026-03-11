@@ -10,6 +10,7 @@ final readonly class PhotoDto
 {
     public function __construct(
         public int $id,
+        public int $tripId,
         public int $userId,
         public ?int $spotId,
         public string $storagePath,
@@ -26,6 +27,7 @@ final readonly class PhotoDto
     {
         return new self(
             id: $photo->id,
+            tripId: $photo->tripId,
             userId: $photo->userId,
             spotId: $photo->spotId,
             storagePath: $photo->storagePath->toString(),
@@ -45,6 +47,7 @@ final readonly class PhotoDto
     {
         return [
             'id' => $this->id,
+            'trip_id' => $this->tripId,
             'user_id' => $this->userId,
             'spot_id' => $this->spotId,
             'storage_path' => $this->storagePath,

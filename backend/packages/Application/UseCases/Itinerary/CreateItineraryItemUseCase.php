@@ -17,6 +17,7 @@ final class CreateItineraryItemUseCase
     }
 
     public function execute(
+        int $tripId,
         int $userId,
         ?int $spotId,
         string $title,
@@ -29,6 +30,7 @@ final class CreateItineraryItemUseCase
     ): ItineraryItemDto {
         $item = new ItineraryItem(
             id: 0,
+            tripId: $tripId,
             userId: $userId,
             spotId: $spotId,
             title: $title,

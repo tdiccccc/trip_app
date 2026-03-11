@@ -10,6 +10,7 @@ final readonly class BoardPostDto
 {
     public function __construct(
         public int $id,
+        public int $tripId,
         public int $userId,
         public string $body,
         public ?int $photoId,
@@ -21,6 +22,7 @@ final readonly class BoardPostDto
     {
         return new self(
             id: $post->id,
+            tripId: $post->tripId,
             userId: $post->userId,
             body: $post->body,
             photoId: $post->photoId,
@@ -35,6 +37,7 @@ final readonly class BoardPostDto
     {
         return [
             'id' => $this->id,
+            'trip_id' => $this->tripId,
             'user_id' => $this->userId,
             'body' => $this->body,
             'photo_id' => $this->photoId,

@@ -18,11 +18,11 @@ final class ExportZipUseCase
      *
      * @return array{itinerary: array{items: array<string, list<array<string, mixed>>>, spots: array<int, string>}, photos: PhotoDto[]}
      */
-    public function execute(): array
+    public function execute(int $tripId): array
     {
         return [
-            'itinerary' => $this->itineraryPdfUseCase->execute(),
-            'photos' => $this->photobookUseCase->execute(),
+            'itinerary' => $this->itineraryPdfUseCase->execute($tripId),
+            'photos' => $this->photobookUseCase->execute($tripId),
         ];
     }
 }

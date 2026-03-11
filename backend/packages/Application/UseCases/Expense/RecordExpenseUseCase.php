@@ -18,6 +18,7 @@ final class RecordExpenseUseCase
     }
 
     public function execute(
+        int $tripId,
         int $userId,
         string $description,
         int $amount,
@@ -27,6 +28,7 @@ final class RecordExpenseUseCase
     ): ExpenseDto {
         $expense = new Expense(
             id: 0,
+            tripId: $tripId,
             userId: $userId,
             description: $description,
             amount: new Money($amount),

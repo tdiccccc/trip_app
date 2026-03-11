@@ -20,9 +20,9 @@ final class GetBoardPostsUseCase
     /**
      * @return array<int, array{post: BoardPostDto, reactions: ReactionDto[]}>
      */
-    public function execute(): array
+    public function execute(int $tripId): array
     {
-        $posts = $this->boardPostRepository->findAll();
+        $posts = $this->boardPostRepository->findAll($tripId);
 
         return array_map(function ($post) {
             $reactions = $this->reactionRepository->findByBoardPostId($post->id);

@@ -10,6 +10,7 @@ final readonly class ExpenseDto
 {
     public function __construct(
         public int $id,
+        public int $tripId,
         public int $userId,
         public string $description,
         public int $amount,
@@ -23,6 +24,7 @@ final readonly class ExpenseDto
     {
         return new self(
             id: $expense->id,
+            tripId: $expense->tripId,
             userId: $expense->userId,
             description: $expense->description,
             amount: $expense->amount->amount,
@@ -39,6 +41,7 @@ final readonly class ExpenseDto
     {
         return [
             'id' => $this->id,
+            'trip_id' => $this->tripId,
             'user_id' => $this->userId,
             'description' => $this->description,
             'amount' => $this->amount,

@@ -10,6 +10,7 @@ final readonly class ItineraryItemDto
 {
     public function __construct(
         public int $id,
+        public int $tripId,
         public int $userId,
         public ?int $spotId,
         public string $title,
@@ -26,6 +27,7 @@ final readonly class ItineraryItemDto
     {
         return new self(
             id: $item->id,
+            tripId: $item->tripId,
             userId: $item->userId,
             spotId: $item->spotId,
             title: $item->title,
@@ -45,6 +47,7 @@ final readonly class ItineraryItemDto
     {
         return [
             'id' => $this->id,
+            'trip_id' => $this->tripId,
             'user_id' => $this->userId,
             'spot_id' => $this->spotId,
             'title' => $this->title,

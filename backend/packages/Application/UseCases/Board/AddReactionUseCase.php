@@ -16,7 +16,7 @@ final class AddReactionUseCase
     ) {
     }
 
-    public function execute(int $boardPostId, int $userId, string $emoji): ReactionDto
+    public function execute(int $tripId, int $boardPostId, int $userId, string $emoji): ReactionDto
     {
         if ($this->reactionRepository->existsByPostUserEmoji($boardPostId, $userId, $emoji)) {
             throw new DomainException('この絵文字は既にリアクション済みです。');

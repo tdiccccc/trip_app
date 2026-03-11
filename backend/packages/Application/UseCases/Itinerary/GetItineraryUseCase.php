@@ -17,9 +17,9 @@ final class GetItineraryUseCase
     /**
      * @return ItineraryItemDto[]
      */
-    public function execute(?string $date = null): array
+    public function execute(int $tripId, ?string $date = null): array
     {
-        $items = $this->itineraryRepository->findAll($date);
+        $items = $this->itineraryRepository->findAll($tripId, $date);
 
         return array_map(
             fn ($item) => ItineraryItemDto::fromEntity($item),

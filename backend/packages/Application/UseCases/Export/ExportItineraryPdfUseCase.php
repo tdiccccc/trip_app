@@ -20,9 +20,9 @@ final class ExportItineraryPdfUseCase
      *
      * @return array{items: array<string, list<array<string, mixed>>>, spots: array<int, string>}
      */
-    public function execute(): array
+    public function execute(int $tripId): array
     {
-        $items = $this->itineraryRepository->findAll();
+        $items = $this->itineraryRepository->findAll($tripId);
         $dtos = array_map(
             fn ($item) => ItineraryItemDto::fromEntity($item),
             $items,

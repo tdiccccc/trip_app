@@ -10,6 +10,7 @@ final readonly class SpotDto
 {
     public function __construct(
         public int $id,
+        public int $tripId,
         public string $name,
         public ?string $description,
         public string $address,
@@ -28,6 +29,7 @@ final readonly class SpotDto
     {
         return new self(
             id: $spot->id,
+            tripId: $spot->tripId,
             name: $spot->name,
             description: $spot->description,
             address: $spot->address,
@@ -49,6 +51,7 @@ final readonly class SpotDto
     {
         return [
             'id' => $this->id,
+            'trip_id' => $this->tripId,
             'name' => $this->name,
             'description' => $this->description,
             'address' => $this->address,

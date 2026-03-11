@@ -18,9 +18,9 @@ final class ExportPhotobookUseCase
      *
      * @return PhotoDto[]
      */
-    public function execute(): array
+    public function execute(int $tripId): array
     {
-        $photos = $this->photoRepository->findAll(sort: 'taken_at', order: 'asc');
+        $photos = $this->photoRepository->findAll($tripId, sort: 'taken_at', order: 'asc');
 
         return array_map(
             fn ($photo) => PhotoDto::fromEntity($photo),

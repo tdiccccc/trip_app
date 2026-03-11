@@ -23,7 +23,7 @@ final class GetSpotDetailUseCase
     /**
      * @return array{spot: SpotDto, memos: SpotMemoDto[], photos: PhotoDto[]}|null
      */
-    public function execute(int $id): ?array
+    public function execute(int $tripId, int $id): ?array
     {
         $spot = $this->spotRepository->findById($id);
 

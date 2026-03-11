@@ -15,10 +15,11 @@ final class PostMessageUseCase
     ) {
     }
 
-    public function execute(int $userId, string $body, ?int $photoId, bool $isBestShot): BoardPostDto
+    public function execute(int $tripId, int $userId, string $body, ?int $photoId, bool $isBestShot): BoardPostDto
     {
         $post = new BoardPost(
             id: 0,
+            tripId: $tripId,
             userId: $userId,
             body: $body,
             photoId: $photoId,

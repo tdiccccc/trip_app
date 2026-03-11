@@ -19,7 +19,7 @@ final class UpdatePackingItemUseCase
     /**
      * @param array<string, mixed> $data
      */
-    public function execute(int $id, array $data): ?PackingItemDto
+    public function execute(int $tripId, int $id, array $data): ?PackingItemDto
     {
         $existing = $this->packingItemRepository->findById($id);
 
@@ -34,6 +34,7 @@ final class UpdatePackingItemUseCase
 
         $updated = new PackingItem(
             id: $existing->id,
+            tripId: $existing->tripId,
             userId: $existing->userId,
             name: $data['name'] ?? $existing->name,
             isChecked: array_key_exists('is_checked', $data) ? (bool) $data['is_checked'] : $existing->isChecked,

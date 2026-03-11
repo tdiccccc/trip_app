@@ -17,6 +17,7 @@ final class UploadPhotoUseCase
     }
 
     public function execute(
+        int $tripId,
         int $userId,
         ?int $spotId,
         string $storagePath,
@@ -29,6 +30,7 @@ final class UploadPhotoUseCase
     ): PhotoDto {
         $photo = new Photo(
             id: 0,
+            tripId: $tripId,
             userId: $userId,
             spotId: $spotId,
             storagePath: new PhotoPath($storagePath),

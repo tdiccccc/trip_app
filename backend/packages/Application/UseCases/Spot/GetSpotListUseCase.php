@@ -18,9 +18,9 @@ final class GetSpotListUseCase
     /**
      * @return SpotDto[]
      */
-    public function execute(?SpotCategory $category = null): array
+    public function execute(int $tripId, ?SpotCategory $category = null): array
     {
-        $spots = $this->spotRepository->findAll($category);
+        $spots = $this->spotRepository->findAll($tripId, $category);
 
         return array_map(
             fn ($spot) => SpotDto::fromEntity($spot),
