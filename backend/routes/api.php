@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AlbumController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BoardController;
 use App\Http\Controllers\Api\ExpenseController;
+use App\Http\Controllers\Api\ExportController;
 use App\Http\Controllers\Api\ItineraryController;
 use App\Http\Controllers\Api\PackingController;
 use App\Http\Controllers\Api\SpotController;
@@ -54,6 +55,12 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/expenses', [ExpenseController::class, 'index']);
     Route::post('/expenses', [ExpenseController::class, 'store']);
     Route::delete('/expenses/{id}', [ExpenseController::class, 'destroy']);
+
+    // エクスポート
+    Route::post('/export/itinerary-pdf', [ExportController::class, 'itineraryPdf']);
+    Route::post('/export/photobook-pdf', [ExportController::class, 'photobookPdf']);
+    Route::post('/export/slideshow-video', [ExportController::class, 'slideshowVideo']);
+    Route::post('/export/zip', [ExportController::class, 'zip']);
 });
 
 // ヘルスチェック
