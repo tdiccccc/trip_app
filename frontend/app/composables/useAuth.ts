@@ -14,12 +14,18 @@ export const useAuth = () => {
       credentials: 'include',
     })
 
-    // 2. ログイン
+    // 2. XSRF-TOKEN をクッキーから取得
+    const xsrfToken = useCookie('XSRF-TOKEN').value
+
+    // 3. ログイン
     const response = await $fetch<ApiResponse<User>>('/api/login', {
       baseURL,
       method: 'POST',
       body: { email, password },
       credentials: 'include',
+      headers: {
+        ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
+      },
     })
 
     user.value = response.data
@@ -30,10 +36,14 @@ export const useAuth = () => {
     const baseURL = config.public.apiBase as string
 
     try {
+      const xsrfToken = useCookie('XSRF-TOKEN').value
       await $fetch('/api/logout', {
         baseURL,
         method: 'POST',
         credentials: 'include',
+        headers: {
+          ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
+        },
       })
     } catch {
       // ログアウトAPIが失敗してもクライアント側の状態はリセットする
