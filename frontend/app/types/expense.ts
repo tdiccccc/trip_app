@@ -1,5 +1,6 @@
 export interface Expense {
   id: number
+  trip_id: number
   label: string
   amount: number
   category: string

@@ -2,6 +2,7 @@ export type TransportType = 'train' | 'car' | 'walk' | 'bus' | 'taxi' | 'none'
 
 export interface ItineraryItem {
   id: number
+  trip_id: number
   user_id: number
   spot_id: number | null
   title: string

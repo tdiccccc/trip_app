@@ -2,6 +2,7 @@ import type { Photo } from './photo'
 
 export interface Spot {
   id: number
+  trip_id: number
   name: string
   description: string | null
   address: string

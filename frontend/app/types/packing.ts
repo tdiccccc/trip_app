@@ -1,5 +1,6 @@
 export interface PackingItem {
   id: number
+  trip_id: number
   name: string
   assignee: string | null
   is_checked: boolean

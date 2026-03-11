@@ -1,5 +1,6 @@
 export interface Photo {
   id: number
+  trip_id: number
   user_id: number
   spot_id: number | null
   storage_path: string

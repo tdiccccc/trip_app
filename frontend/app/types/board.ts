@@ -6,6 +6,7 @@ export interface Reaction {
 
 export interface BoardPost {
   id: number
+  trip_id: number
   user_id: number
   user_name: string
   body: string
