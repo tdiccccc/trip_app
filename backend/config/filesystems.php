@@ -47,6 +47,9 @@ return [
             'report' => false,
         ],
 
+        // Cloudflare R2 (S3互換)
+        // AWS_ENDPOINT に R2 のエンドポイントを設定することで R2 に接続
+        // AWS_USE_PATH_STYLE_ENDPOINT=true が必須
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -55,8 +58,8 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
-            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            'throw' => false,
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', true),
+            'throw' => true,
             'report' => false,
         ],
 

@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reaction extends Model
 {
+    /** @use HasFactory<\Database\Factories\ReactionFactory> */
+    use HasFactory;
+
     /** @var list<string> */
     protected $fillable = [
         'board_post_id',
