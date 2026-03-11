@@ -2,8 +2,9 @@
 
 ## 概要
 
-伊勢旅行アプリの REST API 仕様書。
+伊勢旅行メモリーアプリの REST API 仕様書。
 Laravel 12 が `/api/*` エンドポイントを提供し、フロントエンド（Nuxt 4）から呼び出される。
+旅行関連の全リソースは `/api/trips/{tripId}/...` スコープで管理される。
 
 ---
 
@@ -251,19 +252,298 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-## 2. しおり（Itinerary）
+## 2. 旅行（Trip）
 
-### 2-1. しおり一覧取得
+### 2-1. 旅行一覧取得
+
+自分が参加している旅行の一覧を取得する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `GET` |
+| **パス** | `/api/trips` |
+| **認証** | 要 |
+| **コントローラー** | `TripController@index` |
+| **UseCase** | `GetTripListUseCase` |
+
+#### レスポンス
+
+**成功（200）**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "伊勢旅行 2026",
+      "description": "お伊勢参りと食べ歩きの旅",
+      "destination": "三重県伊勢市",
+      "start_date": "2026-03-28",
+      "end_date": "2026-03-29",
+      "cover_image_url": null,
+      "members": [
+        { "id": 1, "name": "たろう", "role": "owner" },
+        { "id": 2, "name": "はなこ", "role": "member" }
+      ],
+      "created_at": "2026-03-01T00:00:00.000000Z",
+      "updated_at": "2026-03-01T00:00:00.000000Z"
+    }
+  ]
+}
+```
+
+---
+
+### 2-2. 旅行作成
+
+新しい旅行を作成する。作成者は自動的に owner として登録される。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `POST` |
+| **パス** | `/api/trips` |
+| **認証** | 要 |
+| **コントローラー** | `TripController@store` |
+| **UseCase** | `CreateTripUseCase` |
+
+#### リクエストボディ
+
+| フィールド | 型 | 必須 | バリデーション | 説明 |
+|-----------|-----|------|-------------|------|
+| title | string | YES | required, max:255 | 旅行タイトル |
+| description | string | NO | nullable, max:1000 | 説明文 |
+| destination | string | NO | nullable, max:255 | 行き先 |
+| start_date | string | YES | required, date_format:Y-m-d | 開始日 |
+| end_date | string | YES | required, date_format:Y-m-d, after_or_equal:start_date | 終了日 |
+| member_ids | array | NO | nullable, array | 招待するユーザーIDの配列 |
+| member_ids.* | integer | NO | exists:users,id | ユーザーID |
+
+```json
+{
+  "title": "伊勢旅行 2026",
+  "description": "お伊勢参りと食べ歩きの旅",
+  "destination": "三重県伊勢市",
+  "start_date": "2026-03-28",
+  "end_date": "2026-03-29",
+  "member_ids": [2]
+}
+```
+
+#### レスポンス
+
+**成功（201）**
+
+```json
+{
+  "data": {
+    "id": 1,
+    "title": "伊勢旅行 2026",
+    "description": "お伊勢参りと食べ歩きの旅",
+    "destination": "三重県伊勢市",
+    "start_date": "2026-03-28",
+    "end_date": "2026-03-29",
+    "cover_image_url": null,
+    "members": [
+      { "id": 1, "name": "たろう", "role": "owner" },
+      { "id": 2, "name": "はなこ", "role": "member" }
+    ],
+    "created_at": "2026-03-01T00:00:00.000000Z",
+    "updated_at": "2026-03-01T00:00:00.000000Z"
+  }
+}
+```
+
+**エラー（422）**
+
+```json
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "title": ["The title field is required."],
+    "start_date": ["The start date field is required."]
+  }
+}
+```
+
+---
+
+### 2-3. 旅行詳細取得
+
+指定旅行の詳細情報をメンバー情報とともに取得する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `GET` |
+| **パス** | `/api/trips/{tripId}` |
+| **認証** | 要 |
+| **コントローラー** | `TripController@show` |
+| **UseCase** | `GetTripDetailUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
+#### レスポンス
+
+**成功（200）**
+
+```json
+{
+  "data": {
+    "id": 1,
+    "title": "伊勢旅行 2026",
+    "description": "お伊勢参りと食べ歩きの旅",
+    "destination": "三重県伊勢市",
+    "start_date": "2026-03-28",
+    "end_date": "2026-03-29",
+    "cover_image_url": null,
+    "members": [
+      { "id": 1, "name": "たろう", "role": "owner" },
+      { "id": 2, "name": "はなこ", "role": "member" }
+    ],
+    "created_at": "2026-03-01T00:00:00.000000Z",
+    "updated_at": "2026-03-01T00:00:00.000000Z"
+  }
+}
+```
+
+**エラー（403）** -- 旅行メンバーでない場合
+
+```json
+{
+  "message": "Forbidden."
+}
+```
+
+**エラー（404）**
+
+```json
+{
+  "message": "Not found."
+}
+```
+
+---
+
+### 2-4. 旅行情報更新
+
+旅行の基本情報を更新する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `PATCH` |
+| **パス** | `/api/trips/{tripId}` |
+| **認証** | 要 |
+| **コントローラー** | `TripController@update` |
+| **UseCase** | `UpdateTripUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
+#### リクエストボディ
+
+全フィールド任意。送信したフィールドのみ更新される。
+
+| フィールド | 型 | 必須 | バリデーション | 説明 |
+|-----------|-----|------|-------------|------|
+| title | string | NO | sometimes, required, max:255 | 旅行タイトル |
+| description | string | NO | nullable, max:1000 | 説明文 |
+| destination | string | NO | nullable, max:255 | 行き先 |
+| start_date | string | NO | sometimes, required, date_format:Y-m-d | 開始日 |
+| end_date | string | NO | sometimes, required, date_format:Y-m-d, after_or_equal:start_date | 終了日 |
+
+```json
+{
+  "title": "伊勢旅行 2026 春",
+  "description": "お伊勢参りと食べ歩きの旅（更新）"
+}
+```
+
+#### レスポンス
+
+**成功（200）**
+
+```json
+{
+  "data": {
+    "id": 1,
+    "title": "伊勢旅行 2026 春",
+    "description": "お伊勢参りと食べ歩きの旅（更新）",
+    "destination": "三重県伊勢市",
+    "start_date": "2026-03-28",
+    "end_date": "2026-03-29",
+    "cover_image_url": null,
+    "members": [
+      { "id": 1, "name": "たろう", "role": "owner" },
+      { "id": 2, "name": "はなこ", "role": "member" }
+    ],
+    "created_at": "2026-03-01T00:00:00.000000Z",
+    "updated_at": "2026-03-15T14:30:00.000000Z"
+  }
+}
+```
+
+**エラー（404）**
+
+```json
+{
+  "message": "Not found."
+}
+```
+
+---
+
+### 2-5. 旅行削除
+
+旅行とそれに紐づく全データを削除する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `DELETE` |
+| **パス** | `/api/trips/{tripId}` |
+| **認証** | 要 |
+| **コントローラー** | `TripController@destroy` |
+| **UseCase** | `DeleteTripUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
+#### レスポンス
+
+| コード | 説明 |
+|--------|------|
+| 204 | 削除成功（レスポンスボディなし） |
+| 404 | 対象旅行が見つからない |
+
+---
+
+## 3. しおり（Itinerary）
+
+### 3-1. しおり一覧取得
 
 旅行行程のタイムライン一覧を日付・並び順で取得する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/itinerary` |
+| **パス** | `/api/trips/{tripId}/itinerary` |
 | **認証** | 要 |
 | **コントローラー** | `ItineraryController@index` |
 | **UseCase** | `GetItineraryUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### クエリパラメータ
 
@@ -330,16 +610,22 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 2-2. しおり項目作成
+### 3-2. しおり項目作成
 
 新しい行程項目を追加する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/itinerary` |
+| **パス** | `/api/trips/{tripId}/itinerary` |
 | **認証** | 要 |
 | **コントローラー** | `ItineraryController@store` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### リクエストボディ
 
@@ -413,14 +699,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 2-3. しおり項目更新
+### 3-3. しおり項目更新
 
 既存の行程項目を更新する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `PATCH` |
-| **パス** | `/api/itinerary/{id}` |
+| **パス** | `/api/trips/{tripId}/itinerary/{id}` |
 | **認証** | 要 |
 | **コントローラー** | `ItineraryController@update` |
 
@@ -428,6 +714,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | しおり項目ID |
 
 #### リクエストボディ
@@ -494,14 +781,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 2-4. しおり項目削除
+### 3-4. しおり項目削除
 
 行程項目を削除する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `DELETE` |
-| **パス** | `/api/itinerary/{id}` |
+| **パス** | `/api/trips/{tripId}/itinerary/{id}` |
 | **認証** | 要 |
 | **コントローラー** | `ItineraryController@destroy` |
 
@@ -509,6 +796,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | しおり項目ID |
 
 #### レスポンス
@@ -520,16 +808,22 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 2-5. しおり並び替え
+### 3-5. しおり並び替え
 
 複数のしおり項目の sort_order を一括更新する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `PATCH` |
-| **パス** | `/api/itinerary/reorder` |
+| **パス** | `/api/trips/{tripId}/itinerary/reorder` |
 | **認証** | 要 |
 | **コントローラー** | `ItineraryController@reorder` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### リクエストボディ
 
@@ -561,19 +855,25 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-## 3. スポット（Spot）
+## 4. スポット（Spot）
 
-### 3-1. スポット一覧取得
+### 4-1. スポット一覧取得
 
-観光スポットの一覧を取得する。Seeder で事前登録されたデータ。
+旅行に紐づく観光スポットの一覧を取得する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/spots` |
+| **パス** | `/api/trips/{tripId}/spots` |
 | **認証** | 要 |
 | **コントローラー** | `SpotController@index` |
 | **UseCase** | `GetSpotListUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### クエリパラメータ
 
@@ -610,14 +910,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 3-2. スポット詳細取得
+### 4-2. スポット詳細取得
 
 指定スポットの詳細情報をメモ・写真とともに取得する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/spots/{id}` |
+| **パス** | `/api/trips/{tripId}/spots/{id}` |
 | **認証** | 要 |
 | **コントローラー** | `SpotController@show` |
 | **UseCase** | `GetSpotDetailUseCase` |
@@ -626,6 +926,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | スポットID |
 
 #### レスポンス
@@ -698,14 +999,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 3-3. スポットメモ作成
+### 4-3. スポットメモ作成
 
 指定スポットにメモを追加する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/spots/{id}/memos` |
+| **パス** | `/api/trips/{tripId}/spots/{id}/memos` |
 | **認証** | 要 |
 | **コントローラー** | `SpotController@storeMemo` |
 
@@ -713,6 +1014,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | スポットID |
 
 #### リクエストボディ
@@ -761,14 +1063,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 3-4. スポットの写真一覧取得
+### 4-4. スポットの写真一覧取得
 
 指定スポットに紐づく写真の一覧を取得する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/spots/{id}/photos` |
+| **パス** | `/api/trips/{tripId}/spots/{id}/photos` |
 | **認証** | 要 |
 | **コントローラー** | `SpotController@photos` |
 
@@ -776,6 +1078,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | スポットID |
 
 #### レスポンス
@@ -809,19 +1112,25 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-## 4. 写真アルバム（Photo / Album）
+## 5. 写真アルバム（Photo / Album）
 
-### 4-1. 写真一覧取得
+### 5-1. 写真一覧取得
 
-全写真の一覧を取得する。スポット別・時系列でフィルタ可能。
+旅行に紐づく全写真の一覧を取得する。スポット別・時系列でフィルタ可能。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/photos` |
+| **パス** | `/api/trips/{tripId}/photos` |
 | **認証** | 要 |
 | **コントローラー** | `AlbumController@index` |
 | **UseCase** | `GetAlbumUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### クエリパラメータ
 
@@ -866,18 +1175,24 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 4-2. 写真アップロード
+### 5-2. 写真アップロード
 
 写真をアップロードする。画像ファイルは Cloudflare R2 に保存される。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/photos` |
+| **パス** | `/api/trips/{tripId}/photos` |
 | **認証** | 要 |
 | **Content-Type** | `multipart/form-data` |
 | **コントローラー** | `AlbumController@store` |
 | **UseCase** | `UploadPhotoUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### リクエストボディ（multipart/form-data）
 
@@ -932,14 +1247,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 4-3. 写真削除
+### 5-3. 写真削除
 
 指定写真を削除する。R2 上のファイルも削除される。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `DELETE` |
-| **パス** | `/api/photos/{id}` |
+| **パス** | `/api/trips/{tripId}/photos/{id}` |
 | **認証** | 要 |
 | **コントローラー** | `AlbumController@destroy` |
 
@@ -947,6 +1262,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | 写真ID |
 
 #### レスポンス
@@ -958,18 +1274,24 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-## 5. ふたりの掲示板（Board）
+## 6. ふたりの掲示板（Board）
 
-### 5-1. 掲示板投稿一覧取得
+### 6-1. 掲示板投稿一覧取得
 
-掲示板の投稿をリアクション付きで新しい順に取得する。
+旅行に紐づく掲示板の投稿をリアクション付きで新しい順に取得する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/board` |
+| **パス** | `/api/trips/{tripId}/board` |
 | **認証** | 要 |
 | **コントローラー** | `BoardController@index` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### レスポンス
 
@@ -1029,17 +1351,23 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 5-2. 掲示板投稿作成
+### 6-2. 掲示板投稿作成
 
 掲示板にメッセージを投稿する。ベストショット写真の共有にも対応。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/board` |
+| **パス** | `/api/trips/{tripId}/board` |
 | **認証** | 要 |
 | **コントローラー** | `BoardController@store` |
 | **UseCase** | `PostMessageUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### リクエストボディ
 
@@ -1083,14 +1411,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 5-3. リアクション追加
+### 6-3. リアクション追加
 
 掲示板投稿にスタンプ（リアクション）を追加する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/board/{id}/reactions` |
+| **パス** | `/api/trips/{tripId}/board/{id}/reactions` |
 | **認証** | 要 |
 | **コントローラー** | `BoardController@storeReaction` |
 
@@ -1098,6 +1426,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | 掲示板投稿ID |
 
 #### リクエストボディ
@@ -1154,18 +1483,24 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-## 6. パッキングリスト（Packing）
+## 7. パッキングリスト（Packing）
 
-### 6-1. パッキング一覧取得
+### 7-1. パッキング一覧取得
 
-持ち物チェックリストの全項目を取得する。
+旅行に紐づく持ち物チェックリストの全項目を取得する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/packing` |
+| **パス** | `/api/trips/{tripId}/packing` |
 | **認証** | 要 |
 | **コントローラー** | `PackingController@index` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### クエリパラメータ
 
@@ -1216,16 +1551,22 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 6-2. パッキング項目作成
+### 7-2. パッキング項目作成
 
 持ち物リストに新しい項目を追加する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/packing` |
+| **パス** | `/api/trips/{tripId}/packing` |
 | **認証** | 要 |
 | **コントローラー** | `PackingController@store` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### リクエストボディ
 
@@ -1270,14 +1611,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 6-3. パッキング項目更新
+### 7-3. パッキング項目更新
 
 パッキング項目を更新する。チェック状態の切り替えにも使用する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `PATCH` |
-| **パス** | `/api/packing/{id}` |
+| **パス** | `/api/trips/{tripId}/packing/{id}` |
 | **認証** | 要 |
 | **コントローラー** | `PackingController@update` |
 
@@ -1285,6 +1626,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | パッキング項目ID |
 
 #### リクエストボディ
@@ -1331,14 +1673,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 6-4. パッキング項目削除
+### 7-4. パッキング項目削除
 
 パッキング項目を削除する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `DELETE` |
-| **パス** | `/api/packing/{id}` |
+| **パス** | `/api/trips/{tripId}/packing/{id}` |
 | **認証** | 要 |
 | **コントローラー** | `PackingController@destroy` |
 
@@ -1346,6 +1688,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | パッキング項目ID |
 
 #### レスポンス
@@ -1357,18 +1700,24 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-## 7. 費用メモ（Expense）
+## 8. 費用メモ（Expense）
 
-### 7-1. 費用一覧取得
+### 8-1. 費用一覧取得
 
-旅行の支出記録一覧を取得する。
+旅行に紐づく支出記録一覧を取得する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/expenses` |
+| **パス** | `/api/trips/{tripId}/expenses` |
 | **認証** | 要 |
 | **コントローラー** | `ExpenseController@index` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### クエリパラメータ
 
@@ -1419,17 +1768,23 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 7-2. 費用記録作成
+### 8-2. 費用記録作成
 
 新しい支出を記録する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/expenses` |
+| **パス** | `/api/trips/{tripId}/expenses` |
 | **認証** | 要 |
 | **コントローラー** | `ExpenseController@store` |
 | **UseCase** | `RecordExpenseUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### リクエストボディ
 
@@ -1489,14 +1844,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 7-3. 費用記録削除
+### 8-3. 費用記録削除
 
 支出記録を削除する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `DELETE` |
-| **パス** | `/api/expenses/{id}` |
+| **パス** | `/api/trips/{tripId}/expenses/{id}` |
 | **認証** | 要 |
 | **コントローラー** | `ExpenseController@destroy` |
 
@@ -1504,6 +1859,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 説明 |
 |-----------|-----|------|
+| tripId | integer | 旅行ID |
 | id | integer | 費用記録ID |
 
 #### レスポンス
@@ -1515,17 +1871,23 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 7-4. 費用サマリー取得
+### 8-4. 費用サマリー取得
 
 カテゴリ別合計、ユーザー別合計、割り勘精算額を算出して返す。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `GET` |
-| **パス** | `/api/expenses/summary` |
+| **パス** | `/api/trips/{tripId}/expenses/summary` |
 | **認証** | 要 |
 | **コントローラー** | `ExpenseController@summary` |
 | **UseCase** | `GetExpenseSummaryUseCase` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### レスポンス
 
@@ -1575,22 +1937,28 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-## 8. エクスポート（Export）
+## 9. エクスポート（Export）
 
-### 8-1. しおり PDF エクスポート
+### 9-1. しおり PDF エクスポート
 
 旅のしおりを印刷可能な PDF として出力する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/export/itinerary-pdf` |
+| **パス** | `/api/trips/{tripId}/export/itinerary-pdf` |
 | **認証** | 要 |
 | **コントローラー** | `ExportController@itineraryPdf` |
 
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
 #### リクエストボディ
 
-なし（現在のしおりデータ全体を PDF 化する）
+なし（対象旅行のしおりデータ全体を PDF 化する）
 
 #### レスポンス
 
@@ -1613,20 +1981,26 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 8-2. フォトブック PDF エクスポート
+### 9-2. フォトブック PDF エクスポート
 
 写真とコメントをレイアウトしたフォトブック風 PDF を生成する。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/export/photobook-pdf` |
+| **パス** | `/api/trips/{tripId}/export/photobook-pdf` |
 | **認証** | 要 |
 | **コントローラー** | `ExportController@photobookPdf` |
 
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
 #### リクエストボディ
 
-なし（アルバム内の全写真を PDF 化する）
+なし（対象旅行のアルバム内の全写真を PDF 化する）
 
 #### レスポンス
 
@@ -1641,7 +2015,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 8-3. スライドショー動画エクスポート
+### 9-3. スライドショー動画エクスポート
 
 写真を繋いだ MP4 動画を生成する。
 
@@ -1650,13 +2024,19 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/export/slideshow-video` |
+| **パス** | `/api/trips/{tripId}/export/slideshow-video` |
 | **認証** | 要 |
 | **コントローラー** | `ExportController@slideshowVideo` |
 
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
 #### リクエストボディ
 
-なし（アルバム内の全写真を動画化する）
+なし（対象旅行のアルバム内の全写真を動画化する）
 
 #### レスポンス
 
@@ -1671,16 +2051,22 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ---
 
-### 8-4. ZIP 一括ダウンロード
+### 9-4. ZIP 一括ダウンロード
 
-全写真とメモデータをまとめた ZIP ファイルをダウンロードする。
+旅行の全写真とメモデータをまとめた ZIP ファイルをダウンロードする。
 
 | 項目 | 内容 |
 |------|------|
 | **メソッド** | `POST` |
-| **パス** | `/api/export/zip` |
+| **パス** | `/api/trips/{tripId}/export/zip` |
 | **認証** | 要 |
 | **コントローラー** | `ExportController@zip` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
 
 #### リクエストボディ
 
@@ -1708,40 +2094,46 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | 2 | `POST` | `/api/login` | - | ログイン |
 | 3 | `POST` | `/api/logout` | 要 | ログアウト |
 | 4 | `GET` | `/api/user` | 要 | 認証ユーザー取得 |
+| **旅行** | | | | |
+| 5 | `GET` | `/api/trips` | 要 | 旅行一覧取得 |
+| 6 | `POST` | `/api/trips` | 要 | 旅行作成 |
+| 7 | `GET` | `/api/trips/{tripId}` | 要 | 旅行詳細取得 |
+| 8 | `PATCH` | `/api/trips/{tripId}` | 要 | 旅行情報更新 |
+| 9 | `DELETE` | `/api/trips/{tripId}` | 要 | 旅行削除 |
 | **しおり** | | | | |
-| 5 | `GET` | `/api/itinerary` | 要 | しおり一覧取得 |
-| 6 | `POST` | `/api/itinerary` | 要 | しおり項目作成 |
-| 7 | `PATCH` | `/api/itinerary/{id}` | 要 | しおり項目更新 |
-| 8 | `DELETE` | `/api/itinerary/{id}` | 要 | しおり項目削除 |
-| 9 | `PATCH` | `/api/itinerary/reorder` | 要 | しおり並び替え |
+| 10 | `GET` | `/api/trips/{tripId}/itinerary` | 要 | しおり一覧取得 |
+| 11 | `POST` | `/api/trips/{tripId}/itinerary` | 要 | しおり項目作成 |
+| 12 | `PATCH` | `/api/trips/{tripId}/itinerary/{id}` | 要 | しおり項目更新 |
+| 13 | `DELETE` | `/api/trips/{tripId}/itinerary/{id}` | 要 | しおり項目削除 |
+| 14 | `PATCH` | `/api/trips/{tripId}/itinerary/reorder` | 要 | しおり並び替え |
 | **スポット** | | | | |
-| 10 | `GET` | `/api/spots` | 要 | スポット一覧取得 |
-| 11 | `GET` | `/api/spots/{id}` | 要 | スポット詳細取得 |
-| 12 | `POST` | `/api/spots/{id}/memos` | 要 | スポットメモ作成 |
-| 13 | `GET` | `/api/spots/{id}/photos` | 要 | スポット写真一覧取得 |
+| 15 | `GET` | `/api/trips/{tripId}/spots` | 要 | スポット一覧取得 |
+| 16 | `GET` | `/api/trips/{tripId}/spots/{id}` | 要 | スポット詳細取得 |
+| 17 | `POST` | `/api/trips/{tripId}/spots/{id}/memos` | 要 | スポットメモ作成 |
+| 18 | `GET` | `/api/trips/{tripId}/spots/{id}/photos` | 要 | スポット写真一覧取得 |
 | **写真アルバム** | | | | |
-| 14 | `GET` | `/api/photos` | 要 | 写真一覧取得 |
-| 15 | `POST` | `/api/photos` | 要 | 写真アップロード |
-| 16 | `DELETE` | `/api/photos/{id}` | 要 | 写真削除 |
+| 19 | `GET` | `/api/trips/{tripId}/photos` | 要 | 写真一覧取得 |
+| 20 | `POST` | `/api/trips/{tripId}/photos` | 要 | 写真アップロード |
+| 21 | `DELETE` | `/api/trips/{tripId}/photos/{id}` | 要 | 写真削除 |
 | **掲示板** | | | | |
-| 17 | `GET` | `/api/board` | 要 | 掲示板投稿一覧取得 |
-| 18 | `POST` | `/api/board` | 要 | 掲示板投稿作成 |
-| 19 | `POST` | `/api/board/{id}/reactions` | 要 | リアクション追加 |
+| 22 | `GET` | `/api/trips/{tripId}/board` | 要 | 掲示板投稿一覧取得 |
+| 23 | `POST` | `/api/trips/{tripId}/board` | 要 | 掲示板投稿作成 |
+| 24 | `POST` | `/api/trips/{tripId}/board/{id}/reactions` | 要 | リアクション追加 |
 | **パッキング** | | | | |
-| 20 | `GET` | `/api/packing` | 要 | パッキング一覧取得 |
-| 21 | `POST` | `/api/packing` | 要 | パッキング項目作成 |
-| 22 | `PATCH` | `/api/packing/{id}` | 要 | パッキング項目更新 |
-| 23 | `DELETE` | `/api/packing/{id}` | 要 | パッキング項目削除 |
+| 25 | `GET` | `/api/trips/{tripId}/packing` | 要 | パッキング一覧取得 |
+| 26 | `POST` | `/api/trips/{tripId}/packing` | 要 | パッキング項目作成 |
+| 27 | `PATCH` | `/api/trips/{tripId}/packing/{id}` | 要 | パッキング項目更新 |
+| 28 | `DELETE` | `/api/trips/{tripId}/packing/{id}` | 要 | パッキング項目削除 |
 | **費用** | | | | |
-| 24 | `GET` | `/api/expenses` | 要 | 費用一覧取得 |
-| 25 | `POST` | `/api/expenses` | 要 | 費用記録作成 |
-| 26 | `DELETE` | `/api/expenses/{id}` | 要 | 費用記録削除 |
-| 27 | `GET` | `/api/expenses/summary` | 要 | 費用サマリー取得 |
+| 29 | `GET` | `/api/trips/{tripId}/expenses` | 要 | 費用一覧取得 |
+| 30 | `POST` | `/api/trips/{tripId}/expenses` | 要 | 費用記録作成 |
+| 31 | `DELETE` | `/api/trips/{tripId}/expenses/{id}` | 要 | 費用記録削除 |
+| 32 | `GET` | `/api/trips/{tripId}/expenses/summary` | 要 | 費用サマリー取得 |
 | **エクスポート** | | | | |
-| 28 | `POST` | `/api/export/itinerary-pdf` | 要 | しおり PDF 出力 |
-| 29 | `POST` | `/api/export/photobook-pdf` | 要 | フォトブック PDF 出力 |
-| 30 | `POST` | `/api/export/slideshow-video` | 要 | スライドショー動画出力 |
-| 31 | `POST` | `/api/export/zip` | 要 | ZIP 一括ダウンロード |
+| 33 | `POST` | `/api/trips/{tripId}/export/itinerary-pdf` | 要 | しおり PDF 出力 |
+| 34 | `POST` | `/api/trips/{tripId}/export/photobook-pdf` | 要 | フォトブック PDF 出力 |
+| 35 | `POST` | `/api/trips/{tripId}/export/slideshow-video` | 要 | スライドショー動画出力 |
+| 36 | `POST` | `/api/trips/{tripId}/export/zip` | 要 | ZIP 一括ダウンロード |
 
 ---
 
