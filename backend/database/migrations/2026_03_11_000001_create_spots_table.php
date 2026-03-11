@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('spots', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('address');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('spot_id')->nullable()->constrained('spots')->nullOnDelete();
             $table->string('storage_path');

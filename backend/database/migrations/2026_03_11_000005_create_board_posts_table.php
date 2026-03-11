@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('board_posts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->text('body');
             $table->foreignId('photo_id')->nullable()->constrained('photos')->nullOnDelete();
