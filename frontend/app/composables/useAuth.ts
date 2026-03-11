@@ -1,21 +1,61 @@
+import type { User, ApiResponse } from '~/types/auth'
+
 export const useAuth = () => {
-  const user = useState<unknown | null>('auth-user', () => null)
+  const user = useState<User | null>('auth-user', () => null)
   const isAuthenticated = computed(() => user.value !== null)
 
-  const login = async (_email: string, _password: string) => {
-    // TODO: Sanctum SPA 認証を実装
-    // 1. GET /sanctum/csrf-cookie
-    // 2. POST /api/login
+  const login = async (email: string, password: string) => {
+    const config = useRuntimeConfig()
+    const baseURL = config.public.apiBase as string
+
+    // 1. CSRF Cookie 取得
+    await $fetch('/sanctum/csrf-cookie', {
+      baseURL,
+      credentials: 'include',
+    })
+
+    // 2. ログイン
+    const response = await $fetch<ApiResponse<User>>('/api/login', {
+      baseURL,
+      method: 'POST',
+      body: { email, password },
+      credentials: 'include',
+    })
+
+    user.value = response.data
   }
 
   const logout = async () => {
-    // TODO: POST /api/logout
+    const config = useRuntimeConfig()
+    const baseURL = config.public.apiBase as string
+
+    try {
+      await $fetch('/api/logout', {
+        baseURL,
+        method: 'POST',
+        credentials: 'include',
+      })
+    } catch {
+      // ログアウトAPIが失敗してもクライアント側の状態はリセットする
+    }
+
     user.value = null
     await navigateTo('/login')
   }
 
   const fetchUser = async () => {
-    // TODO: GET /api/user
+    const config = useRuntimeConfig()
+    const baseURL = config.public.apiBase as string
+
+    try {
+      const response = await $fetch<ApiResponse<User>>('/api/user', {
+        baseURL,
+        credentials: 'include',
+      })
+      user.value = response.data
+    } catch {
+      user.value = null
+    }
   }
 
   return {
