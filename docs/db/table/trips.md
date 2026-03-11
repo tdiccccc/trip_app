@@ -47,3 +47,10 @@
 - start_date / end_date は SQLite の TEXT 型で YYYY-MM-DD 形式の文字列として保持する
 - created_by は trips の作成者を示す。旅行の参加メンバー管理は trip_members テーブルで行う
 - cover_image_url は Cloudflare R2 上の画像パスを想定
+
+### 権限制御（ロック機能）
+
+- trip メタ情報（タイトル、日程、行き先等）の編集・削除は owner（created_by ユーザー = trip_members.role='owner'）のみ可能
+- 配下リソース（しおり、スポット、写真、掲示板、パッキング、費用）はメンバー全員が編集可能
+- DB カラム追加不要。trip_members.role の owner/member 値で制御する
+- β版で拡張予定: role 値追加（editor, viewer）、owner 移譲、is_locked トグル

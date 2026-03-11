@@ -370,6 +370,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 ### 2-3. 旅行詳細取得
 
 指定旅行の詳細情報をメンバー情報とともに取得する。
+レスポンスにはリクエストユーザーの role を示す `current_user_role` フィールドが含まれる。
 
 | 項目 | 内容 |
 |------|------|
@@ -399,6 +400,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
     "start_date": "2026-03-28",
     "end_date": "2026-03-29",
     "cover_image_url": null,
+    "current_user_role": "owner",
     "members": [
       { "id": 1, "name": "たろう", "role": "owner" },
       { "id": 2, "name": "はなこ", "role": "member" }
@@ -436,6 +438,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | **メソッド** | `PATCH` |
 | **パス** | `/api/trips/{tripId}` |
 | **認証** | 要 |
+| **認可** | owner のみ（member は 403）。`EnsureTripOwner` ミドルウェアで制御 |
 | **コントローラー** | `TripController@update` |
 | **UseCase** | `UpdateTripUseCase` |
 
@@ -488,6 +491,14 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 }
 ```
 
+**エラー（403）** -- owner 以外がリクエストした場合
+
+```json
+{
+  "message": "Forbidden."
+}
+```
+
 **エラー（404）**
 
 ```json
@@ -507,6 +518,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | **メソッド** | `DELETE` |
 | **パス** | `/api/trips/{tripId}` |
 | **認証** | 要 |
+| **認可** | owner のみ（member は 403）。`EnsureTripOwner` ミドルウェアで制御 |
 | **コントローラー** | `TripController@destroy` |
 | **UseCase** | `DeleteTripUseCase` |
 
@@ -521,6 +533,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | コード | 説明 |
 |--------|------|
 | 204 | 削除成功（レスポンスボディなし） |
+| 403 | owner 以外がリクエストした |
 | 404 | 対象旅行が見つからない |
 
 ---
