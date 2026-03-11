@@ -555,32 +555,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ```json
 {
-  "data": [
-    {
-      "id": 1,
-      "title": "伊勢神宮 内宮参拝",
-      "sort_order": 0,
-      "date": "2026-03-28",
-      "start_time": "10:00",
-      "end_time": "12:00"
-    },
-    {
-      "id": 3,
-      "title": "ホテルチェックイン",
-      "sort_order": 1,
-      "date": "2026-03-28",
-      "start_time": "15:00",
-      "end_time": null
-    },
-    {
-      "id": 2,
-      "title": "おかげ横丁で食べ歩き",
-      "sort_order": 2,
-      "date": "2026-03-28",
-      "start_time": "12:30",
-      "end_time": "14:30"
-    }
-  ]
+  "message": "Reordered successfully."
 }
 ```
 
@@ -855,8 +830,6 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | spot_id | integer | NO | スポットIDでフィルタ |
 | sort | string | NO | ソート順。`taken_at`（デフォルト）または `created_at` |
 | order | string | NO | `asc` または `desc`（デフォルト: `desc`） |
-| page | integer | NO | ページ番号（デフォルト: 1） |
-| per_page | integer | NO | 1ページあたりの件数（デフォルト: 20、最大: 100） |
 
 #### レスポンス
 
@@ -887,19 +860,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
       "created_at": "2026-03-28T10:31:00.000000Z",
       "updated_at": "2026-03-28T10:31:00.000000Z"
     }
-  ],
-  "meta": {
-    "current_page": 1,
-    "last_page": 3,
-    "per_page": 20,
-    "total": 45
-  },
-  "links": {
-    "first": "/api/photos?page=1",
-    "last": "/api/photos?page=3",
-    "prev": null,
-    "next": "/api/photos?page=2"
-  }
+  ]
 }
 ```
 
@@ -925,7 +886,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | photo | file | YES | required, image, mimes:jpeg,png,gif,webp, max:10240 | 画像ファイル（最大10MB） |
 | spot_id | integer | NO | nullable, exists:spots,id | 紐付けるスポットID |
 | caption | string | NO | nullable, max:500 | キャプション |
-| taken_at | string | NO | nullable, date | 撮影日時（ISO 8601形式） |
+| taken_at | string | NO | nullable, date | 撮影日時（日付として認識可能な文字列、ISO 8601 推奨） |
 
 #### レスポンス
 
@@ -1010,13 +971,6 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | **認証** | 要 |
 | **コントローラー** | `BoardController@index` |
 
-#### クエリパラメータ
-
-| パラメータ | 型 | 必須 | 説明 |
-|-----------|-----|------|------|
-| page | integer | NO | ページ番号（デフォルト: 1） |
-| per_page | integer | NO | 1ページあたりの件数（デフォルト: 20、最大: 50） |
-
 #### レスポンス
 
 **成功（200）**
@@ -1069,19 +1023,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
       "created_at": "2026-03-28T13:30:00.000000Z",
       "updated_at": "2026-03-28T13:30:00.000000Z"
     }
-  ],
-  "meta": {
-    "current_page": 1,
-    "last_page": 1,
-    "per_page": 20,
-    "total": 2
-  },
-  "links": {
-    "first": "/api/board?page=1",
-    "last": "/api/board?page=1",
-    "prev": null,
-    "next": null
-  }
+  ]
 }
 ```
 
@@ -1702,6 +1644,8 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 ### 8-3. スライドショー動画エクスポート
 
 写真を繋いだ MP4 動画を生成する。
+
+※ サーバーサイド動画生成の複雑性から現在は 501 Not Implemented を返す。将来対応予定。
 
 | 項目 | 内容 |
 |------|------|

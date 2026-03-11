@@ -4,7 +4,7 @@
 
 | レイヤー             | 技術                                | バージョン目安 |
 | -------------------- | ----------------------------------- | -------------- |
-| **フロントエンド**   | Nuxt 4 (Vue 3 + Nitro) + TypeScript | 4.x            |
+| **フロントエンド**   | Nuxt 3.16（Nuxt 4 互換設定）(Vue 3 + Nitro) + TypeScript | 3.16           |
 | **UIフレームワーク** | Tailwind CSS                        | 4+             |
 | **バックエンド**     | Laravel                             | 12             |
 | **DB**               | SQLite                              | 3              |
@@ -25,7 +25,7 @@
 │                     Cloud Run                            │
 │                                                          │
 │  ┌────────────────────┐    ┌──────────────────────────┐  │
-│  │   Nuxt 4 (Nitro)   │    │    Laravel 12 (API)      │  │
+│  │ Nuxt 3.16(Nitro)   │    │    Laravel 12 (API)      │  │
 │  │                     │    │                          │  │
 │  │  SSR / CSR ハイブリッド │───▶│  /api/* エンドポイント   │  │
 │  │  pages/             │    │  Eloquent ORM            │  │
@@ -40,8 +40,8 @@
 └──────────────────────────────────────────────────────────┘
 ```
 
-### Nuxt 4 + Laravel API 構成
-- **フロント**: Nuxt 4 が SSR サーバー (Nitro) として動作し、`useFetch` / `$fetch` で Laravel API を呼び出す
+### Nuxt 3.16（Nuxt 4 互換設定） + Laravel API 構成
+- **フロント**: Nuxt 3.16（Nuxt 4 互換設定）が SSR サーバー (Nitro) として動作し、`useFetch` / `$fetch` で Laravel API を呼び出す
 - **バック**: Laravel 12 は `/api/*` エンドポイントのみ提供（API専用）
 - **認証**: Laravel Sanctum の SPA 認証（Cookie ベース、同一ドメイン運用）
 - **デプロイ**: 2コンテナ構成（Nuxt + Laravel）を Cloud Run サービス2つ、または1コンテナにまとめる
@@ -88,7 +88,7 @@ trip_app/
 │   ├── devcontainer.json            # Dev Container 設定
 │   └── docker-compose.yml           # 開発用 Docker Compose
 │
-├── frontend/                        # Nuxt 4 プロジェクト
+├── frontend/                        # Nuxt 3.16（Nuxt 4 互換設定）プロジェクト
 │   ├── app/
 │   │   ├── pages/                   # ファイルベースルーティング
 │   │   │   ├── index.vue            #   トップ（カウントダウン）
@@ -134,6 +134,11 @@ trip_app/
 │   │   │   │   ├── BoardPostRepositoryInterface.php
 │   │   │   │   ├── PackingItemRepositoryInterface.php
 │   │   │   │   └── ExpenseRepositoryInterface.php
+│   │   │   ├── Enums/               #   ドメイン列挙型
+│   │   │   │   ├── SpotCategory.php
+│   │   │   │   ├── Transport.php
+│   │   │   │   ├── Assignee.php
+│   │   │   │   └── ExpenseCategory.php
 │   │   │   └── Exceptions/          #   ドメイン例外
 │   │   │       └── DomainException.php
 │   │   │
@@ -204,10 +209,9 @@ trip_app/
 │   ├── composer.json
 │   └── .env
 │
-├── docker-compose.yml               # 本番用
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml               # GitHub Actions CI/CD
+│       └── deploy.yml               # GitHub Actions CI/CD（Cloud Run デプロイ）
 ├── ise_trip_app_plan.md             # 企画書
 └── CONTRIBUTING.md                  # このファイル
 ```
@@ -275,7 +279,11 @@ cp .env.example .env
 php artisan key:generate
 touch database/database.sqlite
 php artisan migrate --seed
-php artisan serve --host=0.0.0.0
+php artisan serve --host=0.0.0.0 --port=8900
+
+# または、コンビニエンスコマンドで一括起動
+# （Laravel + Queue + Logs + npm dev を並列起動）
+composer dev
 
 # フロントエンド起動（別ターミナル）
 cd frontend
@@ -292,7 +300,7 @@ npm run dev
 - **サービス数**: 2（Nuxt用 + Laravel用）または 1（まとめる場合）
 - **最小インスタンス**: 0（コスト0運用、コールドスタートあり）
 - **最大インスタンス**: 1（2人しか使わない）
-- **メモリ**: 512MB
+- **メモリ**: Backend: 512MB / Frontend: 256MB
 - **リージョン**: asia-northeast1 (東京)
 
 ### SQLite の永続化
@@ -316,7 +324,7 @@ trigger: push to main
 jobs:
   deploy:
     steps:
-      - npm install & npm run build     # Nuxt 4 ビルド
+      - npm install & npm run build     # Nuxt 3.16 ビルド
       - composer install --no-dev       # Laravel 依存解決
       - Docker build                     # コンテナイメージ作成
       - Push to Artifact Registry        # GCR にプッシュ
@@ -341,7 +349,7 @@ expenses        # 費用記録
 
 ---
 
-## Nuxt 4 の学習ポイント
+## Nuxt 3.16（Nuxt 4 互換設定）の学習ポイント
 
 | 機能                           | 説明                                          | 使いどころ           |
 | ------------------------------ | --------------------------------------------- | -------------------- |
@@ -364,7 +372,7 @@ expenses        # 費用記録
 
 ### コーディング規約
 - **PHP**: PSR-12 準拠（Laravel Pint で自動フォーマット）
-- **Vue/TS**: ESLint + Prettier（Nuxt ESLint Module）
+- **Vue/TS**: ESLint（@nuxt/eslint）
 - **コミットメッセージ**: 日本語OK、`feat:` `fix:` `docs:` プレフィックス推奨
 
 ---
