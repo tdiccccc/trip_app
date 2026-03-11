@@ -5,33 +5,42 @@
   "workspaceFolder": "/workspace",
   "remoteUser": "vscode",
   "postCreateCommand": "cd backend && composer install && cd ../frontend && npm install",
-  "forwardPorts": [3900, 8900],
+  "forwardPorts": [
+    3900,
+    8900
+  ],
   "portsAttributes": {
-    "3900": { "label": "Nuxt dev server" },
-    "8900": { "label": "Laravel dev server" }
+    "3900": {
+      "label": "Nuxt dev server"
+    },
+    "8900": {
+      "label": "Laravel dev server"
+    }
   },
   "customizations": {
     "vscode": {
       "extensions": [
-          "bmewburn.vscode-intelephense-client",
-          "amiralizadeh9480.laravel-extra-intellisense",
-          "xdebug.php-debug",
-          "junstyle.php-cs-fixer",
-          "mhutchie.git-graph",
-          "eamodio.gitlens",
-          "yzhang.markdown-all-in-one",
-          "bierner.markdown-mermaid",
-          "bpruitt-goddard.mermaid-markdown-syntax-highlighting",
-          "GitHub.copilot",
-          "GitHub.copilot-chat",
-          "GitHub.vscode-pull-request-github",
-          "github.vscode-github-actions",
-          "cweijan.vscode-database-client2",
-          "mikestead.dotenv",
-          "mrmlnc.vscode-apache",
-          "formulahendry.code-runner",
-          "42Crunch.vscode-openapi",
-          "recca0120.vscode-phpunit"
+        "Vue.volar",
+        "Vue.vscode-typescript-vue-plugin",
+        "bmewburn.vscode-intelephense-client",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "xdebug.php-debug",
+        "junstyle.php-cs-fixer",
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "yzhang.markdown-all-in-one",
+        "bierner.markdown-mermaid",
+        "bpruitt-goddard.mermaid-markdown-syntax-highlighting",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "GitHub.vscode-pull-request-github",
+        "github.vscode-github-actions",
+        "cweijan.vscode-database-client2",
+        "mikestead.dotenv",
+        "mrmlnc.vscode-apache",
+        "formulahendry.code-runner",
+        "42Crunch.vscode-openapi",
+        "recca0120.vscode-phpunit"
       ],
       "settings": {
         "editor.formatOnSave": true,
