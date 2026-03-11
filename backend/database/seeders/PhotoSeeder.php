@@ -19,6 +19,7 @@ class PhotoSeeder extends Seeder
 
         $photos = [
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 2,
                 'storage_path' => 'photos/demo/photo_1.jpg',
@@ -32,6 +33,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 2,
                 'storage_path' => 'photos/demo/photo_2.jpg',
@@ -45,6 +47,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 1,
                 'storage_path' => 'photos/demo/photo_3.jpg',
@@ -58,6 +61,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 1,
                 'storage_path' => 'photos/demo/photo_4.jpg',
@@ -71,6 +75,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 3,
                 'storage_path' => 'photos/demo/photo_5.jpg',
@@ -84,6 +89,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 3,
                 'storage_path' => 'photos/demo/photo_6.jpg',
@@ -97,6 +103,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 3,
                 'storage_path' => 'photos/demo/photo_7.jpg',
@@ -110,6 +117,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 5,
                 'storage_path' => 'photos/demo/photo_8.jpg',
@@ -123,6 +131,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 5,
                 'storage_path' => 'photos/demo/photo_9.jpg',
@@ -136,6 +145,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 7,
                 'storage_path' => 'photos/demo/photo_10.jpg',
@@ -149,6 +159,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 7,
                 'storage_path' => 'photos/demo/photo_11.jpg',
@@ -162,6 +173,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 6,
                 'storage_path' => 'photos/demo/photo_12.jpg',
@@ -175,6 +187,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 4,
                 'storage_path' => 'photos/demo/photo_13.jpg',
@@ -188,6 +201,7 @@ class PhotoSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => null,
                 'storage_path' => 'photos/demo/photo_14.jpg',

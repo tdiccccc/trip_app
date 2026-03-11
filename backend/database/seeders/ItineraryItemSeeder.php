@@ -20,6 +20,7 @@ class ItineraryItemSeeder extends Seeder
         $items = [
             // === Day 1: 2026-03-28 (土) ===
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => null,
                 'title' => '近鉄特急で伊勢市駅へ',
@@ -33,6 +34,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 2,
                 'title' => '伊勢神宮 外宮 参拝',
@@ -46,6 +48,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 1,
                 'title' => '伊勢神宮 内宮 参拝',
@@ -59,6 +62,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 3,
                 'title' => 'おかげ横丁でランチ＆散策',
@@ -72,6 +76,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 5,
                 'title' => '夫婦岩・二見興玉神社',
@@ -85,6 +90,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 8,
                 'title' => 'ホテルにチェックイン・夕食',
@@ -100,6 +106,7 @@ class ItineraryItemSeeder extends Seeder
 
             // === Day 2: 2026-03-29 (日) ===
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 7,
                 'title' => '金剛證寺・朝熊山展望台',
@@ -113,6 +120,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => 6,
                 'title' => '天の岩戸',
@@ -126,6 +134,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'spot_id' => 4,
                 'title' => 'VISONでランチ＆ショッピング',
@@ -139,6 +148,7 @@ class ItineraryItemSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'spot_id' => null,
                 'title' => '帰路：伊勢市駅から近鉄特急',

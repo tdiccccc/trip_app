@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+            TripSeeder::class,
+            TripMemberSeeder::class,
             SpotSeeder::class,
             SpotMemoSeeder::class,
             ItineraryItemSeeder::class,

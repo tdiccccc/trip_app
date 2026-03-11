@@ -20,6 +20,7 @@ class ExpenseSeeder extends Seeder
         $expenses = [
             // Day 1: 2026-03-28
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'description' => '近鉄特急（名古屋→伊勢市）2名分',
                 'amount' => 6000,
@@ -30,6 +31,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'description' => '外宮→内宮 バス代 2名分',
                 'amount' => 860,
@@ -40,6 +42,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'description' => '赤福餅（赤福本店）',
                 'amount' => 300,
@@ -50,6 +53,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'description' => '伊勢うどん（ふくすけ）2人分',
                 'amount' => 1600,
@@ -60,6 +64,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'description' => '松阪牛串焼き 2本',
                 'amount' => 1200,
@@ -70,6 +75,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'description' => '内宮→二見浦 バス代 2名分',
                 'amount' => 860,
@@ -80,6 +86,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'description' => 'お守り（二見興玉神社）',
                 'amount' => 1000,
@@ -90,6 +97,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'description' => 'タクシー（二見浦→ホテル）',
                 'amount' => 2500,
@@ -100,6 +108,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'description' => 'ホテル宿泊費（1泊2食付き）',
                 'amount' => 30000,
@@ -111,6 +120,7 @@ class ExpenseSeeder extends Seeder
             ],
             // Day 2: 2026-03-29
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'description' => '伊勢志摩スカイライン通行料',
                 'amount' => 1270,
@@ -121,6 +131,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'description' => 'VISON ランチ（海鮮丼 2人分）',
                 'amount' => 4000,
@@ -131,6 +142,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 1,
                 'description' => 'お土産（伊勢茶・干物セット）',
                 'amount' => 3500,
@@ -141,6 +153,7 @@ class ExpenseSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'user_id' => 2,
                 'description' => '近鉄特急（伊勢市→名古屋）2名分',
                 'amount' => 6000,

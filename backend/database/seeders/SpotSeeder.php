@@ -19,6 +19,7 @@ class SpotSeeder extends Seeder
 
         $spots = [
             [
+                'trip_id' => 1,
                 'name' => '伊勢神宮 内宮',
                 'description' => '正式名称は皇大神宮。天照大御神をお祀りする、日本の神社の最高峰。',
                 'address' => '三重県伊勢市宇治館町1',
@@ -34,6 +35,7 @@ class SpotSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'name' => '伊勢神宮 外宮',
                 'description' => '正式名称は豊受大神宮。衣食住の守り神である豊受大御神をお祀りする。参拝は外宮から内宮の順が古くからのならわし。',
                 'address' => '三重県伊勢市豊川町279',
@@ -49,6 +51,7 @@ class SpotSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'name' => 'おかげ横丁',
                 'description' => '内宮門前町の中ほどにある、江戸から明治期の伊勢路の建築物を再現した商業施設。伊勢名物の赤福や伊勢うどんなどが楽しめる。',
                 'address' => '三重県伊勢市宇治中之切町52',
@@ -64,6 +67,7 @@ class SpotSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'name' => 'VISON',
                 'description' => '日本最大級の商業リゾート施設。地元食材を活かしたグルメ、温浴施設、宿泊施設などが揃う複合型リゾート。',
                 'address' => '三重県多気郡多気町ヴィソン672-1',
@@ -79,6 +83,7 @@ class SpotSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'name' => '夫婦岩',
                 'description' => '二見興玉神社の境内にある、大小2つの岩が注連縄で結ばれた名勝。日の出の名所としても有名。',
                 'address' => '三重県伊勢市二見町江575',
@@ -94,6 +99,7 @@ class SpotSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'name' => '天の岩戸',
                 'description' => '天照大御神が隠れたと伝わる伝説の地。恵利原の水穴から湧き出す清水は名水百選にも選ばれている。',
                 'address' => '三重県志摩市磯部町恵利原',
@@ -109,6 +115,7 @@ class SpotSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'name' => '金剛證寺',
                 'description' => '朝熊山の山頂にある臨済宗の寺院。「お伊勢参らば朝熊をかけよ、朝熊かけねば片参り」と言われる伊勢参拝ゆかりの寺。',
                 'address' => '三重県伊勢市朝熊町548',
@@ -124,6 +131,7 @@ class SpotSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'trip_id' => 1,
                 'name' => 'ホテル（宿泊先）',
                 'description' => '宿泊先ホテル。詳細は後日確定。',
                 'address' => '未定',
