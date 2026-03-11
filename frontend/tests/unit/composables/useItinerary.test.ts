@@ -17,17 +17,21 @@ describe('useItinerary', () => {
   })
 
   it('fetchItems calls useApiFetch without date filter', () => {
-    const { fetchItems } = useItinerary()
+    const { fetchItems } = useItinerary(1)
     fetchItems()
 
-    expect(mockUseApiFetch).toHaveBeenCalledWith('/api/itinerary')
+    expect(mockUseApiFetch).toHaveBeenCalled()
+    const arg = mockUseApiFetch.mock.calls[0]![0]
+    expect(toValue(arg)).toBe('/api/trips/1/itinerary')
   })
 
   it('fetchItems calls useApiFetch with date filter', () => {
-    const { fetchItems } = useItinerary()
+    const { fetchItems } = useItinerary(1)
     fetchItems('2026-03-28')
 
-    expect(mockUseApiFetch).toHaveBeenCalledWith('/api/itinerary?date=2026-03-28')
+    expect(mockUseApiFetch).toHaveBeenCalled()
+    const arg = mockUseApiFetch.mock.calls[0]![0]
+    expect(toValue(arg)).toBe('/api/trips/1/itinerary?date=2026-03-28')
   })
 
   it('createItem posts data via $fetch', async () => {
@@ -38,10 +42,10 @@ describe('useItinerary', () => {
     }
     mockFetch.mockResolvedValueOnce({ data: { id: 1, ...input } })
 
-    const { createItem } = useItinerary()
+    const { createItem } = useItinerary(1)
     await createItem(input)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/itinerary', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/itinerary', expect.objectContaining({
       method: 'POST',
       body: input,
       credentials: 'include',
@@ -52,10 +56,10 @@ describe('useItinerary', () => {
     const input = { title: 'Updated title' }
     mockFetch.mockResolvedValueOnce({ data: { id: 1, ...input } })
 
-    const { updateItem } = useItinerary()
+    const { updateItem } = useItinerary(1)
     await updateItem(1, input)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/itinerary/1', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/itinerary/1', expect.objectContaining({
       method: 'PATCH',
       body: input,
       credentials: 'include',
@@ -65,10 +69,10 @@ describe('useItinerary', () => {
   it('deleteItem sends DELETE request', async () => {
     mockFetch.mockResolvedValueOnce(undefined)
 
-    const { deleteItem } = useItinerary()
+    const { deleteItem } = useItinerary(1)
     await deleteItem(5)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/itinerary/5', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/itinerary/5', expect.objectContaining({
       method: 'DELETE',
       credentials: 'include',
     }))
@@ -81,10 +85,10 @@ describe('useItinerary', () => {
     ]
     mockFetch.mockResolvedValueOnce({ data: [] })
 
-    const { reorderItems } = useItinerary()
+    const { reorderItems } = useItinerary(1)
     await reorderItems(items)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/itinerary/reorder', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/itinerary/reorder', expect.objectContaining({
       method: 'PATCH',
       body: { items },
       credentials: 'include',

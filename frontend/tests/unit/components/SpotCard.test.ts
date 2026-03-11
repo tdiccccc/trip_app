@@ -5,6 +5,7 @@ import type { Spot } from '~/types/spot'
 
 const baseSpot: Spot = {
   id: 1,
+  trip_id: 1,
   name: 'Ise Jingu',
   description: 'Famous shrine',
   address: 'Ise, Mie Prefecture',

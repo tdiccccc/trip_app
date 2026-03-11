@@ -17,24 +17,30 @@ describe('useExpenses', () => {
   })
 
   it('fetchExpenses calls useApiFetch without filter', () => {
-    const { fetchExpenses } = useExpenses()
+    const { fetchExpenses } = useExpenses(1)
     fetchExpenses()
 
-    expect(mockUseApiFetch).toHaveBeenCalledWith('/api/expenses')
+    expect(mockUseApiFetch).toHaveBeenCalled()
+    const arg = mockUseApiFetch.mock.calls[0]![0]
+    expect(toValue(arg)).toBe('/api/trips/1/expenses')
   })
 
   it('fetchExpenses calls useApiFetch with category filter', () => {
-    const { fetchExpenses } = useExpenses()
+    const { fetchExpenses } = useExpenses(1)
     fetchExpenses('food')
 
-    expect(mockUseApiFetch).toHaveBeenCalledWith('/api/expenses?category=food')
+    expect(mockUseApiFetch).toHaveBeenCalled()
+    const arg = mockUseApiFetch.mock.calls[0]![0]
+    expect(toValue(arg)).toBe('/api/trips/1/expenses?category=food')
   })
 
   it('fetchSummary calls useApiFetch with summary path', () => {
-    const { fetchSummary } = useExpenses()
+    const { fetchSummary } = useExpenses(1)
     fetchSummary()
 
-    expect(mockUseApiFetch).toHaveBeenCalledWith('/api/expenses/summary')
+    expect(mockUseApiFetch).toHaveBeenCalled()
+    const arg = mockUseApiFetch.mock.calls[0]![0]
+    expect(toValue(arg)).toBe('/api/trips/1/expenses/summary')
   })
 
   it('createExpense sends POST request', async () => {
@@ -46,10 +52,10 @@ describe('useExpenses', () => {
     }
     mockFetch.mockResolvedValueOnce({ data: { id: 1, ...input } })
 
-    const { createExpense } = useExpenses()
+    const { createExpense } = useExpenses(1)
     await createExpense(input)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/expenses', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/expenses', expect.objectContaining({
       method: 'POST',
       body: input,
       credentials: 'include',
@@ -59,10 +65,10 @@ describe('useExpenses', () => {
   it('deleteExpense sends DELETE request', async () => {
     mockFetch.mockResolvedValueOnce(undefined)
 
-    const { deleteExpense } = useExpenses()
+    const { deleteExpense } = useExpenses(1)
     await deleteExpense(7)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/expenses/7', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/expenses/7', expect.objectContaining({
       method: 'DELETE',
       credentials: 'include',
     }))

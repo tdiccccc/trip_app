@@ -17,27 +17,31 @@ describe('usePacking', () => {
   })
 
   it('fetchItems calls useApiFetch without filter', () => {
-    const { fetchItems } = usePacking()
+    const { fetchItems } = usePacking(1)
     fetchItems()
 
-    expect(mockUseApiFetch).toHaveBeenCalledWith('/api/packing')
+    expect(mockUseApiFetch).toHaveBeenCalled()
+    const arg = mockUseApiFetch.mock.calls[0]![0]
+    expect(toValue(arg)).toBe('/api/trips/1/packing')
   })
 
   it('fetchItems calls useApiFetch with assignee filter', () => {
-    const { fetchItems } = usePacking()
+    const { fetchItems } = usePacking(1)
     fetchItems('Alice')
 
-    expect(mockUseApiFetch).toHaveBeenCalledWith('/api/packing?assignee=Alice')
+    expect(mockUseApiFetch).toHaveBeenCalled()
+    const arg = mockUseApiFetch.mock.calls[0]![0]
+    expect(toValue(arg)).toBe('/api/trips/1/packing?assignee=Alice')
   })
 
   it('createItem sends POST request', async () => {
     const input = { name: 'Sunscreen', assignee: 'Alice' }
     mockFetch.mockResolvedValueOnce({ data: { id: 1, ...input, is_checked: false } })
 
-    const { createItem } = usePacking()
+    const { createItem } = usePacking(1)
     await createItem(input)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/packing', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/packing', expect.objectContaining({
       method: 'POST',
       body: input,
       credentials: 'include',
@@ -48,10 +52,10 @@ describe('usePacking', () => {
     const input = { is_checked: true }
     mockFetch.mockResolvedValueOnce({ data: { id: 1, name: 'Sunscreen', is_checked: true } })
 
-    const { updateItem } = usePacking()
+    const { updateItem } = usePacking(1)
     await updateItem(1, input)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/packing/1', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/packing/1', expect.objectContaining({
       method: 'PATCH',
       body: input,
       credentials: 'include',
@@ -61,10 +65,10 @@ describe('usePacking', () => {
   it('deleteItem sends DELETE request', async () => {
     mockFetch.mockResolvedValueOnce(undefined)
 
-    const { deleteItem } = usePacking()
+    const { deleteItem } = usePacking(1)
     await deleteItem(3)
 
-    expect(mockFetch).toHaveBeenCalledWith('/api/packing/3', expect.objectContaining({
+    expect(mockFetch).toHaveBeenCalledWith('/api/trips/1/packing/3', expect.objectContaining({
       method: 'DELETE',
       credentials: 'include',
     }))

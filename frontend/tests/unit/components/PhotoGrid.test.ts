@@ -5,6 +5,7 @@ import type { Photo } from '~/types/photo'
 
 const createPhoto = (id: number, overrides: Partial<Photo> = {}): Photo => ({
   id,
+  trip_id: 1,
   user_id: 1,
   spot_id: null,
   storage_path: `/photos/${id}.jpg`,
@@ -77,7 +78,7 @@ describe('PhotoGrid', () => {
     })
 
     const buttons = wrapper.findAll('button')
-    await buttons[1].trigger('click')
+    await buttons[1]!.trigger('click')
 
     expect(wrapper.emitted('select')).toBeTruthy()
     expect(wrapper.emitted('select')![0]).toEqual([photos[1]])

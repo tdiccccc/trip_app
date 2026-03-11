@@ -4,6 +4,7 @@ import { useSlideshow } from '~/composables/useSlideshow'
 
 const createPhoto = (id: number): Photo => ({
   id,
+  trip_id: 1,
   user_id: 1,
   spot_id: null,
   storage_path: `/photos/${id}.jpg`,
