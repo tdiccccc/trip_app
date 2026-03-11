@@ -17,14 +17,14 @@ use Packages\Domain\Enums\SpotCategory;
 final class SpotController extends Controller
 {
     /**
-     * GET /api/spots
+     * GET /api/trips/{tripId}/spots
      */
-    public function index(Request $request, GetSpotListUseCase $useCase): JsonResponse
+    public function index(int $tripId, Request $request, GetSpotListUseCase $useCase): JsonResponse
     {
         $category = $request->query('category');
         $spotCategory = is_string($category) ? SpotCategory::from($category) : null;
 
-        $spots = $useCase->execute($spotCategory);
+        $spots = $useCase->execute($tripId, $spotCategory);
 
         return response()->json([
             'data' => array_map(fn ($s) => $s->toArray(), $spots),
@@ -32,11 +32,11 @@ final class SpotController extends Controller
     }
 
     /**
-     * GET /api/spots/{id}
+     * GET /api/trips/{tripId}/spots/{id}
      */
-    public function show(int $id, GetSpotDetailUseCase $useCase): JsonResponse
+    public function show(int $tripId, int $id, GetSpotDetailUseCase $useCase): JsonResponse
     {
-        $result = $useCase->execute($id);
+        $result = $useCase->execute($tripId, $id);
 
         if ($result === null) {
             return response()->json(['message' => 'Not found.'], 404);
@@ -52,24 +52,24 @@ final class SpotController extends Controller
     }
 
     /**
-     * POST /api/spots/{id}/memos
+     * POST /api/trips/{tripId}/spots/{id}/memos
      */
-    public function storeMemo(int $id, StoreSpotMemoRequest $request, CreateSpotMemoUseCase $useCase): JsonResponse
+    public function storeMemo(int $tripId, int $id, StoreSpotMemoRequest $request, CreateSpotMemoUseCase $useCase): JsonResponse
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
 
-        $memo = $useCase->execute($id, $user->id, $request->validated('body'));
+        $memo = $useCase->execute($tripId, $id, $user->id, $request->validated('body'));
 
         return response()->json(['data' => $memo->toArray()], 201);
     }
 
     /**
-     * GET /api/spots/{id}/photos
+     * GET /api/trips/{tripId}/spots/{id}/photos
      */
-    public function photos(int $id, GetAlbumUseCase $useCase): JsonResponse
+    public function photos(int $tripId, int $id, GetAlbumUseCase $useCase): JsonResponse
     {
-        $photos = $useCase->execute(spotId: $id);
+        $photos = $useCase->execute(tripId: $tripId, spotId: $id);
 
         return response()->json([
             'data' => array_map(fn ($p) => $p->toArray(), $photos),

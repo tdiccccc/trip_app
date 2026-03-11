@@ -18,14 +18,14 @@ use Packages\Domain\Repositories\ExpenseRepositoryInterface;
 final class ExpenseController extends Controller
 {
     /**
-     * GET /api/expenses
+     * GET /api/trips/{tripId}/expenses
      */
-    public function index(Request $request, ExpenseRepositoryInterface $expenseRepository): JsonResponse
+    public function index(int $tripId, Request $request, ExpenseRepositoryInterface $expenseRepository): JsonResponse
     {
         $category = $request->query('category');
         $categoryStr = is_string($category) ? $category : null;
 
-        $expenses = $expenseRepository->findAll($categoryStr);
+        $expenses = $expenseRepository->findAll($tripId, $categoryStr);
 
         $data = array_map(
             fn ($expense) => ExpenseDto::fromEntity($expense)->toArray(),
@@ -36,15 +36,16 @@ final class ExpenseController extends Controller
     }
 
     /**
-     * POST /api/expenses
+     * POST /api/trips/{tripId}/expenses
      */
-    public function store(StoreExpenseRequest $request, RecordExpenseUseCase $useCase): JsonResponse
+    public function store(int $tripId, StoreExpenseRequest $request, RecordExpenseUseCase $useCase): JsonResponse
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
         $validated = $request->validated();
 
         $expense = $useCase->execute(
+            tripId: $tripId,
             userId: $user->id,
             description: $validated['description'],
             amount: (int) $validated['amount'],
@@ -57,21 +58,21 @@ final class ExpenseController extends Controller
     }
 
     /**
-     * DELETE /api/expenses/{id}
+     * DELETE /api/trips/{tripId}/expenses/{id}
      */
-    public function destroy(int $id, DeleteExpenseUseCase $useCase): Response
+    public function destroy(int $tripId, int $id, DeleteExpenseUseCase $useCase): Response
     {
-        $useCase->execute($id);
+        $useCase->execute($tripId, $id);
 
         return response()->noContent();
     }
 
     /**
-     * GET /api/expenses/summary
+     * GET /api/trips/{tripId}/expenses/summary
      */
-    public function summary(GetExpenseSummaryUseCase $useCase): JsonResponse
+    public function summary(int $tripId, GetExpenseSummaryUseCase $useCase): JsonResponse
     {
-        $summary = $useCase->execute();
+        $summary = $useCase->execute($tripId);
 
         return response()->json(['data' => $summary]);
     }

@@ -18,14 +18,14 @@ use Packages\Application\UseCases\Packing\UpdatePackingItemUseCase;
 final class PackingController extends Controller
 {
     /**
-     * GET /api/packing
+     * GET /api/trips/{tripId}/packing
      */
-    public function index(Request $request, GetPackingListUseCase $useCase): JsonResponse
+    public function index(int $tripId, Request $request, GetPackingListUseCase $useCase): JsonResponse
     {
         $assignee = $request->query('assignee');
         $assigneeStr = is_string($assignee) ? $assignee : null;
 
-        $items = $useCase->execute($assigneeStr);
+        $items = $useCase->execute($tripId, $assigneeStr);
 
         return response()->json([
             'data' => array_map(fn ($item) => $item->toArray(), $items),
@@ -33,15 +33,16 @@ final class PackingController extends Controller
     }
 
     /**
-     * POST /api/packing
+     * POST /api/trips/{tripId}/packing
      */
-    public function store(StorePackingItemRequest $request, CreatePackingItemUseCase $useCase): JsonResponse
+    public function store(int $tripId, StorePackingItemRequest $request, CreatePackingItemUseCase $useCase): JsonResponse
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
         $validated = $request->validated();
 
         $item = $useCase->execute(
+            tripId: $tripId,
             userId: $user->id,
             name: $validated['name'],
             assignee: $validated['assignee'] ?? 'shared',
@@ -53,11 +54,11 @@ final class PackingController extends Controller
     }
 
     /**
-     * PATCH /api/packing/{id}
+     * PATCH /api/trips/{tripId}/packing/{id}
      */
-    public function update(int $id, UpdatePackingItemRequest $request, UpdatePackingItemUseCase $useCase): JsonResponse
+    public function update(int $tripId, int $id, UpdatePackingItemRequest $request, UpdatePackingItemUseCase $useCase): JsonResponse
     {
-        $result = $useCase->execute($id, $request->validated());
+        $result = $useCase->execute($tripId, $id, $request->validated());
 
         if ($result === null) {
             return response()->json(['message' => 'Not found.'], 404);
@@ -67,11 +68,11 @@ final class PackingController extends Controller
     }
 
     /**
-     * DELETE /api/packing/{id}
+     * DELETE /api/trips/{tripId}/packing/{id}
      */
-    public function destroy(int $id, DeletePackingItemUseCase $useCase): Response
+    public function destroy(int $tripId, int $id, DeletePackingItemUseCase $useCase): Response
     {
-        $useCase->execute($id);
+        $useCase->execute($tripId, $id);
 
         return response()->noContent();
     }

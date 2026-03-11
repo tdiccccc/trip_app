@@ -18,15 +18,16 @@ use Packages\Application\UseCases\Album\UploadPhotoUseCase;
 final class AlbumController extends Controller
 {
     /**
-     * GET /api/photos
+     * GET /api/trips/{tripId}/photos
      */
-    public function index(Request $request, GetAlbumUseCase $useCase): JsonResponse
+    public function index(int $tripId, Request $request, GetAlbumUseCase $useCase): JsonResponse
     {
         $spotId = $request->query('spot_id');
         $sort = $request->query('sort', 'taken_at');
         $order = $request->query('order', 'desc');
 
         $photos = $useCase->execute(
+            tripId: $tripId,
             spotId: is_numeric($spotId) ? (int) $spotId : null,
             sort: is_string($sort) ? $sort : 'taken_at',
             order: is_string($order) ? $order : 'desc',
@@ -38,9 +39,9 @@ final class AlbumController extends Controller
     }
 
     /**
-     * POST /api/photos
+     * POST /api/trips/{tripId}/photos
      */
-    public function store(StorePhotoRequest $request, UploadPhotoUseCase $useCase): JsonResponse
+    public function store(int $tripId, StorePhotoRequest $request, UploadPhotoUseCase $useCase): JsonResponse
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
@@ -53,6 +54,7 @@ final class AlbumController extends Controller
         Storage::disk('s3')->put($storagePath, $file->getContent());
 
         $photo = $useCase->execute(
+            tripId: $tripId,
             userId: $user->id,
             spotId: $validated['spot_id'] ?? null,
             storagePath: $storagePath,
@@ -68,11 +70,11 @@ final class AlbumController extends Controller
     }
 
     /**
-     * DELETE /api/photos/{id}
+     * DELETE /api/trips/{tripId}/photos/{id}
      */
-    public function destroy(int $id, DeletePhotoUseCase $useCase): Response
+    public function destroy(int $tripId, int $id, DeletePhotoUseCase $useCase): Response
     {
-        $useCase->execute($id);
+        $useCase->execute($tripId, $id);
 
         return response()->noContent();
     }

@@ -17,11 +17,11 @@ use ZipArchive;
 final class ExportController extends Controller
 {
     /**
-     * POST /api/export/itinerary-pdf
+     * POST /api/trips/{tripId}/export/itinerary-pdf
      */
-    public function itineraryPdf(ExportItineraryPdfUseCase $useCase): Response
+    public function itineraryPdf(int $tripId, ExportItineraryPdfUseCase $useCase): Response
     {
-        $data = $useCase->execute();
+        $data = $useCase->execute($tripId);
 
         /** @var \Barryvdh\DomPDF\PDF $pdf */
         $pdf = Pdf::loadView('exports.itinerary', [
@@ -36,11 +36,11 @@ final class ExportController extends Controller
     }
 
     /**
-     * POST /api/export/photobook-pdf
+     * POST /api/trips/{tripId}/export/photobook-pdf
      */
-    public function photobookPdf(ExportPhotobookUseCase $useCase): Response
+    public function photobookPdf(int $tripId, ExportPhotobookUseCase $useCase): Response
     {
-        $photos = $useCase->execute();
+        $photos = $useCase->execute($tripId);
 
         /** @var \Barryvdh\DomPDF\PDF $pdf */
         $pdf = Pdf::loadView('exports.photobook', [
@@ -54,11 +54,11 @@ final class ExportController extends Controller
     }
 
     /**
-     * POST /api/export/slideshow-video
+     * POST /api/trips/{tripId}/export/slideshow-video
      *
      * サーバーサイド動画生成は複雑なため、準備中スタブ実装。
      */
-    public function slideshowVideo(): JsonResponse
+    public function slideshowVideo(int $tripId): JsonResponse
     {
         return response()->json([
             'message' => 'This feature is currently under development.',
@@ -66,11 +66,11 @@ final class ExportController extends Controller
     }
 
     /**
-     * POST /api/export/zip
+     * POST /api/trips/{tripId}/export/zip
      */
-    public function zip(ExportZipUseCase $useCase): Response
+    public function zip(int $tripId, ExportZipUseCase $useCase): Response
     {
-        $data = $useCase->execute();
+        $data = $useCase->execute($tripId);
 
         // しおり PDF を生成
         /** @var \Barryvdh\DomPDF\PDF $itineraryPdf */

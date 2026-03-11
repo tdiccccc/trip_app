@@ -17,11 +17,11 @@ use Packages\Domain\Repositories\BoardPostRepositoryInterface;
 final class BoardController extends Controller
 {
     /**
-     * GET /api/board
+     * GET /api/trips/{tripId}/board
      */
-    public function index(GetBoardPostsUseCase $useCase): JsonResponse
+    public function index(int $tripId, GetBoardPostsUseCase $useCase): JsonResponse
     {
-        $results = $useCase->execute();
+        $results = $useCase->execute($tripId);
 
         $data = array_map(fn ($item) => [
             ...$item['post']->toArray(),
@@ -32,15 +32,16 @@ final class BoardController extends Controller
     }
 
     /**
-     * POST /api/board
+     * POST /api/trips/{tripId}/board
      */
-    public function store(StoreBoardPostRequest $request, PostMessageUseCase $useCase): JsonResponse
+    public function store(int $tripId, StoreBoardPostRequest $request, PostMessageUseCase $useCase): JsonResponse
     {
         /** @var \App\Models\User $user */
         $user = $request->user();
         $validated = $request->validated();
 
         $post = $useCase->execute(
+            tripId: $tripId,
             userId: $user->id,
             body: $validated['body'],
             photoId: $validated['photo_id'] ?? null,
@@ -51,9 +52,10 @@ final class BoardController extends Controller
     }
 
     /**
-     * POST /api/board/{id}/reactions
+     * POST /api/trips/{tripId}/board/{id}/reactions
      */
     public function storeReaction(
+        int $tripId,
         int $id,
         StoreReactionRequest $request,
         AddReactionUseCase $useCase,
@@ -70,6 +72,7 @@ final class BoardController extends Controller
 
         try {
             $reaction = $useCase->execute(
+                tripId: $tripId,
                 boardPostId: $id,
                 userId: $user->id,
                 emoji: $request->validated('emoji'),
