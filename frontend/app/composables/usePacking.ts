@@ -1,30 +1,37 @@
 import type { PackingItem, CreatePackingItemInput, UpdatePackingItemInput } from '~/types/packing'
 import type { ApiResponse } from '~/types/auth'
 
-export const usePacking = () => {
+export const usePacking = (tripId: MaybeRefOrGetter<string | number>) => {
   const { apiFetch } = useApiClient()
 
   const fetchItems = (assignee?: string) => {
-    const query = assignee ? `?assignee=${assignee}` : ''
-    return useApiFetch<ApiResponse<PackingItem[]>>(`/api/packing${query}`)
+    const url = computed(() => {
+      const t = toValue(tripId)
+      const query = assignee ? `?assignee=${assignee}` : ''
+      return `/api/trips/${t}/packing${query}`
+    })
+    return useApiFetch<ApiResponse<PackingItem[]>>(url)
   }
 
   const createItem = async (input: CreatePackingItemInput) => {
-    return apiFetch<ApiResponse<PackingItem>>('/api/packing', {
+    const t = toValue(tripId)
+    return apiFetch<ApiResponse<PackingItem>>(`/api/trips/${t}/packing`, {
       method: 'POST',
       body: input,
     })
   }
 
   const updateItem = async (id: number, input: UpdatePackingItemInput) => {
-    return apiFetch<ApiResponse<PackingItem>>(`/api/packing/${id}`, {
+    const t = toValue(tripId)
+    return apiFetch<ApiResponse<PackingItem>>(`/api/trips/${t}/packing/${id}`, {
       method: 'PATCH',
       body: input,
     })
   }
 
   const deleteItem = async (id: number) => {
-    return apiFetch(`/api/packing/${id}`, {
+    const t = toValue(tripId)
+    return apiFetch(`/api/trips/${t}/packing/${id}`, {
       method: 'DELETE',
     })
   }

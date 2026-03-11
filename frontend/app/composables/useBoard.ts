@@ -1,22 +1,25 @@
 import type { BoardPost, CreateBoardPostInput, CreateReactionInput, Reaction } from '~/types/board'
 import type { ApiResponse } from '~/types/auth'
 
-export const useBoard = () => {
+export const useBoard = (tripId: MaybeRefOrGetter<string | number>) => {
   const { apiFetch } = useApiClient()
 
   const fetchPosts = () => {
-    return useApiFetch<ApiResponse<BoardPost[]>>('/api/board')
+    const url = computed(() => `/api/trips/${toValue(tripId)}/board`)
+    return useApiFetch<ApiResponse<BoardPost[]>>(url)
   }
 
   const createPost = async (input: CreateBoardPostInput) => {
-    return apiFetch<ApiResponse<BoardPost>>('/api/board', {
+    const t = toValue(tripId)
+    return apiFetch<ApiResponse<BoardPost>>(`/api/trips/${t}/board`, {
       method: 'POST',
       body: input,
     })
   }
 
   const addReaction = async (postId: number, input: CreateReactionInput) => {
-    return apiFetch<ApiResponse<Reaction>>(`/api/board/${postId}/reactions`, {
+    const t = toValue(tripId)
+    return apiFetch<ApiResponse<Reaction>>(`/api/trips/${t}/board/${postId}/reactions`, {
       method: 'POST',
       body: input,
     })

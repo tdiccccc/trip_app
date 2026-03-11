@@ -1,20 +1,30 @@
 import type { Spot, SpotDetail, SpotMemo } from '~/types/spot'
 import type { ApiResponse } from '~/types/auth'
 
-export const useSpots = () => {
+export const useSpots = (tripId: MaybeRefOrGetter<string | number>) => {
   const { apiFetch } = useApiClient()
 
   const fetchSpots = (category?: string) => {
-    const query = category ? `?category=${category}` : ''
-    return useApiFetch<ApiResponse<Spot[]>>(`/api/spots${query}`)
+    const url = computed(() => {
+      const t = toValue(tripId)
+      const query = category ? `?category=${category}` : ''
+      return `/api/trips/${t}/spots${query}`
+    })
+    return useApiFetch<ApiResponse<Spot[]>>(url)
   }
 
-  const fetchSpot = (id: number | string) => {
-    return useApiFetch<ApiResponse<SpotDetail>>(`/api/spots/${id}`)
+  const fetchSpot = (id: MaybeRefOrGetter<number | string>) => {
+    const url = computed(() => {
+      const t = toValue(tripId)
+      const spotId = toValue(id)
+      return `/api/trips/${t}/spots/${spotId}`
+    })
+    return useApiFetch<ApiResponse<SpotDetail>>(url)
   }
 
   const createMemo = async (spotId: number, body: string) => {
-    return apiFetch<ApiResponse<SpotMemo>>(`/api/spots/${spotId}/memos`, {
+    const t = toValue(tripId)
+    return apiFetch<ApiResponse<SpotMemo>>(`/api/trips/${t}/spots/${spotId}/memos`, {
       method: 'POST',
       body: { body },
     })
