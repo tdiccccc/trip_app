@@ -2,8 +2,7 @@ import type { ItineraryItem, CreateItineraryItemInput } from '~/types/itinerary'
 import type { ApiResponse } from '~/types/auth'
 
 export const useItinerary = () => {
-  const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase as string
+  const { apiFetch } = useApiClient()
 
   const fetchItems = (date?: string) => {
     const query = date ? `?date=${date}` : ''
@@ -11,37 +10,29 @@ export const useItinerary = () => {
   }
 
   const createItem = async (input: CreateItineraryItemInput) => {
-    return $fetch<ApiResponse<ItineraryItem>>('/api/itinerary', {
-      baseURL,
+    return apiFetch<ApiResponse<ItineraryItem>>('/api/itinerary', {
       method: 'POST',
       body: input,
-      credentials: 'include',
     })
   }
 
   const updateItem = async (id: number, input: Partial<CreateItineraryItemInput>) => {
-    return $fetch<ApiResponse<ItineraryItem>>(`/api/itinerary/${id}`, {
-      baseURL,
+    return apiFetch<ApiResponse<ItineraryItem>>(`/api/itinerary/${id}`, {
       method: 'PATCH',
       body: input,
-      credentials: 'include',
     })
   }
 
   const deleteItem = async (id: number) => {
-    return $fetch(`/api/itinerary/${id}`, {
-      baseURL,
+    return apiFetch(`/api/itinerary/${id}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
   }
 
   const reorderItems = async (items: { id: number; sort_order: number }[]) => {
-    return $fetch<ApiResponse<ItineraryItem[]>>('/api/itinerary/reorder', {
-      baseURL,
+    return apiFetch<ApiResponse<ItineraryItem[]>>('/api/itinerary/reorder', {
       method: 'PATCH',
       body: { items },
-      credentials: 'include',
     })
   }
 

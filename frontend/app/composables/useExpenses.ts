@@ -2,8 +2,7 @@ import type { Expense, CreateExpenseInput, ExpenseSummary } from '~/types/expens
 import type { ApiResponse } from '~/types/auth'
 
 export const useExpenses = () => {
-  const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase as string
+  const { apiFetch } = useApiClient()
 
   const fetchExpenses = (category?: string) => {
     const query = category ? `?category=${category}` : ''
@@ -15,19 +14,15 @@ export const useExpenses = () => {
   }
 
   const createExpense = async (input: CreateExpenseInput) => {
-    return $fetch<ApiResponse<Expense>>('/api/expenses', {
-      baseURL,
+    return apiFetch<ApiResponse<Expense>>('/api/expenses', {
       method: 'POST',
       body: input,
-      credentials: 'include',
     })
   }
 
   const deleteExpense = async (id: number) => {
-    return $fetch(`/api/expenses/${id}`, {
-      baseURL,
+    return apiFetch(`/api/expenses/${id}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
   }
 

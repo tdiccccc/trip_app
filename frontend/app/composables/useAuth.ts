@@ -3,6 +3,7 @@ import type { User, ApiResponse } from '~/types/auth'
 export const useAuth = () => {
   const user = useState<User | null>('auth-user', () => null)
   const isAuthenticated = computed(() => user.value !== null)
+  const { apiFetch } = useApiClient()
 
   const login = async (email: string, password: string) => {
     const config = useRuntimeConfig()
@@ -14,36 +15,19 @@ export const useAuth = () => {
       credentials: 'include',
     })
 
-    // 2. XSRF-TOKEN をクッキーから取得
-    const xsrfToken = useCookie('XSRF-TOKEN').value
-
-    // 3. ログイン
-    const response = await $fetch<ApiResponse<User>>('/api/login', {
-      baseURL,
+    // 2. ログイン（XSRF-TOKENはapiFetchが自動付与）
+    const response = await apiFetch<ApiResponse<User>>('/api/login', {
       method: 'POST',
       body: { email, password },
-      credentials: 'include',
-      headers: {
-        ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
-      },
     })
 
     user.value = response.data
   }
 
   const logout = async () => {
-    const config = useRuntimeConfig()
-    const baseURL = config.public.apiBase as string
-
     try {
-      const xsrfToken = useCookie('XSRF-TOKEN').value
-      await $fetch('/api/logout', {
-        baseURL,
+      await apiFetch('/api/logout', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
-        },
       })
     } catch {
       // ログアウトAPIが失敗してもクライアント側の状態はリセットする
@@ -54,14 +38,8 @@ export const useAuth = () => {
   }
 
   const fetchUser = async () => {
-    const config = useRuntimeConfig()
-    const baseURL = config.public.apiBase as string
-
     try {
-      const response = await $fetch<ApiResponse<User>>('/api/user', {
-        baseURL,
-        credentials: 'include',
-      })
+      const response = await apiFetch<ApiResponse<User>>('/api/user')
       user.value = response.data
     } catch {
       user.value = null

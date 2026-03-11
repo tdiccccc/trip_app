@@ -2,6 +2,8 @@ import type { Spot, SpotDetail, SpotMemo } from '~/types/spot'
 import type { ApiResponse } from '~/types/auth'
 
 export const useSpots = () => {
+  const { apiFetch } = useApiClient()
+
   const fetchSpots = (category?: string) => {
     const query = category ? `?category=${category}` : ''
     return useApiFetch<ApiResponse<Spot[]>>(`/api/spots${query}`)
@@ -12,12 +14,9 @@ export const useSpots = () => {
   }
 
   const createMemo = async (spotId: number, body: string) => {
-    const config = useRuntimeConfig()
-    return $fetch<ApiResponse<SpotMemo>>(`/api/spots/${spotId}/memos`, {
-      baseURL: config.public.apiBase as string,
+    return apiFetch<ApiResponse<SpotMemo>>(`/api/spots/${spotId}/memos`, {
       method: 'POST',
       body: { body },
-      credentials: 'include',
     })
   }
 

@@ -2,28 +2,23 @@ import type { BoardPost, CreateBoardPostInput, CreateReactionInput, Reaction } f
 import type { ApiResponse } from '~/types/auth'
 
 export const useBoard = () => {
-  const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase as string
+  const { apiFetch } = useApiClient()
 
   const fetchPosts = () => {
     return useApiFetch<ApiResponse<BoardPost[]>>('/api/board')
   }
 
   const createPost = async (input: CreateBoardPostInput) => {
-    return $fetch<ApiResponse<BoardPost>>('/api/board', {
-      baseURL,
+    return apiFetch<ApiResponse<BoardPost>>('/api/board', {
       method: 'POST',
       body: input,
-      credentials: 'include',
     })
   }
 
   const addReaction = async (postId: number, input: CreateReactionInput) => {
-    return $fetch<ApiResponse<Reaction>>(`/api/board/${postId}/reactions`, {
-      baseURL,
+    return apiFetch<ApiResponse<Reaction>>(`/api/board/${postId}/reactions`, {
       method: 'POST',
       body: input,
-      credentials: 'include',
     })
   }
 

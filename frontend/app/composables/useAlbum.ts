@@ -16,8 +16,7 @@ interface FetchPhotosParams {
 }
 
 export const useAlbum = () => {
-  const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase as string
+  const { apiFetch } = useApiClient()
 
   const fetchPhotos = (params?: FetchPhotosParams) => {
     const query = new URLSearchParams()
@@ -40,19 +39,15 @@ export const useAlbum = () => {
     if (options?.caption) formData.append('caption', options.caption)
     if (options?.taken_at) formData.append('taken_at', options.taken_at)
 
-    return $fetch<ApiResponse<Photo>>('/api/photos', {
-      baseURL,
+    return apiFetch<ApiResponse<Photo>>('/api/photos', {
       method: 'POST',
       body: formData,
-      credentials: 'include',
     })
   }
 
   const deletePhoto = async (id: number) => {
-    return $fetch(`/api/photos/${id}`, {
-      baseURL,
+    return apiFetch(`/api/photos/${id}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
   }
 

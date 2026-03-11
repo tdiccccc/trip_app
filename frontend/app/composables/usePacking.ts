@@ -2,8 +2,7 @@ import type { PackingItem, CreatePackingItemInput, UpdatePackingItemInput } from
 import type { ApiResponse } from '~/types/auth'
 
 export const usePacking = () => {
-  const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase as string
+  const { apiFetch } = useApiClient()
 
   const fetchItems = (assignee?: string) => {
     const query = assignee ? `?assignee=${assignee}` : ''
@@ -11,28 +10,22 @@ export const usePacking = () => {
   }
 
   const createItem = async (input: CreatePackingItemInput) => {
-    return $fetch<ApiResponse<PackingItem>>('/api/packing', {
-      baseURL,
+    return apiFetch<ApiResponse<PackingItem>>('/api/packing', {
       method: 'POST',
       body: input,
-      credentials: 'include',
     })
   }
 
   const updateItem = async (id: number, input: UpdatePackingItemInput) => {
-    return $fetch<ApiResponse<PackingItem>>(`/api/packing/${id}`, {
-      baseURL,
+    return apiFetch<ApiResponse<PackingItem>>(`/api/packing/${id}`, {
       method: 'PATCH',
       body: input,
-      credentials: 'include',
     })
   }
 
   const deleteItem = async (id: number) => {
-    return $fetch(`/api/packing/${id}`, {
-      baseURL,
+    return apiFetch(`/api/packing/${id}`, {
       method: 'DELETE',
-      credentials: 'include',
     })
   }
 
