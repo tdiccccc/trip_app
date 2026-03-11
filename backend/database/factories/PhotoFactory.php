@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Photo;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,6 +22,7 @@ final class PhotoFactory extends Factory
     public function definition(): array
     {
         return [
+            'trip_id' => Trip::factory(),
             'user_id' => User::factory(),
             'spot_id' => null,
             'storage_path' => 'photos/1/' . $this->faker->uuid() . '.jpg',

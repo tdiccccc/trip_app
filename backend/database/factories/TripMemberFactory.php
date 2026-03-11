@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\BoardPost;
 use App\Models\Trip;
+use App\Models\TripMember;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<BoardPost>
+ * @extends Factory<TripMember>
  */
-final class BoardPostFactory extends Factory
+final class TripMemberFactory extends Factory
 {
-    protected $model = BoardPost::class;
+    protected $model = TripMember::class;
 
     /**
      * @return array<string, mixed>
@@ -24,9 +24,8 @@ final class BoardPostFactory extends Factory
         return [
             'trip_id' => Trip::factory(),
             'user_id' => User::factory(),
-            'body' => $this->faker->sentence(),
-            'photo_id' => null,
-            'is_best_shot' => false,
+            'role' => 'owner',
+            'joined_at' => now(),
         ];
     }
 }

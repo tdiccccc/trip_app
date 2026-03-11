@@ -6,6 +6,8 @@ namespace Tests\Feature\Itinerary;
 
 use App\Models\ItineraryItem;
 use App\Models\Spot;
+use App\Models\Trip;
+use App\Models\TripMember;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -16,26 +18,36 @@ final class ItineraryControllerTest extends TestCase
 
     private User $user;
 
+    private Trip $trip;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
+        $this->trip = Trip::factory()->create(['created_by' => $this->user->id]);
+        TripMember::factory()->create([
+            'trip_id' => $this->trip->id,
+            'user_id' => $this->user->id,
+            'role' => 'owner',
+        ]);
     }
 
     // ========================================
-    // GET /api/itinerary
+    // GET /api/trips/{tripId}/itinerary
     // ========================================
 
     public function test_index_returns_itinerary_list(): void
     {
         ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'title' => '伊勢神宮参拝',
             'date' => '2026-04-01',
             'sort_order' => 0,
         ]);
         ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'title' => 'おかげ横丁散策',
             'date' => '2026-04-01',
@@ -43,7 +55,7 @@ final class ItineraryControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-            ->getJson('/api/itinerary');
+            ->getJson("/api/trips/{$this->trip->id}/itinerary");
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -57,16 +69,18 @@ final class ItineraryControllerTest extends TestCase
     public function test_index_filters_by_date(): void
     {
         ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'date' => '2026-04-01',
         ]);
         ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'date' => '2026-04-02',
         ]);
 
         $response = $this->actingAs($this->user)
-            ->getJson('/api/itinerary?date=2026-04-01');
+            ->getJson("/api/trips/{$this->trip->id}/itinerary?date=2026-04-01");
 
         $response->assertOk();
         $this->assertCount(1, $response->json('data'));
@@ -74,19 +88,19 @@ final class ItineraryControllerTest extends TestCase
 
     public function test_index_returns_401_for_guest(): void
     {
-        $response = $this->getJson('/api/itinerary');
+        $response = $this->getJson("/api/trips/{$this->trip->id}/itinerary");
 
         $response->assertUnauthorized();
     }
 
     // ========================================
-    // POST /api/itinerary
+    // POST /api/trips/{tripId}/itinerary
     // ========================================
 
     public function test_store_creates_itinerary_item_and_returns_201(): void
     {
         $response = $this->actingAs($this->user)
-            ->postJson('/api/itinerary', [
+            ->postJson("/api/trips/{$this->trip->id}/itinerary", [
                 'title' => '伊勢神宮参拝',
                 'date' => '2026-04-01',
                 'start_time' => '10:00',
@@ -108,6 +122,7 @@ final class ItineraryControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('itinerary_items', [
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'title' => '伊勢神宮参拝',
         ]);
@@ -115,10 +130,10 @@ final class ItineraryControllerTest extends TestCase
 
     public function test_store_with_spot_id(): void
     {
-        $spot = Spot::factory()->create();
+        $spot = Spot::factory()->create(['trip_id' => $this->trip->id]);
 
         $response = $this->actingAs($this->user)
-            ->postJson('/api/itinerary', [
+            ->postJson("/api/trips/{$this->trip->id}/itinerary", [
                 'title' => 'スポット訪問',
                 'date' => '2026-04-01',
                 'spot_id' => $spot->id,
@@ -135,7 +150,7 @@ final class ItineraryControllerTest extends TestCase
     public function test_store_returns_422_without_required_fields(): void
     {
         $response = $this->actingAs($this->user)
-            ->postJson('/api/itinerary', []);
+            ->postJson("/api/trips/{$this->trip->id}/itinerary", []);
 
         $response->assertUnprocessable()
             ->assertJsonValidationErrors(['title', 'date']);
@@ -144,7 +159,7 @@ final class ItineraryControllerTest extends TestCase
     public function test_store_returns_422_with_invalid_date_format(): void
     {
         $response = $this->actingAs($this->user)
-            ->postJson('/api/itinerary', [
+            ->postJson("/api/trips/{$this->trip->id}/itinerary", [
                 'title' => 'テスト',
                 'date' => '2026/04/01',
             ]);
@@ -156,7 +171,7 @@ final class ItineraryControllerTest extends TestCase
     public function test_store_returns_422_with_invalid_transport(): void
     {
         $response = $this->actingAs($this->user)
-            ->postJson('/api/itinerary', [
+            ->postJson("/api/trips/{$this->trip->id}/itinerary", [
                 'title' => 'テスト',
                 'date' => '2026-04-01',
                 'transport' => 'bicycle',
@@ -167,19 +182,20 @@ final class ItineraryControllerTest extends TestCase
     }
 
     // ========================================
-    // PATCH /api/itinerary/{id}
+    // PATCH /api/trips/{tripId}/itinerary/{id}
     // ========================================
 
     public function test_update_modifies_itinerary_item(): void
     {
         $item = ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'title' => '元のタイトル',
             'date' => '2026-04-01',
         ]);
 
         $response = $this->actingAs($this->user)
-            ->patchJson("/api/itinerary/{$item->id}", [
+            ->patchJson("/api/trips/{$this->trip->id}/itinerary/{$item->id}", [
                 'title' => '更新後のタイトル',
             ]);
 
@@ -195,7 +211,7 @@ final class ItineraryControllerTest extends TestCase
     public function test_update_returns_404_for_nonexistent_item(): void
     {
         $response = $this->actingAs($this->user)
-            ->patchJson('/api/itinerary/9999', [
+            ->patchJson("/api/trips/{$this->trip->id}/itinerary/9999", [
                 'title' => '更新',
             ]);
 
@@ -204,41 +220,44 @@ final class ItineraryControllerTest extends TestCase
     }
 
     // ========================================
-    // DELETE /api/itinerary/{id}
+    // DELETE /api/trips/{tripId}/itinerary/{id}
     // ========================================
 
     public function test_destroy_deletes_itinerary_item_and_returns_204(): void
     {
         $item = ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
         ]);
 
         $response = $this->actingAs($this->user)
-            ->deleteJson("/api/itinerary/{$item->id}");
+            ->deleteJson("/api/trips/{$this->trip->id}/itinerary/{$item->id}");
 
         $response->assertNoContent();
         $this->assertDatabaseMissing('itinerary_items', ['id' => $item->id]);
     }
 
     // ========================================
-    // PATCH /api/itinerary/reorder
+    // PATCH /api/trips/{tripId}/itinerary/reorder
     // ========================================
 
     public function test_reorder_updates_sort_orders(): void
     {
         $item1 = ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'sort_order' => 0,
             'date' => '2026-04-01',
         ]);
         $item2 = ItineraryItem::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'sort_order' => 1,
             'date' => '2026-04-01',
         ]);
 
         $response = $this->actingAs($this->user)
-            ->patchJson('/api/itinerary/reorder', [
+            ->patchJson("/api/trips/{$this->trip->id}/itinerary/reorder", [
                 'items' => [
                     ['id' => $item1->id, 'sort_order' => 1],
                     ['id' => $item2->id, 'sort_order' => 0],
@@ -255,7 +274,7 @@ final class ItineraryControllerTest extends TestCase
     public function test_reorder_returns_422_with_empty_items(): void
     {
         $response = $this->actingAs($this->user)
-            ->patchJson('/api/itinerary/reorder', [
+            ->patchJson("/api/trips/{$this->trip->id}/itinerary/reorder", [
                 'items' => [],
             ]);
 
@@ -266,7 +285,7 @@ final class ItineraryControllerTest extends TestCase
     public function test_reorder_returns_422_without_items(): void
     {
         $response = $this->actingAs($this->user)
-            ->patchJson('/api/itinerary/reorder', []);
+            ->patchJson("/api/trips/{$this->trip->id}/itinerary/reorder", []);
 
         $response->assertUnprocessable()
             ->assertJsonValidationErrors(['items']);

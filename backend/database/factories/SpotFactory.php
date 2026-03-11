@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Spot;
+use App\Models\Trip;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +21,7 @@ final class SpotFactory extends Factory
     public function definition(): array
     {
         return [
+            'trip_id' => Trip::factory(),
             'name' => $this->faker->company(),
             'description' => $this->faker->sentence(),
             'address' => $this->faker->address(),

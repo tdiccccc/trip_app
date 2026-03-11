@@ -6,6 +6,8 @@ namespace Tests\Feature\Board;
 
 use App\Models\BoardPost;
 use App\Models\Reaction;
+use App\Models\Trip;
+use App\Models\TripMember;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -16,20 +18,29 @@ final class BoardControllerTest extends TestCase
 
     private User $user;
 
+    private Trip $trip;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
+        $this->trip = Trip::factory()->create(['created_by' => $this->user->id]);
+        TripMember::factory()->create([
+            'trip_id' => $this->trip->id,
+            'user_id' => $this->user->id,
+            'role' => 'owner',
+        ]);
     }
 
     // ========================================
-    // GET /api/board
+    // GET /api/trips/{tripId}/board
     // ========================================
 
     public function test_index_returns_board_posts_with_reactions(): void
     {
         $post = BoardPost::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'body' => 'テスト投稿',
         ]);
@@ -41,7 +52,7 @@ final class BoardControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-            ->getJson('/api/board');
+            ->getJson("/api/trips/{$this->trip->id}/board");
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -55,19 +66,19 @@ final class BoardControllerTest extends TestCase
 
     public function test_index_returns_401_for_guest(): void
     {
-        $response = $this->getJson('/api/board');
+        $response = $this->getJson("/api/trips/{$this->trip->id}/board");
 
         $response->assertUnauthorized();
     }
 
     // ========================================
-    // POST /api/board
+    // POST /api/trips/{tripId}/board
     // ========================================
 
     public function test_store_creates_board_post_and_returns_201(): void
     {
         $response = $this->actingAs($this->user)
-            ->postJson('/api/board', [
+            ->postJson("/api/trips/{$this->trip->id}/board", [
                 'body' => '伊勢神宮に行きたい！',
             ]);
 
@@ -84,6 +95,7 @@ final class BoardControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('board_posts', [
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'body' => '伊勢神宮に行きたい！',
         ]);
@@ -92,24 +104,25 @@ final class BoardControllerTest extends TestCase
     public function test_store_returns_422_without_body(): void
     {
         $response = $this->actingAs($this->user)
-            ->postJson('/api/board', []);
+            ->postJson("/api/trips/{$this->trip->id}/board", []);
 
         $response->assertUnprocessable()
             ->assertJsonValidationErrors(['body']);
     }
 
     // ========================================
-    // POST /api/board/{id}/reactions
+    // POST /api/trips/{tripId}/board/{id}/reactions
     // ========================================
 
     public function test_store_reaction_creates_reaction_and_returns_201(): void
     {
         $post = BoardPost::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
         ]);
 
         $response = $this->actingAs($this->user)
-            ->postJson("/api/board/{$post->id}/reactions", [
+            ->postJson("/api/trips/{$this->trip->id}/board/{$post->id}/reactions", [
                 'emoji' => '❤️',
             ]);
 
@@ -129,6 +142,7 @@ final class BoardControllerTest extends TestCase
     public function test_store_reaction_returns_422_for_duplicate(): void
     {
         $post = BoardPost::factory()->create([
+            'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
         ]);
 
@@ -139,7 +153,7 @@ final class BoardControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-            ->postJson("/api/board/{$post->id}/reactions", [
+            ->postJson("/api/trips/{$this->trip->id}/board/{$post->id}/reactions", [
                 'emoji' => '👍',
             ]);
 
@@ -150,7 +164,7 @@ final class BoardControllerTest extends TestCase
     public function test_store_reaction_returns_404_for_nonexistent_post(): void
     {
         $response = $this->actingAs($this->user)
-            ->postJson('/api/board/9999/reactions', [
+            ->postJson("/api/trips/{$this->trip->id}/board/9999/reactions", [
                 'emoji' => '👍',
             ]);
 
@@ -160,7 +174,7 @@ final class BoardControllerTest extends TestCase
 
     public function test_store_reaction_returns_401_for_guest(): void
     {
-        $response = $this->postJson('/api/board/1/reactions', [
+        $response = $this->postJson("/api/trips/{$this->trip->id}/board/1/reactions", [
             'emoji' => '👍',
         ]);
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Expense;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,6 +22,7 @@ final class ExpenseFactory extends Factory
     public function definition(): array
     {
         return [
+            'trip_id' => Trip::factory(),
             'user_id' => User::factory(),
             'description' => $this->faker->sentence(),
             'amount' => $this->faker->numberBetween(100, 10000),

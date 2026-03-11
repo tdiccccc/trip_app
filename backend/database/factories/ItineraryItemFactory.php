@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\ItineraryItem;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,6 +22,7 @@ final class ItineraryItemFactory extends Factory
     public function definition(): array
     {
         return [
+            'trip_id' => Trip::factory(),
             'user_id' => User::factory(),
             'spot_id' => null,
             'title' => $this->faker->sentence(3),
