@@ -59,7 +59,7 @@ const quickLinks = [
       class="w-full rounded-2xl bg-white p-6 shadow-sm"
     >
       <p class="mb-3 text-center text-sm text-gray-500">
-        Until the trip
+        旅行まであと
       </p>
       <div class="flex justify-center gap-4">
         <div class="text-center">
@@ -67,7 +67,7 @@ const quickLinks = [
             {{ countdown.days }}
           </div>
           <div class="text-xs text-gray-400">
-            days
+            日
           </div>
         </div>
         <div class="text-center">
@@ -75,7 +75,7 @@ const quickLinks = [
             {{ countdown.hours }}
           </div>
           <div class="text-xs text-gray-400">
-            hours
+            時間
           </div>
         </div>
         <div class="text-center">
@@ -83,7 +83,7 @@ const quickLinks = [
             {{ countdown.minutes }}
           </div>
           <div class="text-xs text-gray-400">
-            min
+            分
           </div>
         </div>
         <div class="text-center">
@@ -91,7 +91,7 @@ const quickLinks = [
             {{ countdown.seconds }}
           </div>
           <div class="text-xs text-gray-400">
-            sec
+            秒
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@ const quickLinks = [
       class="w-full rounded-2xl bg-primary-500 p-6 text-center text-white shadow-sm"
     >
       <p class="text-lg font-bold">
-        Have a great trip!
+        素敵な旅を楽しんでね！
       </p>
     </div>
 

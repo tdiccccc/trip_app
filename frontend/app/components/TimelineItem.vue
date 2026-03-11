@@ -47,7 +47,7 @@ const timeRange = computed(() => {
               v-if="isNow"
               class="ml-1 inline-block rounded-full bg-primary-500 px-2 py-0.5 text-xs font-bold text-white"
             >
-              NOW
+              現在
             </span>
           </p>
 
@@ -77,7 +77,7 @@ const timeRange = computed(() => {
         <div class="flex shrink-0 gap-1">
           <button
             class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-            aria-label="Edit"
+            aria-label="編集"
             @click="emit('edit', item)"
           >
             <svg
@@ -96,7 +96,7 @@ const timeRange = computed(() => {
           </button>
           <button
             class="rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
-            aria-label="Delete"
+            aria-label="削除"
             @click="emit('delete', item.id)"
           >
             <svg
@@ -122,7 +122,7 @@ const timeRange = computed(() => {
         :to="`/spots/${item.spot_id}`"
         class="mt-1 inline-block text-xs text-primary-600 underline"
       >
-        View spot details
+        スポット詳細を見る
       </NuxtLink>
     </div>
   </div>

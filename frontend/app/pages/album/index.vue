@@ -65,13 +65,13 @@ const handleDeletePhoto = async () => {
     <!-- Header area -->
     <div class="mb-4 flex items-center justify-between">
       <h1 class="text-xl font-bold text-gray-800">
-        Album
+        アルバム
       </h1>
       <button
         class="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
         @click="showUploader = !showUploader"
       >
-        {{ showUploader ? 'Close' : 'Upload' }}
+        {{ showUploader ? '閉じる' : 'アップロード' }}
       </button>
     </div>
 
@@ -90,7 +90,7 @@ const handleDeletePhoto = async () => {
         class="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       >
         <option :value="undefined">
-          All spots
+          すべてのスポット
         </option>
         <option
           v-for="spot in spots"
@@ -155,7 +155,7 @@ const handleDeletePhoto = async () => {
               class="rounded-xl bg-red-500/80 px-4 py-2 text-sm text-white backdrop-blur-sm transition-colors hover:bg-red-600"
               @click="handleDeletePhoto"
             >
-              Delete
+              削除
             </button>
           </div>
         </div>

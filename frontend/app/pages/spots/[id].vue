@@ -205,7 +205,7 @@ const categoryColors: Record<string, string> = {
       class="mb-6"
     >
       <h2 class="mb-3 text-base font-semibold text-gray-800">
-        Photos
+        写真
       </h2>
       <PhotoGrid
         :photos="spot.photos"
@@ -216,7 +216,7 @@ const categoryColors: Record<string, string> = {
     <!-- Memos section -->
     <div class="mb-6">
       <h2 class="mb-3 text-base font-semibold text-gray-800">
-        Memos
+        メモ
       </h2>
 
       <!-- Memo list -->
@@ -234,7 +234,7 @@ const categoryColors: Record<string, string> = {
         v-else
         class="mb-3 text-sm text-gray-400"
       >
-        No memos yet
+        メモはまだありません
       </p>
 
       <!-- Memo form -->
@@ -253,7 +253,7 @@ const categoryColors: Record<string, string> = {
           :disabled="!newMemo.trim() || isSendingMemo"
           class="rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Send
+          送信
         </button>
       </form>
     </div>
@@ -265,7 +265,7 @@ const categoryColors: Record<string, string> = {
     class="py-16 text-center"
   >
     <p class="text-sm text-gray-400">
-      Loading...
+      読み込み中...
     </p>
   </div>
 </template>

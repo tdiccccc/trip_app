@@ -46,12 +46,12 @@ const handleSubmit = () => {
     <!-- Title -->
     <div>
       <label class="mb-1 block text-sm font-medium text-gray-700">
-        Title <span class="text-red-500">*</span>
+        タイトル <span class="text-red-500">*</span>
       </label>
       <input
         v-model="form.title"
         type="text"
-        placeholder="e.g. Ise Jingu Visit"
+        placeholder="例: 伊勢神宮参拝"
         class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       >
     </div>
@@ -59,7 +59,7 @@ const handleSubmit = () => {
     <!-- Date -->
     <div>
       <label class="mb-1 block text-sm font-medium text-gray-700">
-        Date <span class="text-red-500">*</span>
+        日付 <span class="text-red-500">*</span>
       </label>
       <input
         v-model="form.date"
@@ -71,7 +71,7 @@ const handleSubmit = () => {
     <!-- Time range -->
     <div class="flex gap-3">
       <div class="flex-1">
-        <label class="mb-1 block text-sm font-medium text-gray-700">Start</label>
+        <label class="mb-1 block text-sm font-medium text-gray-700">開始</label>
         <input
           v-model="form.start_time"
           type="time"
@@ -79,7 +79,7 @@ const handleSubmit = () => {
         >
       </div>
       <div class="flex-1">
-        <label class="mb-1 block text-sm font-medium text-gray-700">End</label>
+        <label class="mb-1 block text-sm font-medium text-gray-700">終了</label>
         <input
           v-model="form.end_time"
           type="time"
@@ -90,18 +90,18 @@ const handleSubmit = () => {
 
     <!-- Memo -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700">Memo</label>
+      <label class="mb-1 block text-sm font-medium text-gray-700">メモ</label>
       <textarea
         v-model="form.memo"
         rows="2"
-        placeholder="Notes..."
+        placeholder="メモを入力..."
         class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       />
     </div>
 
     <!-- Transport -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700">Transport</label>
+      <label class="mb-1 block text-sm font-medium text-gray-700">交通手段</label>
       <div class="flex flex-wrap gap-2">
         <button
           v-for="opt in transportOptions"
@@ -125,14 +125,14 @@ const handleSubmit = () => {
         class="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-base text-gray-600 hover:bg-gray-50"
         @click="emit('cancel')"
       >
-        Cancel
+        キャンセル
       </button>
       <button
         type="submit"
         :disabled="!isValid"
         class="flex-1 rounded-xl bg-primary-500 px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {{ isEdit ? 'Update' : 'Add' }}
+        {{ isEdit ? '更新' : '追加' }}
       </button>
     </div>
   </form>

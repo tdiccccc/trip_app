@@ -24,7 +24,7 @@ const handleFileSelect = (event: Event) => {
   if (!file) return
 
   if (!file.type.startsWith('image/')) {
-    errorMessage.value = 'Please select an image file'
+    errorMessage.value = '画像ファイルを選択してください'
     return
   }
 
@@ -47,7 +47,7 @@ const handleUpload = async () => {
     emit('uploaded', result.data)
     resetForm()
   } catch {
-    errorMessage.value = 'Upload failed. Please try again.'
+    errorMessage.value = 'アップロードに失敗しました。もう一度お試しください。'
   } finally {
     isUploading.value = false
   }
@@ -94,7 +94,7 @@ onUnmounted(() => {
         />
       </svg>
       <p class="mt-2 text-sm text-gray-500">
-        Tap to select a photo
+        タップして写真を選択
       </p>
       <input
         ref="fileInput"
@@ -113,7 +113,7 @@ onUnmounted(() => {
       <div class="relative overflow-hidden rounded-2xl">
         <img
           :src="previewUrl"
-          alt="Preview"
+          alt="プレビュー"
           class="w-full rounded-2xl object-cover"
           style="max-height: 240px;"
         >
@@ -141,7 +141,7 @@ onUnmounted(() => {
       <input
         v-model="caption"
         type="text"
-        placeholder="Add a caption..."
+        placeholder="キャプションを追加..."
         class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       >
 
@@ -151,8 +151,8 @@ onUnmounted(() => {
         class="w-full rounded-xl bg-primary-500 px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
         @click="handleUpload"
       >
-        <span v-if="isUploading">Uploading...</span>
-        <span v-else>Upload</span>
+        <span v-if="isUploading">アップロード中...</span>
+        <span v-else>アップロード</span>
       </button>
     </div>
 

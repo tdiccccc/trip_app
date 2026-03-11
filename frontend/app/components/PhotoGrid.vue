@@ -35,6 +35,6 @@ const getImageUrl = (photo: Photo) => {
     v-if="photos.length === 0"
     class="py-12 text-center text-sm text-gray-400"
   >
-    No photos yet
+    写真はまだありません
   </div>
 </template>

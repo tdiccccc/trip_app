@@ -171,7 +171,7 @@ const formInitialData = computed(() => {
       class="py-16 text-center"
     >
       <p class="text-sm text-gray-400">
-        No items yet for this day
+        この日の予定はまだありません
       </p>
     </div>
 

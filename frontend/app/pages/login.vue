@@ -50,7 +50,7 @@ const handleLogin = async () => {
         Ise Trip
       </h1>
       <p class="mb-8 text-center text-sm text-gray-400">
-        Sign in to continue
+        ログインして続けましょう
       </p>
 
       <form
@@ -70,7 +70,7 @@ const handleLogin = async () => {
             for="email"
             class="mb-1 block text-sm font-medium text-gray-700"
           >
-            Email
+            メールアドレス
           </label>
           <input
             id="email"
@@ -88,7 +88,7 @@ const handleLogin = async () => {
             for="password"
             class="mb-1 block text-sm font-medium text-gray-700"
           >
-            Password
+            パスワード
           </label>
           <input
             id="password"
