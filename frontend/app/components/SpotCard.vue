@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Spot } from '~/types/spot'
 
-defineProps<{
+const props = defineProps<{
   spot: Spot
+  tripId?: string
 }>()
 
 const categoryLabels: Record<string, string> = {
@@ -22,7 +23,7 @@ const categoryColors: Record<string, string> = {
 
 <template>
   <NuxtLink
-    :to="`/spots/${spot.id}`"
+    :to="props.tripId ? `/trips/${props.tripId}/spots/${spot.id}` : `/spots/${spot.id}`"
     class="block rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-md"
   >
     <!-- Image -->

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 const route = useRoute()
+const tripId = route.params.tripId as string
 const spotId = route.params.id as string
 
 definePageMeta({
   middleware: ['auth'],
 })
 
-const { fetchSpot, createMemo } = useSpots()
+const { fetchSpot, createMemo } = useSpots(tripId)
 const { data: response, refresh } = fetchSpot(spotId)
 
 const spot = computed(() => response.value?.data ?? null)

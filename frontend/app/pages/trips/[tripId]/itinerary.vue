@@ -9,11 +9,37 @@ useHead({
   title: 'しおり - Ise Trip',
 })
 
-const { fetchItems, createItem, updateItem, deleteItem, reorderItems } = useItinerary()
+const route = useRoute()
+const tripId = route.params.tripId as string
 
-// Trip dates
-const TRIP_DATES = ['2026-03-28', '2026-03-29']
-const selectedDate = ref(TRIP_DATES[0])
+const { fetchTrip } = useTrips()
+const { data: tripResponse } = fetchTrip(tripId)
+const trip = computed(() => tripResponse.value?.data ?? null)
+
+const { fetchItems, createItem, updateItem, deleteItem, reorderItems } = useItinerary(tripId)
+
+// Generate trip dates dynamically from trip data
+const tripDates = computed<string[]>(() => {
+  if (!trip.value) return []
+  const dates: string[] = []
+  const start = new Date(trip.value.start_date + 'T00:00:00')
+  const end = new Date(trip.value.end_date + 'T00:00:00')
+  const current = new Date(start)
+  while (current <= end) {
+    dates.push(current.toISOString().slice(0, 10))
+    current.setDate(current.getDate() + 1)
+  }
+  return dates
+})
+
+const selectedDate = ref('')
+
+// Set initial selected date when trip data loads
+watch(tripDates, (dates) => {
+  if (dates.length > 0 && !selectedDate.value) {
+    selectedDate.value = dates[0]
+  }
+}, { immediate: true })
 
 // Fetch items for selected date (reactively watches selectedDate)
 const { data: response, refresh } = fetchItems(selectedDate)
@@ -156,7 +182,7 @@ const formInitialData = computed(() => {
     <!-- Date tabs -->
     <div class="mb-4 flex gap-2">
       <button
-        v-for="date in TRIP_DATES"
+        v-for="date in tripDates"
         :key="date"
         class="rounded-full px-4 py-2 text-sm font-medium transition-colors"
         :class="selectedDate === date
@@ -180,6 +206,7 @@ const formInitialData = computed(() => {
         :is-now="isCurrentItem(item)"
         :is-first="index === 0"
         :is-last="index === items.length - 1"
+        :trip-id="tripId"
         @edit="openEditForm"
         @delete="handleDelete"
         @move-up="handleMove($event, 'up')"

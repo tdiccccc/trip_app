@@ -15,7 +15,7 @@ const isLoading = ref(false)
 
 // Already authenticated -> redirect
 if (isAuthenticated.value) {
-  navigateTo('/')
+  navigateTo('/trips')
 }
 
 const handleLogin = async () => {

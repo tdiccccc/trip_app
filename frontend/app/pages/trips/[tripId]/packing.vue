@@ -9,7 +9,10 @@ useHead({
   title: 'パッキングリスト - Ise Trip',
 })
 
-const { fetchItems, createItem, updateItem, deleteItem } = usePacking()
+const route = useRoute()
+const tripId = route.params.tripId as string
+
+const { fetchItems, createItem, updateItem, deleteItem } = usePacking(tripId)
 
 // Filter tabs
 type AssigneeFilter = 'all' | 'taro' | 'hanako'

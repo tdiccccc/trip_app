@@ -2,10 +2,27 @@
 const { isAuthenticated, logout } = useAuth()
 const route = useRoute()
 
-const navItems = [
-  { to: '/itinerary', label: 'しおり', icon: 'calendar' },
-  { to: '/album', label: 'アルバム', icon: 'photo' },
-]
+// Extract tripId from route if available
+const tripId = computed(() => {
+  const params = route.params
+  return (params.tripId as string) ?? null
+})
+
+// Navigation items scoped to current trip
+const navItems = computed(() => {
+  if (!tripId.value) return []
+  const base = `/trips/${tripId.value}`
+  return [
+    { to: `${base}/itinerary`, label: 'しおり', icon: 'calendar' },
+    { to: `${base}/album`, label: 'アルバム', icon: 'photo' },
+  ]
+})
+
+// Header link: go to trip top if inside a trip, otherwise trips list
+const headerLink = computed(() => {
+  if (tripId.value) return `/trips/${tripId.value}`
+  return '/trips'
+})
 </script>
 
 <template>
@@ -13,12 +30,34 @@ const navItems = [
     <!-- Header -->
     <header class="sticky top-0 z-40 border-b border-primary-100 bg-white/90 backdrop-blur-sm">
       <div class="flex items-center justify-between px-4 py-3">
-        <NuxtLink
-          to="/"
-          class="text-lg font-bold text-primary-700"
-        >
-          Ise Trip
-        </NuxtLink>
+        <div class="flex items-center gap-2">
+          <NuxtLink
+            v-if="tripId"
+            to="/trips"
+            class="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            aria-label="旅行一覧に戻る"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </NuxtLink>
+          <NuxtLink
+            :to="headerLink"
+            class="text-lg font-bold text-primary-700"
+          >
+            Ise Trip
+          </NuxtLink>
+        </div>
         <button
           v-if="isAuthenticated"
           class="text-sm text-gray-500 hover:text-gray-700"
@@ -36,7 +75,7 @@ const navItems = [
 
     <!-- Bottom navigation -->
     <nav
-      v-if="isAuthenticated"
+      v-if="isAuthenticated && navItems.length > 0"
       class="sticky bottom-0 z-40 border-t border-primary-100 bg-white/95 backdrop-blur-sm"
     >
       <div class="flex justify-around py-2">

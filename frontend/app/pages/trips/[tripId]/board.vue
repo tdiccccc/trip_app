@@ -9,7 +9,10 @@ useHead({
   title: 'ふたりの掲示板 - Ise Trip',
 })
 
-const { fetchPosts, createPost, addReaction } = useBoard()
+const route = useRoute()
+const tripId = route.params.tripId as string
+
+const { fetchPosts, createPost, addReaction } = useBoard(tripId)
 const { user } = useAuth()
 
 // Fetch posts

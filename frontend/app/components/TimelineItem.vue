@@ -6,6 +6,7 @@ const props = defineProps<{
   isNow?: boolean
   isFirst?: boolean
   isLast?: boolean
+  tripId?: string
 }>()
 
 const emit = defineEmits<{
@@ -166,8 +167,8 @@ const timeRange = computed(() => {
 
       <!-- Spot link -->
       <NuxtLink
-        v-if="item.spot_id"
-        :to="`/spots/${item.spot_id}`"
+        v-if="item.spot_id && props.tripId"
+        :to="`/trips/${props.tripId}/spots/${item.spot_id}`"
         class="mt-1 inline-block text-xs text-primary-600 underline"
       >
         スポット詳細を見る

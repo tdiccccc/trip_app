@@ -7,9 +7,10 @@ const emit = defineEmits<{
 
 const props = defineProps<{
   spotId?: number
+  tripId: string
 }>()
 
-const { uploadPhoto } = useAlbum()
+const { uploadPhoto } = useAlbum(props.tripId)
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const caption = ref('')

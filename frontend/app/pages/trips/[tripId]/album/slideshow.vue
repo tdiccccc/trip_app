@@ -10,7 +10,10 @@ useHead({
   title: 'スライドショー - Ise Trip',
 })
 
-const { fetchPhotos } = useAlbum()
+const route = useRoute()
+const tripId = route.params.tripId as string
+
+const { fetchPhotos } = useAlbum(tripId)
 const { data } = await fetchPhotos({ sort: 'taken_at', order: 'asc' })
 
 const photos = computed<Photo[]>(() => data.value?.data ?? [])
@@ -47,7 +50,7 @@ const autoHideControls = () => {
   }, 3000)
 }
 
-const handleClose = () => navigateTo('/album')
+const handleClose = () => navigateTo(`/trips/${tripId}/album`)
 
 onMounted(() => {
   if (photos.value.length > 0) {

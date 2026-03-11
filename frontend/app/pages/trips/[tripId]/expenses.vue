@@ -9,7 +9,10 @@ useHead({
   title: '費用メモ - Ise Trip',
 })
 
-const { fetchExpenses, fetchSummary, createExpense, deleteExpense } = useExpenses()
+const route = useRoute()
+const tripId = route.params.tripId as string
+
+const { fetchExpenses, fetchSummary, createExpense, deleteExpense } = useExpenses(tripId)
 
 // Category definitions
 const CATEGORIES: { key: string; label: string }[] = [

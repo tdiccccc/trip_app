@@ -10,8 +10,11 @@ useHead({
   title: 'アルバム - Ise Trip',
 })
 
-const { fetchPhotos, deletePhoto } = useAlbum()
-const { fetchSpots } = useSpots()
+const route = useRoute()
+const tripId = route.params.tripId as string
+
+const { fetchPhotos, deletePhoto } = useAlbum(tripId)
+const { fetchSpots } = useSpots(tripId)
 
 // Spot filter
 const selectedSpotId = ref<number | undefined>(undefined)
@@ -60,12 +63,20 @@ const handleDeletePhoto = async () => {
       <h1 class="text-xl font-bold text-gray-800">
         アルバム
       </h1>
-      <button
-        class="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
-        @click="showUploader = !showUploader"
-      >
-        {{ showUploader ? '閉じる' : 'アップロード' }}
-      </button>
+      <div class="flex items-center gap-2">
+        <NuxtLink
+          :to="`/trips/${tripId}/album/slideshow`"
+          class="rounded-xl border border-primary-300 px-3 py-2 text-sm font-medium text-primary-600 transition-colors hover:bg-primary-50"
+        >
+          スライドショー
+        </NuxtLink>
+        <button
+          class="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
+          @click="showUploader = !showUploader"
+        >
+          {{ showUploader ? '閉じる' : 'アップロード' }}
+        </button>
+      </div>
     </div>
 
     <!-- Uploader -->
@@ -73,7 +84,10 @@ const handleDeletePhoto = async () => {
       v-if="showUploader"
       class="mb-4"
     >
-      <PhotoUploader @uploaded="handleUploaded" />
+      <PhotoUploader
+        :trip-id="tripId"
+        @uploaded="handleUploaded"
+      />
     </div>
 
     <!-- Spot filter -->
