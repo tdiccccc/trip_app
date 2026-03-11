@@ -9,7 +9,7 @@ useHead({
   title: 'しおり - Ise Trip',
 })
 
-const { fetchItems, createItem, updateItem, deleteItem } = useItinerary()
+const { fetchItems, createItem, updateItem, deleteItem, reorderItems } = useItinerary()
 
 // Trip dates
 const TRIP_DATES = ['2026-03-28', '2026-03-29']
@@ -109,6 +109,31 @@ const handleDelete = async (id: number) => {
   }
 }
 
+const handleMove = async (id: number, direction: 'up' | 'down') => {
+  const list = items.value
+  const idx = list.findIndex(item => item.id === id)
+  if (idx < 0) return
+
+  const swapIdx = direction === 'up' ? idx - 1 : idx + 1
+  if (swapIdx < 0 || swapIdx >= list.length) return
+
+  const reordered = list.map((item, i) => ({
+    id: item.id,
+    sort_order: i === idx
+      ? list[swapIdx].sort_order
+      : i === swapIdx
+        ? list[idx].sort_order
+        : item.sort_order,
+  }))
+
+  try {
+    await reorderItems(reordered)
+    await refresh()
+  } catch {
+    // Error handling
+  }
+}
+
 const formatDateLabel = (date: string) => {
   const d = new Date(date + 'T00:00:00')
   const month = d.getMonth() + 1
@@ -156,12 +181,16 @@ const formInitialData = computed(() => {
       class="space-y-1"
     >
       <TimelineItem
-        v-for="item in items"
+        v-for="(item, index) in items"
         :key="item.id"
         :item="item"
         :is-now="isCurrentItem(item)"
+        :is-first="index === 0"
+        :is-last="index === items.length - 1"
         @edit="openEditForm"
         @delete="handleDelete"
+        @move-up="handleMove($event, 'up')"
+        @move-down="handleMove($event, 'down')"
       />
     </div>
 

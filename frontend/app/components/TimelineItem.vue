@@ -4,11 +4,15 @@ import type { ItineraryItem } from '~/types/itinerary'
 const props = defineProps<{
   item: ItineraryItem
   isNow?: boolean
+  isFirst?: boolean
+  isLast?: boolean
 }>()
 
 const emit = defineEmits<{
   edit: [item: ItineraryItem]
   delete: [id: number]
+  moveUp: [id: number]
+  moveDown: [id: number]
 }>()
 
 const timeRange = computed(() => {
@@ -74,7 +78,50 @@ const timeRange = computed(() => {
         </div>
 
         <!-- Actions -->
-        <div class="flex shrink-0 gap-1">
+        <div class="flex shrink-0 items-start gap-0.5">
+          <!-- Move up -->
+          <button
+            :disabled="isFirst"
+            class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-30 disabled:hover:bg-transparent"
+            aria-label="上に移動"
+            @click="emit('moveUp', item.id)"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </button>
+          <!-- Move down -->
+          <button
+            :disabled="isLast"
+            class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-30 disabled:hover:bg-transparent"
+            aria-label="下に移動"
+            @click="emit('moveDown', item.id)"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          <!-- Edit -->
           <button
             class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
             aria-label="編集"
@@ -94,6 +141,7 @@ const timeRange = computed(() => {
               />
             </svg>
           </button>
+          <!-- Delete -->
           <button
             class="rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
             aria-label="削除"
