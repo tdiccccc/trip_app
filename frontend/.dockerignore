@@ -1,0 +1,32 @@
+# Dependencies (installed in Docker build)
+node_modules/
+
+# Build output (built in Docker build)
+.output/
+.nuxt/
+
+# Environment files
+.env
+.env.*
+
+# Development / IDE files
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitattributes
+.gitignore
+
+# Documentation
+README.md
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Test files
+tests/
+*.test.ts
+*.spec.ts
+vitest.config.*

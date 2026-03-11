@@ -1,0 +1,87 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker asia-northeast1-docker.pkg.dev
+
+      # ---------- Backend ----------
+      - name: Build backend image
+        run: |
+          docker build \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:${{ github.sha }} \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:latest \
+            -f backend/Dockerfile \
+            backend/
+
+      - name: Push backend image
+        run: |
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:${{ github.sha }}
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:latest
+
+      - name: Deploy backend to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ise-trip-backend
+          region: asia-northeast1
+          image: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:${{ github.sha }}
+          flags: |
+            --min-instances=0
+            --max-instances=1
+            --memory=512Mi
+            --cpu=1
+            --allow-unauthenticated
+            --set-env-vars=APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr
+
+      # ---------- Frontend ----------
+      - name: Build frontend image
+        run: |
+          docker build \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:${{ github.sha }} \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:latest \
+            -f frontend/Dockerfile \
+            frontend/
+
+      - name: Push frontend image
+        run: |
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:${{ github.sha }}
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:latest
+
+      - name: Deploy frontend to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ise-trip-frontend
+          region: asia-northeast1
+          image: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:${{ github.sha }}
+          flags: |
+            --min-instances=0
+            --max-instances=1
+            --memory=256Mi
+            --cpu=1
+            --allow-unauthenticated
+            --set-env-vars=NODE_ENV=production

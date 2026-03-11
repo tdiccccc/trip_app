@@ -1,0 +1,42 @@
+# Dependencies (installed in Docker build)
+vendor/
+node_modules/
+
+# Environment files (secrets injected at runtime)
+.env
+.env.backup
+.env.production
+
+# Development / IDE files
+.phpunit.result.cache
+.phpunit.cache/
+.idea/
+.vscode/
+.fleet/
+.nova/
+.zed/
+
+# Git
+.git/
+.gitattributes
+.gitignore
+
+# Testing
+tests/
+phpunit.xml
+
+# Documentation
+README.md
+
+# Storage (ephemeral in container)
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# SQLite database (created at runtime)
+database/database.sqlite
+
+# Docker
+Dockerfile
+.dockerignore
