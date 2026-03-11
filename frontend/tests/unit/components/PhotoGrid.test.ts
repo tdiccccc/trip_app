@@ -89,7 +89,7 @@ describe('PhotoGrid', () => {
       props: { photos: [] },
     })
 
-    expect(wrapper.text()).toContain('No photos yet')
+    expect(wrapper.text()).toContain('写真はまだありません')
     expect(wrapper.findAll('img')).toHaveLength(0)
   })
 
