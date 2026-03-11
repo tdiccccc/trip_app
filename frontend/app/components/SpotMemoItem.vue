@@ -17,7 +17,7 @@ const formatDate = (dateStr: string) => {
 </script>
 
 <template>
-  <div class="rounded-xl bg-amber-50 p-3">
+  <div class="rounded-xl bg-primary-50 p-3">
     <p class="whitespace-pre-wrap text-sm text-gray-700">
       {{ memo.body }}
     </p>

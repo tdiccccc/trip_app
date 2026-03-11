@@ -22,13 +22,13 @@ const timeRange = computed(() => {
 <template>
   <div
     class="relative flex gap-3 py-3 pl-4"
-    :class="isNow ? 'bg-amber-50 rounded-xl border border-amber-300' : ''"
+    :class="isNow ? 'bg-primary-50 rounded-xl border border-primary-300' : ''"
   >
     <!-- Timeline dot -->
     <div class="flex flex-col items-center pt-1">
       <div
         class="h-3 w-3 rounded-full"
-        :class="isNow ? 'bg-amber-500 ring-4 ring-amber-200' : 'bg-gray-300'"
+        :class="isNow ? 'bg-primary-500 ring-4 ring-primary-200' : 'bg-gray-300'"
       />
       <div class="mt-1 h-full w-0.5 bg-gray-200" />
     </div>
@@ -40,12 +40,12 @@ const timeRange = computed(() => {
           <!-- Time -->
           <p
             v-if="timeRange"
-            class="text-xs font-medium text-amber-600"
+            class="text-xs font-medium text-primary-600"
           >
             {{ timeRange }}
             <span
               v-if="isNow"
-              class="ml-1 inline-block rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white"
+              class="ml-1 inline-block rounded-full bg-primary-500 px-2 py-0.5 text-xs font-bold text-white"
             >
               NOW
             </span>
@@ -120,7 +120,7 @@ const timeRange = computed(() => {
       <NuxtLink
         v-if="item.spot_id"
         :to="`/spots/${item.spot_id}`"
-        class="mt-1 inline-block text-xs text-amber-600 underline"
+        class="mt-1 inline-block text-xs text-primary-600 underline"
       >
         View spot details
       </NuxtLink>

@@ -142,8 +142,8 @@ const formInitialData = computed(() => {
         :key="date"
         class="rounded-full px-4 py-2 text-sm font-medium transition-colors"
         :class="selectedDate === date
-          ? 'bg-amber-500 text-white shadow-sm'
-          : 'bg-white text-gray-600 hover:bg-amber-50'"
+          ? 'bg-primary-500 text-white shadow-sm'
+          : 'bg-white text-gray-600 hover:bg-primary-50'"
         @click="selectedDate = date"
       >
         {{ formatDateLabel(date) }}
@@ -178,7 +178,7 @@ const formInitialData = computed(() => {
     <!-- Add button -->
     <div class="fixed bottom-20 right-4 z-30">
       <button
-        class="flex h-14 w-14 items-center justify-center rounded-full bg-amber-500 text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+        class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
         @click="openAddForm"
       >
         <svg

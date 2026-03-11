@@ -101,7 +101,7 @@ const assigneeLabel = (assignee: string | null) => {
         パッキングリスト
       </h1>
       <button
-        class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+        class="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
         @click="showAddForm = !showAddForm"
       >
         {{ showAddForm ? '閉じる' : '追加' }}
@@ -112,13 +112,13 @@ const assigneeLabel = (assignee: string | null) => {
     <div class="mb-4 rounded-xl bg-white p-3 shadow-sm">
       <div class="mb-1 flex items-center justify-between text-sm">
         <span class="text-gray-600">準備状況</span>
-        <span class="font-semibold text-amber-700">
+        <span class="font-semibold text-primary-700">
           {{ checkedCount }} / {{ totalCount }}
         </span>
       </div>
       <div class="h-2.5 overflow-hidden rounded-full bg-gray-100">
         <div
-          class="h-full rounded-full bg-amber-500 transition-all duration-300"
+          class="h-full rounded-full bg-primary-500 transition-all duration-300"
           :style="{ width: `${progressPercent}%` }"
         />
       </div>
@@ -137,12 +137,12 @@ const assigneeLabel = (assignee: string | null) => {
           v-model="newName"
           type="text"
           placeholder="アイテム名"
-          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         >
         <div class="flex gap-2">
           <select
             v-model="newAssignee"
-            class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+            class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
           >
             <option value="">
               担当者なし
@@ -157,7 +157,7 @@ const assigneeLabel = (assignee: string | null) => {
           <button
             type="submit"
             :disabled="!newName.trim() || isSubmitting"
-            class="rounded-xl bg-amber-500 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-amber-600 disabled:bg-gray-300"
+            class="rounded-xl bg-primary-500 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:bg-gray-300"
           >
             追加
           </button>
@@ -172,8 +172,8 @@ const assigneeLabel = (assignee: string | null) => {
         :key="tab.key"
         class="rounded-full px-4 py-2 text-sm font-medium transition-colors"
         :class="selectedFilter === tab.key
-          ? 'bg-amber-500 text-white shadow-sm'
-          : 'bg-white text-gray-600 hover:bg-amber-50'"
+          ? 'bg-primary-500 text-white shadow-sm'
+          : 'bg-white text-gray-600 hover:bg-primary-50'"
         @click="selectedFilter = tab.key"
       >
         {{ tab.label }}
@@ -201,8 +201,8 @@ const assigneeLabel = (assignee: string | null) => {
         <button
           class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg border-2 transition-colors"
           :class="item.is_checked
-            ? 'border-amber-500 bg-amber-500'
-            : 'border-gray-300 hover:border-amber-400'"
+            ? 'border-primary-500 bg-primary-500'
+            : 'border-gray-300 hover:border-primary-400'"
           @click="handleToggle(item)"
         >
           <svg

@@ -9,13 +9,13 @@ const navItems = [
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-amber-50/30">
+  <div class="flex min-h-dvh flex-col bg-primary-50/30">
     <!-- Header -->
-    <header class="sticky top-0 z-40 border-b border-amber-100 bg-white/90 backdrop-blur-sm">
+    <header class="sticky top-0 z-40 border-b border-primary-100 bg-white/90 backdrop-blur-sm">
       <div class="flex items-center justify-between px-4 py-3">
         <NuxtLink
           to="/"
-          class="text-lg font-bold text-amber-700"
+          class="text-lg font-bold text-primary-700"
         >
           Ise Trip
         </NuxtLink>
@@ -37,7 +37,7 @@ const navItems = [
     <!-- Bottom navigation -->
     <nav
       v-if="isAuthenticated"
-      class="sticky bottom-0 z-40 border-t border-amber-100 bg-white/95 backdrop-blur-sm"
+      class="sticky bottom-0 z-40 border-t border-primary-100 bg-white/95 backdrop-blur-sm"
     >
       <div class="flex justify-around py-2">
         <NuxtLink
@@ -45,7 +45,7 @@ const navItems = [
           :key="item.to"
           :to="item.to"
           class="flex flex-col items-center gap-0.5 px-4 py-1 text-xs"
-          :class="route.path.startsWith(item.to) ? 'text-amber-600' : 'text-gray-400'"
+          :class="route.path.startsWith(item.to) ? 'text-primary-600' : 'text-gray-400'"
         >
           <!-- Calendar icon -->
           <svg

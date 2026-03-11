@@ -180,7 +180,7 @@ const categoryColors: Record<string, string> = {
         :href="spot.google_maps_url"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-3 rounded-xl bg-amber-500 p-3 text-white shadow-sm transition-colors hover:bg-amber-600"
+        class="flex items-center gap-3 rounded-xl bg-primary-500 p-3 text-white shadow-sm transition-colors hover:bg-primary-600"
       >
         <svg
           class="h-5 w-5 shrink-0"
@@ -246,12 +246,12 @@ const categoryColors: Record<string, string> = {
           v-model="newMemo"
           type="text"
           placeholder="メモを追加..."
-          class="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         >
         <button
           type="submit"
           :disabled="!newMemo.trim() || isSendingMemo"
-          class="rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-50"
+          class="rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Send
         </button>

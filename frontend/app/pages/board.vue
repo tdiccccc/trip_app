@@ -117,7 +117,7 @@ const isOwnPost = (post: BoardPost) => {
       >
         <!-- User & date -->
         <div class="mb-2 flex items-center justify-between">
-          <span class="text-sm font-semibold text-amber-700">
+          <span class="text-sm font-semibold text-primary-700">
             {{ post.user_name }}
           </span>
           <span class="text-xs text-gray-400">
@@ -137,7 +137,7 @@ const isOwnPost = (post: BoardPost) => {
             :key="emoji"
             class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs transition-colors"
             :class="info.userIds.includes(user?.id ?? -1)
-              ? 'border-amber-300 bg-amber-50'
+              ? 'border-primary-300 bg-primary-50'
               : 'border-gray-200 bg-gray-50 hover:bg-gray-100'"
             @click="handleAddReaction(post.id, emoji as string)"
           >
@@ -162,7 +162,7 @@ const isOwnPost = (post: BoardPost) => {
               <button
                 v-for="emoji in EMOJI_OPTIONS"
                 :key="emoji"
-                class="rounded-lg p-1.5 text-lg transition-colors hover:bg-amber-50"
+                class="rounded-lg p-1.5 text-lg transition-colors hover:bg-primary-50"
                 @click="handleAddReaction(post.id, emoji)"
               >
                 {{ emoji }}
@@ -181,7 +181,7 @@ const isOwnPost = (post: BoardPost) => {
       >
         <textarea
           v-model="newBody"
-          class="flex-1 resize-none rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="flex-1 resize-none rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
           rows="1"
           placeholder="メッセージを入力..."
           @input="($event.target as HTMLTextAreaElement).style.height = 'auto'; ($event.target as HTMLTextAreaElement).style.height = ($event.target as HTMLTextAreaElement).scrollHeight + 'px'"
@@ -189,7 +189,7 @@ const isOwnPost = (post: BoardPost) => {
         <button
           type="submit"
           :disabled="!newBody.trim() || isSubmitting"
-          class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-amber-500 text-white transition-colors hover:bg-amber-600 disabled:bg-gray-300"
+          class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary-500 text-white transition-colors hover:bg-primary-600 disabled:bg-gray-300"
         >
           <svg
             class="h-5 w-5"

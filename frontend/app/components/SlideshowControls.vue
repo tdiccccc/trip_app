@@ -57,7 +57,7 @@ const progressPercent = computed(() => {
       <!-- Progress bar -->
       <div class="mb-4 h-1 w-full overflow-hidden rounded-full bg-white/20">
         <div
-          class="h-full rounded-full bg-amber-500 transition-all duration-300"
+          class="h-full rounded-full bg-primary-500 transition-all duration-300"
           :style="{ width: `${progressPercent}%` }"
         />
       </div>
@@ -113,7 +113,7 @@ const progressPercent = computed(() => {
             v-for="option in speedOptions"
             :key="option.value"
             class="rounded-full px-3 py-1 text-xs text-white transition-colors"
-            :class="intervalMs === option.value ? 'bg-amber-500' : 'hover:bg-white/20'"
+            :class="intervalMs === option.value ? 'bg-primary-500' : 'hover:bg-white/20'"
             @click="emit('speed-change', option.value)"
           >
             {{ option.label }}
@@ -126,7 +126,7 @@ const progressPercent = computed(() => {
             v-for="option in transitionOptions"
             :key="option.value"
             class="rounded-full px-3 py-1 text-xs text-white transition-colors"
-            :class="transition === option.value ? 'bg-amber-500' : 'hover:bg-white/20'"
+            :class="transition === option.value ? 'bg-primary-500' : 'hover:bg-white/20'"
             @click="emit('transition-change', option.value)"
           >
             {{ option.label }}

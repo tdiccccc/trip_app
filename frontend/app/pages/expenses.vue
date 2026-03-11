@@ -134,7 +134,7 @@ const paidByLabel = (paidBy: string) => {
         費用メモ
       </h1>
       <button
-        class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+        class="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
         @click="showForm = !showForm"
       >
         {{ showForm ? '閉じる' : '追加' }}
@@ -144,11 +144,11 @@ const paidByLabel = (paidBy: string) => {
     <!-- Summary card -->
     <div
       v-if="summary"
-      class="mb-4 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-4 text-white shadow-sm"
+      class="mb-4 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 p-4 text-white shadow-sm"
     >
       <div class="mb-3 flex items-center justify-between">
         <div>
-          <p class="text-xs text-amber-100">
+          <p class="text-xs text-primary-100">
             合計金額
           </p>
           <p class="text-2xl font-bold">
@@ -156,7 +156,7 @@ const paidByLabel = (paidBy: string) => {
           </p>
         </div>
         <div class="text-right">
-          <p class="text-xs text-amber-100">
+          <p class="text-xs text-primary-100">
             一人あたり
           </p>
           <p class="text-lg font-semibold">
@@ -172,7 +172,7 @@ const paidByLabel = (paidBy: string) => {
           :key="catKey"
           class="rounded-xl bg-white/15 px-2 py-1.5 text-center"
         >
-          <p class="text-xs text-amber-100">
+          <p class="text-xs text-primary-100">
             {{ categoryLabel(catKey as string) }}
           </p>
           <p class="text-sm font-semibold">
@@ -195,19 +195,19 @@ const paidByLabel = (paidBy: string) => {
           v-model="formData.label"
           type="text"
           placeholder="項目名"
-          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         >
         <input
           v-model.number="formData.amount"
           type="number"
           placeholder="金額"
           min="0"
-          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         >
         <div class="flex gap-2">
           <select
             v-model="formData.category"
-            class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+            class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
           >
             <option
               v-for="cat in CATEGORIES"
@@ -219,7 +219,7 @@ const paidByLabel = (paidBy: string) => {
           </select>
           <select
             v-model="formData.paid_by"
-            class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+            class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
           >
             <option value="taro">
               たろう
@@ -233,12 +233,12 @@ const paidByLabel = (paidBy: string) => {
           v-model="formData.note"
           type="text"
           placeholder="メモ（任意）"
-          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         >
         <button
           type="submit"
           :disabled="!formData.label.trim() || formData.amount <= 0 || isSubmitting"
-          class="w-full rounded-xl bg-amber-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-amber-600 disabled:bg-gray-300"
+          class="w-full rounded-xl bg-primary-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:bg-gray-300"
         >
           追加する
         </button>
@@ -250,8 +250,8 @@ const paidByLabel = (paidBy: string) => {
       <button
         class="flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors"
         :class="!selectedCategory
-          ? 'bg-amber-500 text-white shadow-sm'
-          : 'bg-white text-gray-600 hover:bg-amber-50'"
+          ? 'bg-primary-500 text-white shadow-sm'
+          : 'bg-white text-gray-600 hover:bg-primary-50'"
         @click="selectedCategory = ''"
       >
         全て
@@ -261,8 +261,8 @@ const paidByLabel = (paidBy: string) => {
         :key="cat.key"
         class="flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors"
         :class="selectedCategory === cat.key
-          ? 'bg-amber-500 text-white shadow-sm'
-          : 'bg-white text-gray-600 hover:bg-amber-50'"
+          ? 'bg-primary-500 text-white shadow-sm'
+          : 'bg-white text-gray-600 hover:bg-primary-50'"
         @click="selectedCategory = cat.key"
       >
         {{ cat.label }}
@@ -291,7 +291,7 @@ const paidByLabel = (paidBy: string) => {
               <p class="text-sm font-semibold text-gray-800">
                 {{ expense.label }}
               </p>
-              <span class="rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-700">
+              <span class="rounded-full bg-primary-50 px-2 py-0.5 text-xs text-primary-700">
                 {{ categoryLabel(expense.category) }}
               </span>
             </div>

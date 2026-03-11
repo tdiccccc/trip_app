@@ -68,7 +68,7 @@ const handleDeletePhoto = async () => {
         Album
       </h1>
       <button
-        class="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+        class="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
         @click="showUploader = !showUploader"
       >
         {{ showUploader ? 'Close' : 'Upload' }}
@@ -87,7 +87,7 @@ const handleDeletePhoto = async () => {
     <div class="mb-4">
       <select
         v-model="selectedSpotId"
-        class="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+        class="w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       >
         <option :value="undefined">
           All spots

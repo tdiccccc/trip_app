@@ -52,7 +52,7 @@ const handleSubmit = () => {
         v-model="form.title"
         type="text"
         placeholder="e.g. Ise Jingu Visit"
-        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       >
     </div>
 
@@ -64,7 +64,7 @@ const handleSubmit = () => {
       <input
         v-model="form.date"
         type="date"
-        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       >
     </div>
 
@@ -75,7 +75,7 @@ const handleSubmit = () => {
         <input
           v-model="form.start_time"
           type="time"
-          class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         >
       </div>
       <div class="flex-1">
@@ -83,7 +83,7 @@ const handleSubmit = () => {
         <input
           v-model="form.end_time"
           type="time"
-          class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+          class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
         >
       </div>
     </div>
@@ -95,7 +95,7 @@ const handleSubmit = () => {
         v-model="form.memo"
         rows="2"
         placeholder="Notes..."
-        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-base focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       />
     </div>
 
@@ -109,7 +109,7 @@ const handleSubmit = () => {
           type="button"
           class="rounded-full border px-3 py-1.5 text-sm transition-colors"
           :class="form.transport === opt.value
-            ? 'border-amber-400 bg-amber-50 text-amber-700'
+            ? 'border-primary-400 bg-primary-50 text-primary-700'
             : 'border-gray-300 bg-white text-gray-600 hover:bg-gray-50'"
           @click="form.transport = form.transport === opt.value ? null : opt.value"
         >
@@ -130,7 +130,7 @@ const handleSubmit = () => {
       <button
         type="submit"
         :disabled="!isValid"
-        class="flex-1 rounded-xl bg-amber-500 px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-50"
+        class="flex-1 rounded-xl bg-primary-500 px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {{ isEdit ? 'Update' : 'Add' }}
       </button>

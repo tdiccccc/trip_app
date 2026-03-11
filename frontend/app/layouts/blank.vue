@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-dvh flex-col bg-amber-50/30">
+  <div class="flex min-h-dvh flex-col bg-primary-50/30">
     <slot />
   </div>
 </template>

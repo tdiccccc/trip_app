@@ -45,7 +45,7 @@ const quickLinks = [
   <div class="flex flex-col items-center gap-6 py-8">
     <!-- Title -->
     <div class="text-center">
-      <h1 class="text-3xl font-bold text-amber-700">
+      <h1 class="text-3xl font-bold text-primary-700">
         Ise Trip
       </h1>
       <p class="mt-1 text-sm text-gray-400">
@@ -63,7 +63,7 @@ const quickLinks = [
       </p>
       <div class="flex justify-center gap-4">
         <div class="text-center">
-          <div class="text-3xl font-bold text-amber-600">
+          <div class="text-3xl font-bold text-primary-600">
             {{ countdown.days }}
           </div>
           <div class="text-xs text-gray-400">
@@ -71,7 +71,7 @@ const quickLinks = [
           </div>
         </div>
         <div class="text-center">
-          <div class="text-3xl font-bold text-amber-600">
+          <div class="text-3xl font-bold text-primary-600">
             {{ countdown.hours }}
           </div>
           <div class="text-xs text-gray-400">
@@ -79,7 +79,7 @@ const quickLinks = [
           </div>
         </div>
         <div class="text-center">
-          <div class="text-3xl font-bold text-amber-600">
+          <div class="text-3xl font-bold text-primary-600">
             {{ countdown.minutes }}
           </div>
           <div class="text-xs text-gray-400">
@@ -87,7 +87,7 @@ const quickLinks = [
           </div>
         </div>
         <div class="text-center">
-          <div class="text-3xl font-bold text-amber-600">
+          <div class="text-3xl font-bold text-primary-600">
             {{ countdown.seconds }}
           </div>
           <div class="text-xs text-gray-400">
@@ -100,7 +100,7 @@ const quickLinks = [
     <!-- Trip started message -->
     <div
       v-else
-      class="w-full rounded-2xl bg-amber-500 p-6 text-center text-white shadow-sm"
+      class="w-full rounded-2xl bg-primary-500 p-6 text-center text-white shadow-sm"
     >
       <p class="text-lg font-bold">
         Have a great trip!

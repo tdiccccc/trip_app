@@ -77,7 +77,7 @@ onUnmounted(() => {
     <!-- File select area -->
     <div
       v-if="!previewUrl"
-      class="cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-amber-400"
+      class="cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-primary-400"
       @click="fileInput?.click()"
     >
       <svg
@@ -142,13 +142,13 @@ onUnmounted(() => {
         v-model="caption"
         type="text"
         placeholder="Add a caption..."
-        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-200"
+        class="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
       >
 
       <!-- Upload button -->
       <button
         :disabled="isUploading"
-        class="w-full rounded-xl bg-amber-500 px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-50"
+        class="w-full rounded-xl bg-primary-500 px-4 py-2.5 text-base font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
         @click="handleUpload"
       >
         <span v-if="isUploading">Uploading...</span>

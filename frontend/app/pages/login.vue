@@ -46,7 +46,7 @@ const handleLogin = async () => {
 <template>
   <div class="flex min-h-dvh items-center justify-center px-4">
     <div class="w-full max-w-sm">
-      <h1 class="mb-2 text-center text-2xl font-bold text-amber-700">
+      <h1 class="mb-2 text-center text-2xl font-bold text-primary-700">
         Ise Trip
       </h1>
       <p class="mb-8 text-center text-sm text-gray-400">
@@ -79,7 +79,7 @@ const handleLogin = async () => {
             required
             autocomplete="email"
             placeholder="mail@example.com"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-200"
           >
         </div>
 
@@ -97,14 +97,14 @@ const handleLogin = async () => {
             required
             autocomplete="current-password"
             placeholder="パスワード"
-            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+            class="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-primary-400 focus:ring-2 focus:ring-primary-200"
           >
         </div>
 
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full rounded-xl bg-amber-500 py-3 text-base font-semibold text-white transition hover:bg-amber-600 active:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
+          class="w-full rounded-xl bg-primary-500 py-3 text-base font-semibold text-white transition hover:bg-primary-600 active:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <span v-if="isLoading">ログイン中...</span>
           <span v-else>ログイン</span>
