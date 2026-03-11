@@ -1,4 +1,4 @@
-export type TransportType = 'train' | 'car' | 'walk' | 'bus' | 'none'
+export type TransportType = 'train' | 'car' | 'walk' | 'bus' | 'taxi' | 'none'
 
 export interface ItineraryItem {
   id: number

@@ -10,5 +10,6 @@ enum Transport: string
     case Car = 'car';
     case Walk = 'walk';
     case Bus = 'bus';
+    case Taxi = 'taxi';
     case None = 'none';
 }

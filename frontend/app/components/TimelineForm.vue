@@ -16,6 +16,7 @@ const transportOptions: { value: TransportType; label: string }[] = [
   { value: 'car', label: '車' },
   { value: 'walk', label: '徒歩' },
   { value: 'bus', label: 'バス' },
+  { value: 'taxi', label: 'タクシー' },
   { value: 'none', label: 'なし' },
 ]
 

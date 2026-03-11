@@ -25,7 +25,7 @@ final class UpdateItineraryItemRequest extends FormRequest
             'date' => ['sometimes', 'required', 'date_format:Y-m-d'],
             'start_time' => ['sometimes', 'nullable', 'date_format:H:i'],
             'end_time' => ['sometimes', 'nullable', 'date_format:H:i'],
-            'transport' => ['sometimes', 'nullable', 'string', 'in:train,car,walk,bus,none'],
+            'transport' => ['sometimes', 'nullable', 'string', 'in:train,car,walk,bus,taxi,none'],
             'sort_order' => ['sometimes', 'nullable', 'integer', 'min:0'],
         ];
     }

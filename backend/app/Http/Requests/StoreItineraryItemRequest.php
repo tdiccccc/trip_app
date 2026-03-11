@@ -25,7 +25,7 @@ final class StoreItineraryItemRequest extends FormRequest
             'date' => ['required', 'date_format:Y-m-d'],
             'start_time' => ['nullable', 'date_format:H:i'],
             'end_time' => ['nullable', 'date_format:H:i'],
-            'transport' => ['nullable', 'string', 'in:train,car,walk,bus,none'],
+            'transport' => ['nullable', 'string', 'in:train,car,walk,bus,taxi,none'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }

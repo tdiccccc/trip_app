@@ -8,6 +8,7 @@ const iconMap: Record<string, string> = {
   car: '\uD83D\uDE97',
   walk: '\uD83D\uDEB6',
   bus: '\uD83D\uDE8C',
+  taxi: '\uD83D\uDE95',
   none: '\u23F8',
 }
 
@@ -21,6 +22,7 @@ const labelMap: Record<string, string> = {
   car: '車',
   walk: '徒歩',
   bus: 'バス',
+  taxi: 'タクシー',
   none: 'なし',
 }
 
