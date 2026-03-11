@@ -13,9 +13,10 @@ class EloquentBoardPostRepository implements BoardPostRepositoryInterface
     /**
      * @return BoardPost[]
      */
-    public function findAll(): array
+    public function findAll(int $tripId): array
     {
         return BoardPostModel::query()
+            ->where('trip_id', $tripId)
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(fn (BoardPostModel $model): BoardPost => $this->toEntity($model))
@@ -36,10 +37,11 @@ class EloquentBoardPostRepository implements BoardPostRepositoryInterface
     public function save(BoardPost $post): BoardPost
     {
         $model = $post->id === 0
-            ? new BoardPostModel()
+            ? new BoardPostModel
             : BoardPostModel::findOrFail($post->id);
 
         $model->fill([
+            'trip_id' => $post->tripId,
             'user_id' => $post->userId,
             'body' => $post->body,
             'photo_id' => $post->photoId,
@@ -54,6 +56,7 @@ class EloquentBoardPostRepository implements BoardPostRepositoryInterface
     {
         return new BoardPost(
             id: $model->id,
+            tripId: $model->trip_id,
             userId: $model->user_id,
             body: $model->body,
             photoId: $model->photo_id,

@@ -14,9 +14,10 @@ class EloquentItineraryRepository implements ItineraryRepositoryInterface
     /**
      * @return ItineraryItem[]
      */
-    public function findAll(?string $date = null): array
+    public function findAll(int $tripId, ?string $date = null): array
     {
         $query = ItineraryItemModel::query()
+            ->where('trip_id', $tripId)
             ->orderBy('date', 'asc')
             ->orderBy('sort_order', 'asc');
 
@@ -43,10 +44,11 @@ class EloquentItineraryRepository implements ItineraryRepositoryInterface
     public function save(ItineraryItem $item): ItineraryItem
     {
         $model = $item->id === 0
-            ? new ItineraryItemModel()
+            ? new ItineraryItemModel
             : ItineraryItemModel::findOrFail($item->id);
 
         $model->fill([
+            'trip_id' => $item->tripId,
             'user_id' => $item->userId,
             'spot_id' => $item->spotId,
             'title' => $item->title,
@@ -68,7 +70,7 @@ class EloquentItineraryRepository implements ItineraryRepositoryInterface
     }
 
     /**
-     * @param array<array{id: int, sort_order: int}> $items
+     * @param  array<array{id: int, sort_order: int}>  $items
      */
     public function updateSortOrders(array $items): void
     {
@@ -82,6 +84,7 @@ class EloquentItineraryRepository implements ItineraryRepositoryInterface
     {
         return new ItineraryItem(
             id: $model->id,
+            tripId: $model->trip_id,
             userId: $model->user_id,
             spotId: $model->spot_id,
             title: $model->title,

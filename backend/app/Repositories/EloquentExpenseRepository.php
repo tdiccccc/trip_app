@@ -15,9 +15,11 @@ class EloquentExpenseRepository implements ExpenseRepositoryInterface
     /**
      * @return Expense[]
      */
-    public function findAll(?string $category = null): array
+    public function findAll(int $tripId, ?string $category = null): array
     {
-        $query = ExpenseModel::query()->orderBy('paid_at', 'desc');
+        $query = ExpenseModel::query()
+            ->where('trip_id', $tripId)
+            ->orderBy('paid_at', 'desc');
 
         if ($category !== null) {
             $query->where('category', $category);
@@ -42,10 +44,11 @@ class EloquentExpenseRepository implements ExpenseRepositoryInterface
     public function save(Expense $expense): Expense
     {
         $model = $expense->id === 0
-            ? new ExpenseModel()
+            ? new ExpenseModel
             : ExpenseModel::findOrFail($expense->id);
 
         $model->fill([
+            'trip_id' => $expense->tripId,
             'user_id' => $expense->userId,
             'description' => $expense->description,
             'amount' => $expense->amount->amount,
@@ -67,6 +70,7 @@ class EloquentExpenseRepository implements ExpenseRepositoryInterface
     {
         return new Expense(
             id: $model->id,
+            tripId: $model->trip_id,
             userId: $model->user_id,
             description: $model->description,
             amount: new Money($model->amount),

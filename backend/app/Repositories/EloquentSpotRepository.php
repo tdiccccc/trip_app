@@ -15,9 +15,11 @@ class EloquentSpotRepository implements SpotRepositoryInterface
     /**
      * @return Spot[]
      */
-    public function findAll(?SpotCategory $category = null): array
+    public function findAll(int $tripId, ?SpotCategory $category = null): array
     {
-        $query = SpotModel::query()->orderBy('sort_order', 'asc');
+        $query = SpotModel::query()
+            ->where('trip_id', $tripId)
+            ->orderBy('sort_order', 'asc');
 
         if ($category !== null) {
             $query->where('category', $category->value);
@@ -43,6 +45,7 @@ class EloquentSpotRepository implements SpotRepositoryInterface
     {
         return new Spot(
             id: $model->id,
+            tripId: $model->trip_id,
             name: $model->name,
             description: $model->description,
             address: $model->address,

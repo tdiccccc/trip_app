@@ -8,23 +8,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ItineraryItem extends Model
+class TripMember extends Model
 {
-    /** @use HasFactory<\Database\Factories\ItineraryItemFactory> */
+    /** @use HasFactory<\Database\Factories\TripMemberFactory> */
     use HasFactory;
 
     /** @var list<string> */
     protected $fillable = [
         'trip_id',
         'user_id',
-        'spot_id',
-        'title',
-        'memo',
-        'date',
-        'start_time',
-        'end_time',
-        'transport',
-        'sort_order',
+        'role',
+        'joined_at',
     ];
 
     /**
@@ -33,7 +27,7 @@ class ItineraryItem extends Model
     protected function casts(): array
     {
         return [
-            'sort_order' => 'integer',
+            'joined_at' => 'datetime',
         ];
     }
 
@@ -51,13 +45,5 @@ class ItineraryItem extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return BelongsTo<Spot, $this>
-     */
-    public function spot(): BelongsTo
-    {
-        return $this->belongsTo(Spot::class);
     }
 }

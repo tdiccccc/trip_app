@@ -16,6 +16,7 @@ class BoardPost extends Model
 
     /** @var list<string> */
     protected $fillable = [
+        'trip_id',
         'user_id',
         'body',
         'photo_id',
@@ -30,6 +31,14 @@ class BoardPost extends Model
         return [
             'is_best_shot' => 'boolean',
         ];
+    }
+
+    /**
+     * @return BelongsTo<Trip, $this>
+     */
+    public function trip(): BelongsTo
+    {
+        return $this->belongsTo(Trip::class);
     }
 
     /**

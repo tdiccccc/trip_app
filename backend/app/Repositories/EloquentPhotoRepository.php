@@ -14,9 +14,10 @@ class EloquentPhotoRepository implements PhotoRepositoryInterface
     /**
      * @return Photo[]
      */
-    public function findAll(?int $spotId = null, string $sort = 'taken_at', string $order = 'desc'): array
+    public function findAll(int $tripId, ?int $spotId = null, string $sort = 'taken_at', string $order = 'desc'): array
     {
-        $query = PhotoModel::query();
+        $query = PhotoModel::query()
+            ->where('trip_id', $tripId);
 
         if ($spotId !== null) {
             $query->where('spot_id', $spotId);
@@ -56,10 +57,11 @@ class EloquentPhotoRepository implements PhotoRepositoryInterface
     public function save(Photo $photo): Photo
     {
         $model = $photo->id === 0
-            ? new PhotoModel()
+            ? new PhotoModel
             : PhotoModel::findOrFail($photo->id);
 
         $model->fill([
+            'trip_id' => $photo->tripId,
             'user_id' => $photo->userId,
             'spot_id' => $photo->spotId,
             'storage_path' => $photo->storagePath->toString(),
@@ -84,6 +86,7 @@ class EloquentPhotoRepository implements PhotoRepositoryInterface
     {
         return new Photo(
             id: $model->id,
+            tripId: $model->trip_id,
             userId: $model->user_id,
             spotId: $model->spot_id,
             storagePath: new PhotoPath($model->storage_path),

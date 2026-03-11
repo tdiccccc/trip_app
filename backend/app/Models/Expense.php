@@ -15,6 +15,7 @@ class Expense extends Model
 
     /** @var list<string> */
     protected $fillable = [
+        'trip_id',
         'user_id',
         'description',
         'amount',
@@ -32,6 +33,14 @@ class Expense extends Model
             'amount' => 'integer',
             'is_shared' => 'boolean',
         ];
+    }
+
+    /**
+     * @return BelongsTo<Trip, $this>
+     */
+    public function trip(): BelongsTo
+    {
+        return $this->belongsTo(Trip::class);
     }
 
     /**

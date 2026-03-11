@@ -12,6 +12,8 @@ use App\Repositories\EloquentPhotoRepository;
 use App\Repositories\EloquentReactionRepository;
 use App\Repositories\EloquentSpotMemoRepository;
 use App\Repositories\EloquentSpotRepository;
+use App\Repositories\EloquentTripMemberRepository;
+use App\Repositories\EloquentTripRepository;
 use Illuminate\Support\ServiceProvider;
 use Packages\Domain\Repositories\BoardPostRepositoryInterface;
 use Packages\Domain\Repositories\ExpenseRepositoryInterface;
@@ -21,6 +23,8 @@ use Packages\Domain\Repositories\PhotoRepositoryInterface;
 use Packages\Domain\Repositories\ReactionRepositoryInterface;
 use Packages\Domain\Repositories\SpotMemoRepositoryInterface;
 use Packages\Domain\Repositories\SpotRepositoryInterface;
+use Packages\Domain\Repositories\TripMemberRepositoryInterface;
+use Packages\Domain\Repositories\TripRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(TripRepositoryInterface::class, EloquentTripRepository::class);
+        $this->app->bind(TripMemberRepositoryInterface::class, EloquentTripMemberRepository::class);
         $this->app->bind(SpotRepositoryInterface::class, EloquentSpotRepository::class);
         $this->app->bind(SpotMemoRepositoryInterface::class, EloquentSpotMemoRepository::class);
         $this->app->bind(ItineraryRepositoryInterface::class, EloquentItineraryRepository::class);

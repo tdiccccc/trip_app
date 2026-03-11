@@ -15,6 +15,7 @@ class PackingItem extends Model
 
     /** @var list<string> */
     protected $fillable = [
+        'trip_id',
         'user_id',
         'name',
         'is_checked',
@@ -32,6 +33,14 @@ class PackingItem extends Model
             'is_checked' => 'boolean',
             'sort_order' => 'integer',
         ];
+    }
+
+    /**
+     * @return BelongsTo<Trip, $this>
+     */
+    public function trip(): BelongsTo
+    {
+        return $this->belongsTo(Trip::class);
     }
 
     /**

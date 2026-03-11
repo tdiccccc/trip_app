@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Spot extends Model
@@ -15,6 +16,7 @@ class Spot extends Model
 
     /** @var list<string> */
     protected $fillable = [
+        'trip_id',
         'name',
         'description',
         'address',
@@ -38,6 +40,14 @@ class Spot extends Model
             'longitude' => 'float',
             'sort_order' => 'integer',
         ];
+    }
+
+    /**
+     * @return BelongsTo<Trip, $this>
+     */
+    public function trip(): BelongsTo
+    {
+        return $this->belongsTo(Trip::class);
     }
 
     /**

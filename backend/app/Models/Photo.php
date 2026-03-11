@@ -15,6 +15,7 @@ class Photo extends Model
 
     /** @var list<string> */
     protected $fillable = [
+        'trip_id',
         'user_id',
         'spot_id',
         'storage_path',
@@ -34,6 +35,14 @@ class Photo extends Model
         return [
             'file_size' => 'integer',
         ];
+    }
+
+    /**
+     * @return BelongsTo<Trip, $this>
+     */
+    public function trip(): BelongsTo
+    {
+        return $this->belongsTo(Trip::class);
     }
 
     /**

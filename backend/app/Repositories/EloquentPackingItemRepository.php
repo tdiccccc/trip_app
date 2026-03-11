@@ -14,9 +14,11 @@ class EloquentPackingItemRepository implements PackingItemRepositoryInterface
     /**
      * @return PackingItem[]
      */
-    public function findAll(?string $assignee = null): array
+    public function findAll(int $tripId, ?string $assignee = null): array
     {
-        $query = PackingItemModel::query()->orderBy('sort_order', 'asc');
+        $query = PackingItemModel::query()
+            ->where('trip_id', $tripId)
+            ->orderBy('sort_order', 'asc');
 
         if ($assignee !== null) {
             $query->where('assignee', $assignee);
@@ -41,10 +43,11 @@ class EloquentPackingItemRepository implements PackingItemRepositoryInterface
     public function save(PackingItem $item): PackingItem
     {
         $model = $item->id === 0
-            ? new PackingItemModel()
+            ? new PackingItemModel
             : PackingItemModel::findOrFail($item->id);
 
         $model->fill([
+            'trip_id' => $item->tripId,
             'user_id' => $item->userId,
             'name' => $item->name,
             'is_checked' => $item->isChecked,
@@ -66,6 +69,7 @@ class EloquentPackingItemRepository implements PackingItemRepositoryInterface
     {
         return new PackingItem(
             id: $model->id,
+            tripId: $model->trip_id,
             userId: $model->user_id,
             name: $model->name,
             isChecked: $model->is_checked,
