@@ -19,6 +19,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             SpotSeeder::class,
+            SpotMemoSeeder::class,
+            ItineraryItemSeeder::class,
+            PhotoSeeder::class,
+            BoardPostSeeder::class,
+            ReactionSeeder::class,
+            PackingItemSeeder::class,
+            ExpenseSeeder::class,
         ]);
     }
 }
