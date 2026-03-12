@@ -65,11 +65,13 @@ const isOwner = computed(() => trip.value?.current_user_role === 'owner')
 
 const quickLinks = computed(() => [
   { to: `/trips/${tripId}/itinerary`, label: 'しおり', description: '旅行の予定を確認', icon: 'calendar' },
+  { to: `/trips/${tripId}/now`, label: '今どこ', description: 'GPS で現在地確認', icon: 'location' },
   { to: `/trips/${tripId}/album`, label: 'アルバム', description: '写真を見る・追加', icon: 'photo' },
   { to: `/trips/${tripId}/board`, label: '掲示板', description: 'ふたりの伝言板', icon: 'board' },
   { to: `/trips/${tripId}/packing`, label: 'パッキング', description: '持ち物チェック', icon: 'packing' },
   { to: `/trips/${tripId}/expenses`, label: '費用メモ', description: '支出を記録・集計', icon: 'expenses' },
   { to: `/trips/${tripId}/export`, label: 'エクスポート', description: '思い出を書き出し', icon: 'export' },
+  { to: `/trips/${tripId}/summary`, label: 'サマリー', description: '旅行の統計情報', icon: 'summary' },
 ])
 
 // Delete trip
@@ -217,6 +219,27 @@ const handleDelete = async () => {
             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
           />
         </svg>
+        <!-- Location icon (今どこ) -->
+        <svg
+          v-if="link.icon === 'location'"
+          class="h-8 w-8 text-primary-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+        </svg>
         <!-- Photo icon (アルバム) -->
         <svg
           v-if="link.icon === 'photo'"
@@ -290,6 +313,21 @@ const handleDelete = async () => {
             stroke-linejoin="round"
             stroke-width="1.5"
             d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+        <!-- Summary icon (サマリー) -->
+        <svg
+          v-if="link.icon === 'summary'"
+          class="h-8 w-8 text-primary-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
           />
         </svg>
         <div class="text-center">
