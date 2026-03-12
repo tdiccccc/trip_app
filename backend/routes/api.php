@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ItineraryController;
 use App\Http\Controllers\Api\PackingController;
 use App\Http\Controllers\Api\SpotController;
 use App\Http\Controllers\Api\TripController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\EnsureTripMember;
 use App\Http\Middleware\EnsureTripOwner;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
     // 認証
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'me']);
+
+    // ユーザー一覧（メンバー追加用）
+    Route::get('/users', [UserController::class, 'index']);
 
     // 旅行 CRUD（一覧・作成は全認証ユーザー）
     Route::get('/trips', [TripController::class, 'index']);
