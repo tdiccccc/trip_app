@@ -4,7 +4,7 @@
 
 伊勢旅行メモリーアプリの全機能一覧。
 複数旅行管理に対応し、各機能は旅行に紐づいて管理される。
-各機能の実装状況と対応するページ・API を記載する（最終更新: 2026-03-11）。
+各機能の実装状況と対応するページ・API を記載する（最終更新: 2026-03-12）。
 
 ---
 
@@ -13,22 +13,22 @@
 | # | 機能名 | 概要 | 実装状況 | 対応ページ | 主要 API |
 |---|--------|------|---------|-----------|---------|
 | 1 | ログイン | Sanctum SPA 認証によるメール + パスワードログイン | 実装済み | `/login` | `POST /api/login` |
-| 2 | 旅行管理 | 旅行の作成・一覧・詳細・編集・削除 | 未実装 | `/trips`, `/trips/new`, `/trips/:tripId` | `/api/trips` |
-| 3 | カウントダウン | 旅行開始日までの残り時間をリアルタイム表示 | 実装済み（移行対応要） | `/trips/:tripId` | `GET /api/trips/:tripId` |
-| 4 | しおり（タイムライン） | 旅行に紐づく行程の時系列管理（追加・編集・削除） | 実装済み（移行対応要） | `/trips/:tripId/itinerary` | `/api/trips/:tripId/itinerary` |
-| 5 | スポット詳細 | 旅行に紐づく観光スポットの情報表示・メモ追加・写真閲覧 | 実装済み（移行対応要） | `/trips/:tripId/spots/:id` | `/api/trips/:tripId/spots/:id`, `/api/trips/:tripId/spots/:id/memos` |
-| 6 | 写真アルバム | 旅行に紐づく写真のアップロード・一覧表示・フィルタ・削除 | 実装済み（移行対応要） | `/trips/:tripId/album` | `/api/trips/:tripId/photos` |
-| 7 | スライドショー | 旅行のアルバム写真の全画面自動再生 | 実装済み（移行対応要） | `/trips/:tripId/album/slideshow` | `/api/trips/:tripId/photos` |
-| 8 | ふたりの掲示板 | 旅行に紐づくメッセージ投稿・絵文字リアクション | 実装済み（移行対応要） | `/trips/:tripId/board` | `/api/trips/:tripId/board`, `/api/trips/:tripId/board/:id/reactions` |
-| 9 | パッキングリスト | 旅行に紐づく共有持ち物チェックリスト（担当分け対応） | 実装済み（移行対応要） | `/trips/:tripId/packing` | `/api/trips/:tripId/packing` |
-| 10 | 費用メモ | 旅行に紐づく支出記録・カテゴリ別集計・割り勘計算 | 実装済み（移行対応要） | `/trips/:tripId/expenses` | `/api/trips/:tripId/expenses`, `/api/trips/:tripId/expenses/summary` |
-| 11 | エクスポート | 旅行の記録を各種形式で出力 | フロントエンド未実装（スタブ） | `/trips/:tripId/export` | `/api/trips/:tripId/export/*`（バックエンド実装済み） |
+| 2 | 旅行管理 | 旅行の作成・一覧・詳細・編集・削除 | 実装済み | `/trips`, `/trips/new`, `/trips/:tripId` | `/api/trips` |
+| 3 | カウントダウン | 旅行開始日までの残り時間をリアルタイム表示 | 実装済み | `/trips/:tripId` | `GET /api/trips/:tripId` |
+| 4 | しおり（タイムライン） | 旅行に紐づく行程の時系列管理（追加・編集・削除） | 実装済み | `/trips/:tripId/itinerary` | `/api/trips/:tripId/itinerary` |
+| 5 | スポット詳細 | 旅行に紐づく観光スポットの情報表示・メモ追加・写真閲覧 | 実装済み | `/trips/:tripId/spots/:id` | `/api/trips/:tripId/spots/:id`, `/api/trips/:tripId/spots/:id/memos` |
+| 6 | 写真アルバム | 旅行に紐づく写真のアップロード・一覧表示・フィルタ・削除 | 実装済み | `/trips/:tripId/album` | `/api/trips/:tripId/photos` |
+| 7 | スライドショー | 旅行のアルバム写真の全画面自動再生 | 実装済み | `/trips/:tripId/album/slideshow` | `/api/trips/:tripId/photos` |
+| 8 | ふたりの掲示板 | 旅行に紐づくメッセージ投稿・絵文字リアクション | 実装済み | `/trips/:tripId/board` | `/api/trips/:tripId/board`, `/api/trips/:tripId/board/:id/reactions` |
+| 9 | パッキングリスト | 旅行に紐づく共有持ち物チェックリスト（担当分け対応） | 実装済み | `/trips/:tripId/packing` | `/api/trips/:tripId/packing` |
+| 10 | 費用メモ | 旅行に紐づく支出記録・カテゴリ別集計・割り勘計算 | 実装済み | `/trips/:tripId/expenses` | `/api/trips/:tripId/expenses`, `/api/trips/:tripId/expenses/summary` |
+| 11 | エクスポート | 旅行の記録を各種形式で出力 | 実装済み（動画エクスポートのみ未実装） | `/trips/:tripId/export` | `/api/trips/:tripId/export/*`（バックエンド実装済み） |
 
 ---
 
 ## 将来対応（未実装機能）
 
-以下の機能は設計済みだが、現時点ではフロントエンドに実装されていない。
+以下の機能は設計済みだが、現時点では実装されていない。
 
 | 機能名 | 概要 | 関連ページ | 備考 |
 |--------|------|-----------|------|
@@ -39,9 +39,6 @@
 | テンプレート一括追加 | パッキングリストにテンプレートから一括追加 | `/trips/:tripId/packing` | API 未実装 |
 | BGM 再生 | スライドショーに BGM を付ける | `/trips/:tripId/album/slideshow` | 音声ファイル管理の仕組みが未整備 |
 | スライドショー動画エクスポート | スライドショーを MP4 動画として書き出し | `/trips/:tripId/export` | バックエンド API 含め未実装 |
-| PDF しおり出力 | 行程表を PDF で出力 | `/trips/:tripId/export` | バックエンド API 実装済み、フロントエンド未実装 |
-| フォトブック PDF | 写真をフォトブック風 PDF に整形 | `/trips/:tripId/export` | バックエンド API 実装済み、フロントエンド未実装 |
-| ZIP 一括ダウンロード | 全データを ZIP でダウンロード | `/trips/:tripId/export` | バックエンド API 実装済み、フロントエンド未実装 |
 
 ---
 
@@ -142,6 +139,7 @@
 ### 11. エクスポート
 
 - 旅行の記録を各種形式で出力
-- 現状はスタブ（タイトルと説明文のみ）
-- バックエンド API は PDF しおり・フォトブック PDF・ZIP ダウンロードに対応済み
-- フロントエンドの UI 実装が今後必要
+- PDF しおり・フォトブック PDF・ZIP 一括ダウンロードの3機能は Blob ダウンロードで実装済み
+- スライドショー動画（MP4）は「準備中」表示（バックエンド API が 501 スタブ）
+- 各カードにアイコン・説明・ダウンロードボタン・ローディング状態を実装
+- エラーハンドリングあり（ダウンロード失敗時のエラー表示）
