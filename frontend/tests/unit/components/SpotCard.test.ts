@@ -24,7 +24,7 @@ const baseSpot: Spot = {
 describe('SpotCard', () => {
   it('renders spot name', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: baseSpot },
+      props: { spot: baseSpot, tripId: '1' },
     })
 
     expect(wrapper.text()).toContain('Ise Jingu')
@@ -32,7 +32,7 @@ describe('SpotCard', () => {
 
   it('renders spot address', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: baseSpot },
+      props: { spot: baseSpot, tripId: '1' },
     })
 
     expect(wrapper.text()).toContain('Ise, Mie Prefecture')
@@ -40,7 +40,7 @@ describe('SpotCard', () => {
 
   it('renders category badge for sightseeing', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: baseSpot },
+      props: { spot: baseSpot, tripId: '1' },
     })
 
     expect(wrapper.text()).toContain('観光')
@@ -48,7 +48,7 @@ describe('SpotCard', () => {
 
   it('renders category badge for food', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: { ...baseSpot, category: 'food' as const } },
+      props: { spot: { ...baseSpot, category: 'food' as const }, tripId: '1' },
     })
 
     expect(wrapper.text()).toContain('グルメ')
@@ -56,7 +56,7 @@ describe('SpotCard', () => {
 
   it('renders category badge for hotel', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: { ...baseSpot, category: 'hotel' as const } },
+      props: { spot: { ...baseSpot, category: 'hotel' as const }, tripId: '1' },
     })
 
     expect(wrapper.text()).toContain('宿泊')
@@ -64,7 +64,7 @@ describe('SpotCard', () => {
 
   it('renders image when image_url is provided', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: baseSpot },
+      props: { spot: baseSpot, tripId: '1' },
     })
 
     const img = wrapper.find('img')
@@ -75,7 +75,7 @@ describe('SpotCard', () => {
 
   it('renders placeholder when image_url is null', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: { ...baseSpot, image_url: null } },
+      props: { spot: { ...baseSpot, image_url: null }, tripId: '1' },
     })
 
     const img = wrapper.find('img')
@@ -86,7 +86,7 @@ describe('SpotCard', () => {
 
   it('does not render address when null', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: { ...baseSpot, address: '' } },
+      props: { spot: { ...baseSpot, address: '' }, tripId: '1' },
     })
 
     // Address paragraph should not be visible (v-if="spot.address")
@@ -95,10 +95,10 @@ describe('SpotCard', () => {
 
   it('links to spot detail page', async () => {
     const wrapper = await mountSuspended(SpotCard, {
-      props: { spot: baseSpot },
+      props: { spot: baseSpot, tripId: '1' },
     })
 
     const link = wrapper.find('a')
-    expect(link.attributes('href')).toBe('/spots/1')
+    expect(link.attributes('href')).toBe('/trips/1/spots/1')
   })
 })
