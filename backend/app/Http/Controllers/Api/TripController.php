@@ -14,6 +14,7 @@ use Packages\Application\UseCases\Trip\CreateTripUseCase;
 use Packages\Application\UseCases\Trip\DeleteTripUseCase;
 use Packages\Application\UseCases\Trip\GetTripDetailUseCase;
 use Packages\Application\UseCases\Trip\GetTripListUseCase;
+use Packages\Application\UseCases\Trip\GetTripSummaryUseCase;
 use Packages\Application\UseCases\Trip\UpdateTripUseCase;
 
 final class TripController extends Controller
@@ -94,5 +95,19 @@ final class TripController extends Controller
         $useCase->execute($tripId);
 
         return response()->noContent();
+    }
+
+    /**
+     * GET /api/trips/{tripId}/summary
+     */
+    public function summary(Request $request, int $tripId, GetTripSummaryUseCase $useCase): JsonResponse
+    {
+        $result = $useCase->execute($tripId);
+
+        if ($result === null) {
+            return response()->json(['message' => 'Not found.'], 404);
+        }
+
+        return response()->json(['data' => $result->toArray()]);
     }
 }
