@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ItineraryItem, CreateItineraryItemInput } from '~/types/itinerary'
+import type { Spot } from '~/types/spot'
 
 definePageMeta({
   middleware: ['auth'],
@@ -17,6 +18,17 @@ const { data: tripResponse } = fetchTrip(tripId)
 const trip = computed(() => tripResponse.value?.data ?? null)
 
 const { fetchItems, createItem, updateItem, deleteItem, reorderItems } = useItinerary(tripId)
+
+// View mode toggle (list / map)
+const viewMode = ref<'list' | 'map'>('list')
+
+// Fetch spots for map view
+const { fetchSpots } = useSpots(tripId)
+const { data: spotsResponse } = fetchSpots()
+const spots = computed<Spot[]>(() => {
+  const res = spotsResponse.value as { data?: Spot[] } | null
+  return res?.data ?? []
+})
 
 // Generate trip dates dynamically from trip data
 const tripDates = computed<string[]>(() => {
@@ -161,6 +173,22 @@ const formatDateLabel = (date: string) => {
   return `${month}/${day}(${weekday})`
 }
 
+// Map spot list for display below the map
+const mapSpotList = computed(() => {
+  const sorted = [...items.value].sort((a, b) => a.sort_order - b.sort_order)
+  const result: { order: number; spot: { name: string }; item: ItineraryItem }[] = []
+  let order = 1
+
+  for (const item of sorted) {
+    if (!item.spot_id) continue
+    const spot = spots.value.find((s: Spot) => s.id === item.spot_id)
+    if (!spot || spot.latitude === null || spot.longitude === null) continue
+    result.push({ order: order++, spot, item })
+  }
+
+  return result
+})
+
 const formInitialData = computed(() => {
   if (!editingItem.value) {
     return { date: selectedDate.value }
@@ -194,35 +222,98 @@ const formInitialData = computed(() => {
       </button>
     </div>
 
-    <!-- Timeline -->
-    <div
-      v-if="items.length > 0"
-      class="space-y-1"
-    >
-      <TimelineItem
-        v-for="(item, index) in items"
-        :key="item.id"
-        :item="item"
-        :is-now="isCurrentItem(item)"
-        :is-first="index === 0"
-        :is-last="index === items.length - 1"
-        :trip-id="tripId"
-        @edit="openEditForm"
-        @delete="handleDelete"
-        @move-up="handleMove($event, 'up')"
-        @move-down="handleMove($event, 'down')"
-      />
+    <!-- View mode tabs -->
+    <div class="mb-4 flex rounded-lg bg-gray-100 p-1">
+      <button
+        class="flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+        :class="viewMode === 'list'
+          ? 'bg-white text-gray-800 shadow-sm'
+          : 'text-gray-500 hover:text-gray-700'"
+        @click="viewMode = 'list'"
+      >
+        リスト
+      </button>
+      <button
+        class="flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+        :class="viewMode === 'map'
+          ? 'bg-white text-gray-800 shadow-sm'
+          : 'text-gray-500 hover:text-gray-700'"
+        @click="viewMode = 'map'"
+      >
+        マップ
+      </button>
     </div>
 
-    <!-- Empty state -->
-    <div
-      v-else
-      class="py-16 text-center"
-    >
-      <p class="text-sm text-gray-400">
-        この日の予定はまだありません
-      </p>
-    </div>
+    <!-- List view -->
+    <template v-if="viewMode === 'list'">
+      <!-- Timeline -->
+      <div
+        v-if="items.length > 0"
+        class="space-y-1"
+      >
+        <TimelineItem
+          v-for="(item, index) in items"
+          :key="item.id"
+          :item="item"
+          :is-now="isCurrentItem(item)"
+          :is-first="index === 0"
+          :is-last="index === items.length - 1"
+          :trip-id="tripId"
+          @edit="openEditForm"
+          @delete="handleDelete"
+          @move-up="handleMove($event, 'up')"
+          @move-down="handleMove($event, 'down')"
+        />
+      </div>
+
+      <!-- Empty state -->
+      <div
+        v-else
+        class="py-16 text-center"
+      >
+        <p class="text-sm text-gray-400">
+          この日の予定はまだありません
+        </p>
+      </div>
+    </template>
+
+    <!-- Map view -->
+    <template v-if="viewMode === 'map'">
+      <RouteMap
+        :spots="spots"
+        :itinerary-items="items"
+      />
+
+      <!-- Spot list below map -->
+      <div
+        v-if="mapSpotList.length > 0"
+        class="mt-4 space-y-2"
+      >
+        <div
+          v-for="entry in mapSpotList"
+          :key="entry.item.id"
+          class="flex items-center gap-3 rounded-lg bg-white px-3 py-2 shadow-sm"
+        >
+          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-xs font-bold text-white">
+            {{ entry.order }}
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-gray-800">
+              {{ entry.spot.name }}
+            </p>
+            <p
+              v-if="entry.item.start_time"
+              class="text-xs text-gray-500"
+            >
+              {{ entry.item.start_time.slice(0, 5) }}
+              <template v-if="entry.item.end_time">
+                - {{ entry.item.end_time.slice(0, 5) }}
+              </template>
+            </p>
+          </div>
+        </div>
+      </div>
+    </template>
 
     <!-- Add button -->
     <div class="fixed bottom-20 right-4 z-30">
