@@ -57,8 +57,12 @@ const formatDateRange = (startDate: string, endDate: string) => {
 const isOwner = computed(() => trip.value?.current_user_role === 'owner')
 
 const quickLinks = computed(() => [
-  { to: `/trips/${tripId}/itinerary`, label: 'しおり', description: '旅行の予定を確認' },
-  { to: `/trips/${tripId}/album`, label: 'アルバム', description: '写真を見る・追加' },
+  { to: `/trips/${tripId}/itinerary`, label: 'しおり', description: '旅行の予定を確認', icon: 'calendar' },
+  { to: `/trips/${tripId}/album`, label: 'アルバム', description: '写真を見る・追加', icon: 'photo' },
+  { to: `/trips/${tripId}/board`, label: '掲示板', description: 'ふたりの伝言板', icon: 'board' },
+  { to: `/trips/${tripId}/packing`, label: 'パッキング', description: '持ち物チェック', icon: 'packing' },
+  { to: `/trips/${tripId}/expenses`, label: '費用メモ', description: '支出を記録・集計', icon: 'expenses' },
+  { to: `/trips/${tripId}/export`, label: 'エクスポート', description: '思い出を書き出し', icon: 'export' },
 ])
 
 // Delete trip
@@ -163,23 +167,17 @@ const handleDelete = async () => {
     </div>
 
     <!-- Quick links -->
-    <div class="w-full space-y-3">
+    <div class="w-full grid grid-cols-2 gap-3">
       <NuxtLink
         v-for="link in quickLinks"
         :key="link.to"
         :to="link.to"
-        class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+        class="flex flex-col items-center gap-2 rounded-2xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
       >
-        <div class="min-w-0 flex-1">
-          <div class="text-base font-semibold text-gray-800">
-            {{ link.label }}
-          </div>
-          <div class="text-sm text-gray-400">
-            {{ link.description }}
-          </div>
-        </div>
+        <!-- Calendar icon (しおり) -->
         <svg
-          class="h-5 w-5 shrink-0 text-gray-300"
+          v-if="link.icon === 'calendar'"
+          class="h-8 w-8 text-primary-500"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -187,10 +185,93 @@ const handleDelete = async () => {
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
+            stroke-width="1.5"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
           />
         </svg>
+        <!-- Photo icon (アルバム) -->
+        <svg
+          v-if="link.icon === 'photo'"
+          class="h-8 w-8 text-primary-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+        <!-- Board icon (掲示板) -->
+        <svg
+          v-if="link.icon === 'board'"
+          class="h-8 w-8 text-primary-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+          />
+        </svg>
+        <!-- Packing icon (パッキング) -->
+        <svg
+          v-if="link.icon === 'packing'"
+          class="h-8 w-8 text-primary-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+          />
+        </svg>
+        <!-- Expenses icon (費用メモ) -->
+        <svg
+          v-if="link.icon === 'expenses'"
+          class="h-8 w-8 text-primary-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <!-- Export icon (エクスポート) -->
+        <svg
+          v-if="link.icon === 'export'"
+          class="h-8 w-8 text-primary-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+        <div class="text-center">
+          <div class="text-sm font-semibold text-gray-800">
+            {{ link.label }}
+          </div>
+          <div class="text-xs text-gray-400">
+            {{ link.description }}
+          </div>
+        </div>
       </NuxtLink>
     </div>
 
