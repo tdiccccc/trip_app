@@ -93,6 +93,14 @@ class Trip extends Model
     }
 
     /**
+     * @return HasMany<ExpenseCategory, $this>
+     */
+    public function expenseCategories(): HasMany
+    {
+        return $this->hasMany(ExpenseCategory::class);
+    }
+
+    /**
      * @return HasMany<Expense, $this>
      */
     public function expenses(): HasMany

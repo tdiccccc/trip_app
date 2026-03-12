@@ -21,7 +21,7 @@ final class StoreExpenseRequest extends FormRequest
         return [
             'description' => ['required', 'string', 'max:255'],
             'amount' => ['required', 'integer', 'min:1'],
-            'category' => ['sometimes', 'string', 'in:transport,food,souvenir,accommodation,other'],
+            'expense_category_id' => ['required', 'integer', 'exists:expense_categories,id'],
             'paid_at' => ['required', 'date_format:Y-m-d'],
             'is_shared' => ['sometimes', 'boolean'],
         ];

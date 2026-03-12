@@ -6,7 +6,7 @@ namespace Packages\Application\UseCases\Expense;
 
 use Packages\Application\DTOs\ExpenseDto;
 use Packages\Domain\Entities\Expense;
-use Packages\Domain\Enums\ExpenseCategory;
+use Packages\Domain\Repositories\ExpenseCategoryRepositoryInterface;
 use Packages\Domain\Repositories\ExpenseRepositoryInterface;
 use Packages\Domain\ValueObjects\Money;
 
@@ -14,6 +14,7 @@ final class RecordExpenseUseCase
 {
     public function __construct(
         private readonly ExpenseRepositoryInterface $expenseRepository,
+        private readonly ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
     ) {
     }
 
@@ -22,7 +23,7 @@ final class RecordExpenseUseCase
         int $userId,
         string $description,
         int $amount,
-        string $category,
+        int $categoryId,
         string $paidAt,
         bool $isShared,
     ): ExpenseDto {
@@ -32,13 +33,15 @@ final class RecordExpenseUseCase
             userId: $userId,
             description: $description,
             amount: new Money($amount),
-            category: ExpenseCategory::from($category),
+            categoryId: $categoryId,
             paidAt: $paidAt,
             isShared: $isShared,
         );
 
         $saved = $this->expenseRepository->save($expense);
 
-        return ExpenseDto::fromEntity($saved);
+        $category = $this->expenseCategoryRepository->findById($saved->categoryId);
+
+        return ExpenseDto::fromEntity($saved, $category);
     }
 }

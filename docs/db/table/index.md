@@ -3,7 +3,7 @@
 ## 概要
 
 伊勢旅行アプリのデータベーステーブル一覧。
-全11テーブル、SQLite 3 で運用する。
+全12テーブル、SQLite 3 で運用する。
 
 ---
 
@@ -21,7 +21,8 @@
 | 8 | board_posts | 掲示板投稿 | 旅行ごとのふたりの掲示板メッセージ | [board_posts.md](./board_posts.md) |
 | 9 | reactions | リアクション | 掲示板投稿へのスタンプ | [reactions.md](./reactions.md) |
 | 10 | packing_items | パッキング項目 | 旅行ごとの持ち物チェックリスト | [packing_items.md](./packing_items.md) |
-| 11 | expenses | 費用記録 | 旅行ごとの支出記録・割り勘計算用 | [expenses.md](./expenses.md) |
+| 11 | expense_categories | 費用カテゴリ | 旅行ごとのカスタム費用カテゴリ | [expense_categories.md](./expense_categories.md) |
+| 12 | expenses | 費用記録 | 旅行ごとの支出記録・割り勘計算用 | [expenses.md](./expenses.md) |
 
 ---
 
@@ -60,4 +61,3 @@ SQLite には ENUM 型がないため、以下のカラムはアプリ層（Lara
 | itinerary_items | transport | train / car / walk / bus / none |
 | trip_members | role | owner / member |
 | packing_items | assignee | self / partner / shared |
-| expenses | category | transport / food / souvenir / accommodation / other |

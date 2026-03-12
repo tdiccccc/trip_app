@@ -1831,6 +1831,210 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 ## 8. 費用メモ（Expense）
 
+### 8-0a. 費用カテゴリ一覧取得
+
+旅行に紐づく費用カテゴリ一覧を取得する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `GET` |
+| **パス** | `/api/trips/{tripId}/expense-categories` |
+| **認証** | 要 |
+| **コントローラー** | `ExpenseCategoryController@index` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
+#### レスポンス
+
+**成功（200）**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "trip_id": 1,
+      "name": "食事",
+      "key": "food",
+      "color": "#FF6B6B",
+      "sort_order": 0
+    },
+    {
+      "id": 2,
+      "trip_id": 1,
+      "name": "交通",
+      "key": "transport",
+      "color": "#4ECDC4",
+      "sort_order": 1
+    }
+  ]
+}
+```
+
+---
+
+### 8-0b. 費用カテゴリ作成
+
+新しい費用カテゴリを作成する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `POST` |
+| **パス** | `/api/trips/{tripId}/expense-categories` |
+| **認証** | 要 |
+| **コントローラー** | `ExpenseCategoryController@store` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+
+#### リクエストボディ
+
+| フィールド | 型 | 必須 | バリデーション | 説明 |
+|-----------|-----|------|-------------|------|
+| name | string | YES | required, max:50 | カテゴリ名 |
+| key | string | NO | regex:/^[a-z0-9_-]+$/, max:30, unique(trip_id+key) | 識別キー（未指定時は name から自動生成） |
+| color | string | NO | regex:/^#[0-9A-Fa-f]{6}$/ | UIカラーコード |
+| sort_order | integer | NO | integer, min:0 | 表示順 |
+
+```json
+{
+  "name": "チケット",
+  "key": "ticket",
+  "color": "#FFD93D",
+  "sort_order": 4
+}
+```
+
+#### レスポンス
+
+**成功（201）**
+
+```json
+{
+  "data": {
+    "id": 7,
+    "trip_id": 1,
+    "name": "チケット",
+    "key": "ticket",
+    "color": "#FFD93D",
+    "sort_order": 4
+  }
+}
+```
+
+**エラー（422）**
+
+```json
+{
+  "message": "The given data was invalid.",
+  "errors": {
+    "name": ["The name field is required."],
+    "key": ["The key has already been taken."]
+  }
+}
+```
+
+---
+
+### 8-0c. 費用カテゴリ更新
+
+費用カテゴリを更新する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `PUT` |
+| **パス** | `/api/trips/{tripId}/expense-categories/{id}` |
+| **認証** | 要 |
+| **コントローラー** | `ExpenseCategoryController@update` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+| id | integer | カテゴリID |
+
+#### リクエストボディ
+
+| フィールド | 型 | 必須 | バリデーション | 説明 |
+|-----------|-----|------|-------------|------|
+| name | string | YES | required, max:50 | カテゴリ名 |
+| key | string | NO | regex:/^[a-z0-9_-]+$/, max:30, unique(trip_id+key, 自身除外) | 識別キー |
+| color | string | NO | regex:/^#[0-9A-Fa-f]{6}$/ | UIカラーコード |
+| sort_order | integer | NO | integer, min:0 | 表示順 |
+
+```json
+{
+  "name": "グルメ",
+  "key": "food",
+  "color": "#FF8C42",
+  "sort_order": 0
+}
+```
+
+#### レスポンス
+
+**成功（200）**
+
+```json
+{
+  "data": {
+    "id": 1,
+    "trip_id": 1,
+    "name": "グルメ",
+    "key": "food",
+    "color": "#FF8C42",
+    "sort_order": 0
+  }
+}
+```
+
+---
+
+### 8-0d. 費用カテゴリ削除
+
+費用カテゴリを削除する。紐づく費用記録が存在する場合は削除を拒否する。
+
+| 項目 | 内容 |
+|------|------|
+| **メソッド** | `DELETE` |
+| **パス** | `/api/trips/{tripId}/expense-categories/{id}` |
+| **認証** | 要 |
+| **コントローラー** | `ExpenseCategoryController@destroy` |
+
+#### パスパラメータ
+
+| パラメータ | 型 | 説明 |
+|-----------|-----|------|
+| tripId | integer | 旅行ID |
+| id | integer | カテゴリID |
+
+#### レスポンス
+
+| コード | 説明 |
+|--------|------|
+| 204 | 削除成功（レスポンスボディなし） |
+| 404 | 対象リソースが見つからない |
+| 409 | 紐づく費用記録が存在するため削除不可 |
+
+**エラー（409）**
+
+```json
+{
+  "message": "このカテゴリには費用記録が紐づいているため削除できません。",
+  "expense_count": 5
+}
+```
+
+---
+
 ### 8-1. 費用一覧取得
 
 旅行に紐づく支出記録一覧を取得する。
@@ -1852,7 +2056,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|-----|------|------|
-| category | string | NO | カテゴリフィルタ（transport / food / souvenir / accommodation / other） |
+| category_id | integer | NO | カテゴリIDフィルタ（expense_categories.id） |
 
 #### レスポンス
 
@@ -1864,14 +2068,20 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
     {
       "id": 1,
       "user_id": 1,
+      "expense_category_id": 2,
       "description": "近鉄特急券（難波→伊勢市）",
       "amount": 3200,
-      "category": "transport",
       "paid_at": "2026-03-28",
       "is_shared": true,
       "user": {
         "id": 1,
         "name": "たろう"
+      },
+      "category": {
+        "id": 2,
+        "name": "交通",
+        "key": "transport",
+        "color": "#4ECDC4"
       },
       "created_at": "2026-03-28T08:00:00.000000Z",
       "updated_at": "2026-03-28T08:00:00.000000Z"
@@ -1879,14 +2089,20 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
     {
       "id": 2,
       "user_id": 2,
+      "expense_category_id": 3,
       "description": "赤福（お土産）",
       "amount": 800,
-      "category": "souvenir",
       "paid_at": "2026-03-28",
       "is_shared": false,
       "user": {
         "id": 2,
         "name": "はなこ"
+      },
+      "category": {
+        "id": 3,
+        "name": "お土産",
+        "key": "souvenir",
+        "color": "#A8E6CF"
       },
       "created_at": "2026-03-28T14:00:00.000000Z",
       "updated_at": "2026-03-28T14:00:00.000000Z"
@@ -1921,7 +2137,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 |-----------|-----|------|-------------|------|
 | description | string | YES | required, max:255 | 支出内容 |
 | amount | integer | YES | required, integer, min:1 | 金額（円） |
-| category | string | NO | in:transport,food,souvenir,accommodation,other | カテゴリ（デフォルト: other） |
+| expense_category_id | integer | YES | required, exists:expense_categories,id | 費用カテゴリID |
 | paid_at | string | YES | required, date_format:Y-m-d | 支払日 |
 | is_shared | boolean | NO | boolean | 割り勘対象（デフォルト: true） |
 
@@ -1929,7 +2145,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 {
   "description": "伊勢うどん（昼食）",
   "amount": 1200,
-  "category": "food",
+  "expense_category_id": 1,
   "paid_at": "2026-03-28",
   "is_shared": true
 }
@@ -1944,14 +2160,20 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
   "data": {
     "id": 3,
     "user_id": 1,
+    "expense_category_id": 1,
     "description": "伊勢うどん（昼食）",
     "amount": 1200,
-    "category": "food",
     "paid_at": "2026-03-28",
     "is_shared": true,
     "user": {
       "id": 1,
       "name": "たろう"
+    },
+    "category": {
+      "id": 1,
+      "name": "食事",
+      "key": "food",
+      "color": "#FF6B6B"
     },
     "created_at": "2026-03-28T12:30:00.000000Z",
     "updated_at": "2026-03-28T12:30:00.000000Z"
@@ -2255,16 +2477,21 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | 28 | `POST` | `/api/trips/{tripId}/packing` | 要 | パッキング項目作成 |
 | 29 | `PATCH` | `/api/trips/{tripId}/packing/{id}` | 要 | パッキング項目更新 |
 | 30 | `DELETE` | `/api/trips/{tripId}/packing/{id}` | 要 | パッキング項目削除 |
+| **費用カテゴリ** | | | | |
+| 31 | `GET` | `/api/trips/{tripId}/expense-categories` | 要 | 費用カテゴリ一覧取得 |
+| 32 | `POST` | `/api/trips/{tripId}/expense-categories` | 要 | 費用カテゴリ作成 |
+| 33 | `PUT` | `/api/trips/{tripId}/expense-categories/{id}` | 要 | 費用カテゴリ更新 |
+| 34 | `DELETE` | `/api/trips/{tripId}/expense-categories/{id}` | 要 | 費用カテゴリ削除（使用中: 409） |
 | **費用** | | | | |
-| 31 | `GET` | `/api/trips/{tripId}/expenses` | 要 | 費用一覧取得 |
-| 32 | `POST` | `/api/trips/{tripId}/expenses` | 要 | 費用記録作成 |
-| 33 | `DELETE` | `/api/trips/{tripId}/expenses/{id}` | 要 | 費用記録削除 |
-| 34 | `GET` | `/api/trips/{tripId}/expenses/summary` | 要 | 費用サマリー取得 |
+| 35 | `GET` | `/api/trips/{tripId}/expenses` | 要 | 費用一覧取得 |
+| 36 | `POST` | `/api/trips/{tripId}/expenses` | 要 | 費用記録作成 |
+| 37 | `DELETE` | `/api/trips/{tripId}/expenses/{id}` | 要 | 費用記録削除 |
+| 38 | `GET` | `/api/trips/{tripId}/expenses/summary` | 要 | 費用サマリー取得 |
 | **エクスポート** | | | | |
-| 35 | `POST` | `/api/trips/{tripId}/export/itinerary-pdf` | 要 | しおり PDF 出力 |
-| 36 | `POST` | `/api/trips/{tripId}/export/photobook-pdf` | 要 | フォトブック PDF 出力 |
-| 37 | `POST` | `/api/trips/{tripId}/export/slideshow-video` | 要 | スライドショー動画出力 |
-| 38 | `POST` | `/api/trips/{tripId}/export/zip` | 要 | ZIP 一括ダウンロード |
+| 39 | `POST` | `/api/trips/{tripId}/export/itinerary-pdf` | 要 | しおり PDF 出力 |
+| 40 | `POST` | `/api/trips/{tripId}/export/photobook-pdf` | 要 | フォトブック PDF 出力 |
+| 41 | `POST` | `/api/trips/{tripId}/export/slideshow-video` | 要 | スライドショー動画出力 |
+| 42 | `POST` | `/api/trips/{tripId}/export/zip` | 要 | ZIP 一括ダウンロード |
 
 ---
 

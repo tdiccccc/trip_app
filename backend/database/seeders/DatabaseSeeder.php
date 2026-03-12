@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             BoardPostSeeder::class,
             ReactionSeeder::class,
             PackingItemSeeder::class,
+            ExpenseCategorySeeder::class,
             ExpenseSeeder::class,
         ]);
     }

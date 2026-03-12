@@ -21,7 +21,7 @@
 | 7 | スライドショー | 旅行のアルバム写真の全画面自動再生 | 実装済み | `/trips/:tripId/album/slideshow` | `/api/trips/:tripId/photos` |
 | 8 | ふたりの掲示板 | 旅行に紐づくメッセージ投稿・絵文字リアクション | 実装済み | `/trips/:tripId/board` | `/api/trips/:tripId/board`, `/api/trips/:tripId/board/:id/reactions` |
 | 9 | パッキングリスト | 旅行に紐づく共有持ち物チェックリスト（担当分け対応） | 実装済み | `/trips/:tripId/packing` | `/api/trips/:tripId/packing` |
-| 10 | 費用メモ | 旅行に紐づく支出記録・カテゴリ別集計・割り勘計算 | 実装済み | `/trips/:tripId/expenses` | `/api/trips/:tripId/expenses`, `/api/trips/:tripId/expenses/summary` |
+| 10 | 費用メモ | 旅行に紐づく支出記録・カスタムカテゴリ管理・カテゴリ別集計・割り勘計算 | 実装済み | `/trips/:tripId/expenses` | `/api/trips/:tripId/expense-categories`, `/api/trips/:tripId/expenses`, `/api/trips/:tripId/expenses/summary` |
 | 11 | エクスポート | 旅行の記録を各種形式で出力 | 実装済み（動画エクスポートのみ未実装） | `/trips/:tripId/export` | `/api/trips/:tripId/export/*`（バックエンド実装済み） |
 | 12 | 権限制御強化 | 写真・掲示板投稿の削除を投稿者本人のみに制限 | 未実装 | - | `DELETE /api/trips/:tripId/photos/:id`, `DELETE /api/trips/:tripId/board/:id` |
 | 13 | 観光ルート記録 | しおりページにマップビューを追加し、スポット間のルートを地図で表示 | 未実装 | `/trips/:tripId/itinerary`（マップビュー） | 既存API利用 |
@@ -134,7 +134,10 @@
 
 - 旅行に紐づく支出を管理
 - 支出の新規追加（項目名・金額・カテゴリ・支払者・メモ）
-- カテゴリ: 食事・交通・チケット・お土産・宿泊・その他
+- カテゴリのカスタム管理（旅行ごとに作成・編集・削除が可能）
+  - デフォルトカテゴリ: 食事・交通・お土産・宿泊・チケット・その他
+  - カテゴリにはカラーコードを設定可能（UI での色分け表示に使用）
+  - 費用記録が紐づいているカテゴリは削除不可（409 Conflict）
 - 支払者: たろう / はなこ
 - サマリーカード（合計金額・一人あたり・カテゴリ別内訳）
 - カテゴリ別フィルタリング

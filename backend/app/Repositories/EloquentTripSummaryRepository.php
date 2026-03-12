@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\BoardPost;
 use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use App\Models\ItineraryItem;
 use App\Models\PackingItem;
 use App\Models\Photo;
@@ -53,15 +54,29 @@ class EloquentTripSummaryRepository implements TripSummaryRepositoryInterface
      */
     public function sumExpensesByCategory(int $tripId): array
     {
-        $results = Expense::where('trip_id', $tripId)
-            ->selectRaw('category, SUM(amount) as total')
-            ->groupBy('category')
-            ->pluck('total', 'category')
+        $results = Expense::where('expenses.trip_id', $tripId)
+            ->join('expense_categories', 'expenses.expense_category_id', '=', 'expense_categories.id')
+            ->selectRaw('expense_categories.key as category_key, SUM(expenses.amount) as total')
+            ->groupBy('expense_categories.key')
+            ->pluck('total', 'category_key')
+            ->toArray();
+
+        // 全カテゴリを含める（0の場合も）
+        $categories = ExpenseCategory::where('trip_id', $tripId)
+            ->orderBy('sort_order')
+            ->pluck('key')
             ->toArray();
 
         $typed = [];
-        foreach ($results as $category => $total) {
-            $typed[(string) $category] = (int) $total;
+        foreach ($categories as $key) {
+            $typed[$key] = (int) ($results[$key] ?? 0);
+        }
+
+        // DB に登録済みだが categories テーブルにない費用のフォールバック
+        foreach ($results as $key => $total) {
+            if (! isset($typed[$key])) {
+                $typed[(string) $key] = (int) $total;
+            }
         }
 
         return $typed;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Packages\Domain\Entities;
 
-use Packages\Domain\Enums\ExpenseCategory;
 use Packages\Domain\ValueObjects\Money;
 
 final class Expense
@@ -15,7 +14,7 @@ final class Expense
         public readonly int $userId,
         public readonly string $description,
         public readonly Money $amount,
-        public readonly ExpenseCategory $category,
+        public readonly int $categoryId,
         public readonly string $paidAt,
         public readonly bool $isShared,
     ) {

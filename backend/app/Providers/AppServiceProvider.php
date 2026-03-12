@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Repositories\EloquentBoardPostRepository;
+use App\Repositories\EloquentExpenseCategoryRepository;
 use App\Repositories\EloquentExpenseRepository;
 use App\Repositories\EloquentItineraryRepository;
 use App\Repositories\EloquentPackingItemRepository;
@@ -18,6 +19,7 @@ use App\Repositories\EloquentTripSummaryRepository;
 use App\Repositories\EloquentUserRepository;
 use Illuminate\Support\ServiceProvider;
 use Packages\Domain\Repositories\BoardPostRepositoryInterface;
+use Packages\Domain\Repositories\ExpenseCategoryRepositoryInterface;
 use Packages\Domain\Repositories\ExpenseRepositoryInterface;
 use Packages\Domain\Repositories\ItineraryRepositoryInterface;
 use Packages\Domain\Repositories\PackingItemRepositoryInterface;
@@ -47,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ReactionRepositoryInterface::class, EloquentReactionRepository::class);
         $this->app->bind(PackingItemRepositoryInterface::class, EloquentPackingItemRepository::class);
         $this->app->bind(ExpenseRepositoryInterface::class, EloquentExpenseRepository::class);
+        $this->app->bind(ExpenseCategoryRepositoryInterface::class, EloquentExpenseCategoryRepository::class);
         $this->app->bind(UserRepositoryInterface::class, EloquentUserRepository::class);
         $this->app->bind(TripSummaryRepositoryInterface::class, EloquentTripSummaryRepository::class);
     }

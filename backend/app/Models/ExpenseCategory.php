@@ -7,21 +7,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Expense extends Model
+class ExpenseCategory extends Model
 {
-    /** @use HasFactory<\Database\Factories\ExpenseFactory> */
+    /** @use HasFactory<\Database\Factories\ExpenseCategoryFactory> */
     use HasFactory;
 
     /** @var list<string> */
     protected $fillable = [
         'trip_id',
-        'user_id',
-        'description',
-        'amount',
-        'expense_category_id',
-        'paid_at',
-        'is_shared',
+        'name',
+        'key',
+        'color',
+        'sort_order',
     ];
 
     /**
@@ -30,8 +29,7 @@ class Expense extends Model
     protected function casts(): array
     {
         return [
-            'amount' => 'integer',
-            'is_shared' => 'boolean',
+            'sort_order' => 'integer',
         ];
     }
 
@@ -44,18 +42,10 @@ class Expense extends Model
     }
 
     /**
-     * @return BelongsTo<User, $this>
+     * @return HasMany<Expense, $this>
      */
-    public function user(): BelongsTo
+    public function expenses(): HasMany
     {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return BelongsTo<ExpenseCategory, $this>
-     */
-    public function expenseCategory(): BelongsTo
-    {
-        return $this->belongsTo(ExpenseCategory::class);
+        return $this->hasMany(Expense::class);
     }
 }

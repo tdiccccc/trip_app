@@ -11,7 +11,7 @@ interface ExpenseRepositoryInterface
     /**
      * @return Expense[]
      */
-    public function findAll(int $tripId, ?string $category = null): array;
+    public function findAll(int $tripId, ?int $categoryId = null): array;
 
     public function findById(int $id): ?Expense;
 

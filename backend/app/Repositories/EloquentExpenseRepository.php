@@ -6,7 +6,6 @@ namespace App\Repositories;
 
 use App\Models\Expense as ExpenseModel;
 use Packages\Domain\Entities\Expense;
-use Packages\Domain\Enums\ExpenseCategory;
 use Packages\Domain\Repositories\ExpenseRepositoryInterface;
 use Packages\Domain\ValueObjects\Money;
 
@@ -15,14 +14,14 @@ class EloquentExpenseRepository implements ExpenseRepositoryInterface
     /**
      * @return Expense[]
      */
-    public function findAll(int $tripId, ?string $category = null): array
+    public function findAll(int $tripId, ?int $categoryId = null): array
     {
         $query = ExpenseModel::query()
             ->where('trip_id', $tripId)
             ->orderBy('paid_at', 'desc');
 
-        if ($category !== null) {
-            $query->where('category', $category);
+        if ($categoryId !== null) {
+            $query->where('expense_category_id', $categoryId);
         }
 
         return $query->get()
@@ -52,7 +51,7 @@ class EloquentExpenseRepository implements ExpenseRepositoryInterface
             'user_id' => $expense->userId,
             'description' => $expense->description,
             'amount' => $expense->amount->amount,
-            'category' => $expense->category->value,
+            'expense_category_id' => $expense->categoryId,
             'paid_at' => $expense->paidAt,
             'is_shared' => $expense->isShared,
         ]);
@@ -74,7 +73,7 @@ class EloquentExpenseRepository implements ExpenseRepositoryInterface
             userId: $model->user_id,
             description: $model->description,
             amount: new Money($model->amount),
-            category: ExpenseCategory::from($model->category),
+            categoryId: $model->expense_category_id,
             paidAt: $model->paid_at,
             isShared: $model->is_shared,
         );

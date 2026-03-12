@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Packages\Application\UseCases\Expense;
 
+use Packages\Domain\Repositories\ExpenseCategoryRepositoryInterface;
 use Packages\Domain\Repositories\ExpenseRepositoryInterface;
 
 final class GetExpenseSummaryUseCase
 {
     public function __construct(
         private readonly ExpenseRepositoryInterface $expenseRepository,
+        private readonly ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
     ) {
     }
 
@@ -19,6 +21,13 @@ final class GetExpenseSummaryUseCase
     public function execute(int $tripId): array
     {
         $expenses = $this->expenseRepository->findAll($tripId);
+
+        // カテゴリマップを構築（id -> key）
+        $categories = $this->expenseCategoryRepository->findAll($tripId);
+        $categoryKeyMap = [];
+        foreach ($categories as $category) {
+            $categoryKeyMap[$category->id] = $category->key;
+        }
 
         $totalAmount = 0;
         $sharedTotal = 0;
@@ -34,7 +43,7 @@ final class GetExpenseSummaryUseCase
             $totalAmount += $amount;
 
             // カテゴリ別集計
-            $categoryKey = $expense->category->value;
+            $categoryKey = $categoryKeyMap[$expense->categoryId] ?? 'unknown';
             $byCategory[$categoryKey] = ($byCategory[$categoryKey] ?? 0) + $amount;
 
             // ユーザー別集計

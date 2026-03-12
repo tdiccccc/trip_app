@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\AlbumController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BoardController;
+use App\Http\Controllers\Api\ExpenseCategoryController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\ExportController;
 use App\Http\Controllers\Api\ItineraryController;
@@ -80,6 +81,12 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('/packing', [PackingController::class, 'store']);
         Route::patch('/packing/{id}', [PackingController::class, 'update']);
         Route::delete('/packing/{id}', [PackingController::class, 'destroy']);
+
+        // 費用カテゴリ
+        Route::get('/expense-categories', [ExpenseCategoryController::class, 'index']);
+        Route::post('/expense-categories', [ExpenseCategoryController::class, 'store']);
+        Route::put('/expense-categories/{id}', [ExpenseCategoryController::class, 'update']);
+        Route::delete('/expense-categories/{id}', [ExpenseCategoryController::class, 'destroy']);
 
         // 費用メモ
         Route::get('/expenses/summary', [ExpenseController::class, 'summary']);

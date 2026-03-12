@@ -17,6 +17,12 @@ class ExpenseSeeder extends Seeder
     {
         $now = Carbon::now();
 
+        // trip_id=1 のカテゴリIDを取得
+        $categories = DB::table('expense_categories')
+            ->where('trip_id', 1)
+            ->pluck('id', 'key')
+            ->toArray();
+
         $expenses = [
             // Day 1: 2026-03-28
             [
@@ -24,7 +30,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 1,
                 'description' => '近鉄特急（名古屋→伊勢市）2名分',
                 'amount' => 6000,
-                'category' => 'transport',
+                'expense_category_id' => $categories['transport'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -35,7 +41,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 1,
                 'description' => '外宮→内宮 バス代 2名分',
                 'amount' => 860,
-                'category' => 'transport',
+                'expense_category_id' => $categories['transport'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -46,7 +52,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 2,
                 'description' => '赤福餅（赤福本店）',
                 'amount' => 300,
-                'category' => 'food',
+                'expense_category_id' => $categories['food'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -57,7 +63,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 1,
                 'description' => '伊勢うどん（ふくすけ）2人分',
                 'amount' => 1600,
-                'category' => 'food',
+                'expense_category_id' => $categories['food'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -68,7 +74,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 2,
                 'description' => '松阪牛串焼き 2本',
                 'amount' => 1200,
-                'category' => 'food',
+                'expense_category_id' => $categories['food'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -79,7 +85,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 1,
                 'description' => '内宮→二見浦 バス代 2名分',
                 'amount' => 860,
-                'category' => 'transport',
+                'expense_category_id' => $categories['transport'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -90,7 +96,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 2,
                 'description' => 'お守り（二見興玉神社）',
                 'amount' => 1000,
-                'category' => 'souvenir',
+                'expense_category_id' => $categories['souvenir'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => false,
                 'created_at' => $now,
@@ -101,7 +107,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 1,
                 'description' => 'タクシー（二見浦→ホテル）',
                 'amount' => 2500,
-                'category' => 'transport',
+                'expense_category_id' => $categories['transport'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -112,7 +118,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 1,
                 'description' => 'ホテル宿泊費（1泊2食付き）',
                 'amount' => 30000,
-                'category' => 'hotel',
+                'expense_category_id' => $categories['accommodation'],
                 'paid_at' => '2026-03-28',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -124,7 +130,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 2,
                 'description' => '伊勢志摩スカイライン通行料',
                 'amount' => 1270,
-                'category' => 'transport',
+                'expense_category_id' => $categories['transport'],
                 'paid_at' => '2026-03-29',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -135,7 +141,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 2,
                 'description' => 'VISON ランチ（海鮮丼 2人分）',
                 'amount' => 4000,
-                'category' => 'food',
+                'expense_category_id' => $categories['food'],
                 'paid_at' => '2026-03-29',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -146,7 +152,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 1,
                 'description' => 'お土産（伊勢茶・干物セット）',
                 'amount' => 3500,
-                'category' => 'souvenir',
+                'expense_category_id' => $categories['souvenir'],
                 'paid_at' => '2026-03-29',
                 'is_shared' => true,
                 'created_at' => $now,
@@ -157,7 +163,7 @@ class ExpenseSeeder extends Seeder
                 'user_id' => 2,
                 'description' => '近鉄特急（伊勢市→名古屋）2名分',
                 'amount' => 6000,
-                'category' => 'transport',
+                'expense_category_id' => $categories['transport'],
                 'paid_at' => '2026-03-29',
                 'is_shared' => true,
                 'created_at' => $now,

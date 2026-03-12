@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Packages\Application\UseCases\Trip;
 
 use Packages\Application\DTOs\TripSummaryDto;
-use Packages\Domain\Enums\ExpenseCategory;
 use Packages\Domain\Repositories\TripRepositoryInterface;
 use Packages\Domain\Repositories\TripSummaryRepositoryInterface;
 
@@ -31,12 +30,8 @@ final class GetTripSummaryUseCase
             ? (int) floor($totalExpense / $memberCount)
             : 0;
 
-        // カテゴリ別費用（全カテゴリを含める、0の場合も）
-        $rawByCategory = $this->tripSummaryRepository->sumExpensesByCategory($tripId);
-        $expenseByCategory = [];
-        foreach (ExpenseCategory::cases() as $category) {
-            $expenseByCategory[$category->value] = $rawByCategory[$category->value] ?? 0;
-        }
+        // カテゴリ別費用（リポジトリが全カテゴリを含めて返す）
+        $expenseByCategory = $this->tripSummaryRepository->sumExpensesByCategory($tripId);
 
         // trip_days: start_date と end_date の日数差 + 1
         $startDate = new \DateTimeImmutable($trip->startDate);

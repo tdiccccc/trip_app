@@ -3,7 +3,7 @@
 ## 概要
 
 伊勢旅行アプリのデータベース ER図。
-Mermaid 記法で記述する。全11テーブルのリレーションを表す。
+Mermaid 記法で記述する。全12テーブルのリレーションを表す。
 
 ---
 
@@ -137,13 +137,24 @@ erDiagram
         TEXT updated_at
     }
 
+    expense_categories {
+        INTEGER id PK
+        INTEGER trip_id FK
+        TEXT name
+        TEXT key
+        TEXT color
+        INTEGER sort_order
+        TEXT created_at
+        TEXT updated_at
+    }
+
     expenses {
         INTEGER id PK
         INTEGER trip_id FK
         INTEGER user_id FK
+        INTEGER expense_category_id FK
         TEXT description
         INTEGER amount
-        TEXT category
         TEXT paid_at
         INTEGER is_shared
         TEXT created_at
@@ -159,6 +170,7 @@ erDiagram
     trips ||--o{ photos : "has"
     trips ||--o{ board_posts : "has"
     trips ||--o{ packing_items : "has"
+    trips ||--o{ expense_categories : "has"
     trips ||--o{ expenses : "has"
 
     %% users からのリレーション
@@ -169,6 +181,9 @@ erDiagram
     users ||--o{ reactions : "reacts"
     users ||--o{ packing_items : "manages"
     users ||--o{ expenses : "records"
+
+    %% expense_categories からのリレーション
+    expense_categories ||--o{ expenses : "categorizes"
 
     %% spots からのリレーション
     spots ||--o{ spot_memos : "has"
@@ -194,19 +209,21 @@ erDiagram
 | 6 | trips | photos | trip_id | 1:N | 旅行に写真が紐づく |
 | 7 | trips | board_posts | trip_id | 1:N | 旅行に掲示板投稿が紐づく |
 | 8 | trips | packing_items | trip_id | 1:N | 旅行にパッキング項目が紐づく |
-| 9 | trips | expenses | trip_id | 1:N | 旅行に費用記録が紐づく |
-| 10 | users | spot_memos | user_id | 1:N | ユーザーがスポットメモを投稿 |
-| 11 | users | itinerary_items | user_id | 1:N | ユーザーがしおり項目を作成 |
-| 12 | users | photos | user_id | 1:N | ユーザーが写真をアップロード |
-| 13 | users | board_posts | user_id | 1:N | ユーザーが掲示板に投稿 |
-| 14 | users | reactions | user_id | 1:N | ユーザーがリアクション |
-| 15 | users | packing_items | user_id | 1:N | ユーザーがパッキング項目を管理 |
-| 16 | users | expenses | user_id | 1:N | ユーザーが費用を記録 |
-| 17 | spots | spot_memos | spot_id | 1:N | スポットにメモが紐づく |
-| 18 | spots | itinerary_items | spot_id | 1:N | スポットがしおり項目から参照される |
-| 19 | spots | photos | spot_id | 1:N | スポットに写真が紐づく |
-| 20 | board_posts | reactions | board_post_id | 1:N | 投稿にリアクションが紐づく |
-| 21 | photos | board_posts | photo_id | 1:1 | ベストショット写真が投稿に紐づく |
+| 9 | trips | expense_categories | trip_id | 1:N | 旅行に費用カテゴリが紐づく |
+| 10 | trips | expenses | trip_id | 1:N | 旅行に費用記録が紐づく |
+| 11 | users | spot_memos | user_id | 1:N | ユーザーがスポットメモを投稿 |
+| 12 | users | itinerary_items | user_id | 1:N | ユーザーがしおり項目を作成 |
+| 13 | users | photos | user_id | 1:N | ユーザーが写真をアップロード |
+| 14 | users | board_posts | user_id | 1:N | ユーザーが掲示板に投稿 |
+| 15 | users | reactions | user_id | 1:N | ユーザーがリアクション |
+| 16 | users | packing_items | user_id | 1:N | ユーザーがパッキング項目を管理 |
+| 17 | users | expenses | user_id | 1:N | ユーザーが費用を記録 |
+| 18 | spots | spot_memos | spot_id | 1:N | スポットにメモが紐づく |
+| 19 | spots | itinerary_items | spot_id | 1:N | スポットがしおり項目から参照される |
+| 20 | spots | photos | spot_id | 1:N | スポットに写真が紐づく |
+| 21 | expense_categories | expenses | expense_category_id | 1:N | カテゴリに費用記録が紐づく |
+| 22 | board_posts | reactions | board_post_id | 1:N | 投稿にリアクションが紐づく |
+| 23 | photos | board_posts | photo_id | 1:1 | ベストショット写真が投稿に紐づく |
 
 ---
 
@@ -233,8 +250,10 @@ erDiagram
 | reactions.user_id | CASCADE | ユーザー削除時にリアクションも削除 |
 | packing_items.trip_id | CASCADE | 旅行削除時にパッキング項目も削除 |
 | packing_items.user_id | CASCADE | ユーザー削除時にパッキング項目も削除 |
+| expense_categories.trip_id | CASCADE | 旅行削除時にカテゴリも削除 |
 | expenses.trip_id | CASCADE | 旅行削除時に費用記録も削除 |
 | expenses.user_id | CASCADE | ユーザー削除時に費用記録も削除 |
+| expenses.expense_category_id | RESTRICT | カテゴリ削除時に費用記録が存在する場合は削除拒否 |
 
 ---
 

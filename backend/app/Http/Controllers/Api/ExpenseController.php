@@ -13,6 +13,7 @@ use Packages\Application\DTOs\ExpenseDto;
 use Packages\Application\UseCases\Expense\DeleteExpenseUseCase;
 use Packages\Application\UseCases\Expense\GetExpenseSummaryUseCase;
 use Packages\Application\UseCases\Expense\RecordExpenseUseCase;
+use Packages\Domain\Repositories\ExpenseCategoryRepositoryInterface;
 use Packages\Domain\Repositories\ExpenseRepositoryInterface;
 
 final class ExpenseController extends Controller
@@ -20,15 +21,26 @@ final class ExpenseController extends Controller
     /**
      * GET /api/trips/{tripId}/expenses
      */
-    public function index(int $tripId, Request $request, ExpenseRepositoryInterface $expenseRepository): JsonResponse
-    {
-        $category = $request->query('category');
-        $categoryStr = is_string($category) ? $category : null;
+    public function index(
+        int $tripId,
+        Request $request,
+        ExpenseRepositoryInterface $expenseRepository,
+        ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
+    ): JsonResponse {
+        $categoryId = $request->query('category_id');
+        $categoryIdInt = is_numeric($categoryId) ? (int) $categoryId : null;
 
-        $expenses = $expenseRepository->findAll($tripId, $categoryStr);
+        $expenses = $expenseRepository->findAll($tripId, $categoryIdInt);
+
+        // カテゴリマップを構築
+        $categories = $expenseCategoryRepository->findAll($tripId);
+        $categoryMap = [];
+        foreach ($categories as $category) {
+            $categoryMap[$category->id] = $category;
+        }
 
         $data = array_map(
-            fn ($expense) => ExpenseDto::fromEntity($expense)->toArray(),
+            fn ($expense) => ExpenseDto::fromEntity($expense, $categoryMap[$expense->categoryId] ?? null)->toArray(),
             $expenses,
         );
 
@@ -49,7 +61,7 @@ final class ExpenseController extends Controller
             userId: $user->id,
             description: $validated['description'],
             amount: (int) $validated['amount'],
-            category: $validated['category'] ?? 'other',
+            categoryId: (int) $validated['expense_category_id'],
             paidAt: $validated['paid_at'],
             isShared: (bool) ($validated['is_shared'] ?? true),
         );

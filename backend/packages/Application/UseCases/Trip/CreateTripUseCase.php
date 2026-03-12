@@ -6,6 +6,7 @@ namespace Packages\Application\UseCases\Trip;
 
 use Packages\Application\DTOs\TripDto;
 use Packages\Application\DTOs\TripMemberDto;
+use Packages\Application\UseCases\ExpenseCategory\InitializeDefaultCategoriesUseCase;
 use Packages\Domain\Entities\Trip;
 use Packages\Domain\Entities\TripMember;
 use Packages\Domain\Enums\TripMemberRole;
@@ -17,6 +18,7 @@ final class CreateTripUseCase
     public function __construct(
         private readonly TripRepositoryInterface $tripRepository,
         private readonly TripMemberRepositoryInterface $tripMemberRepository,
+        private readonly InitializeDefaultCategoriesUseCase $initializeDefaultCategoriesUseCase,
     ) {
     }
 
@@ -46,6 +48,9 @@ final class CreateTripUseCase
         );
 
         $savedTrip = $this->tripRepository->save($trip);
+
+        // デフォルトの費用カテゴリを作成
+        $this->initializeDefaultCategoriesUseCase->execute($savedTrip->id);
 
         // 作成者を owner として登録
         $ownerMember = new TripMember(

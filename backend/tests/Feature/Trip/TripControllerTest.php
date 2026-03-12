@@ -124,6 +124,47 @@ final class TripControllerTest extends TestCase
         ]);
     }
 
+    public function test_store_creates_default_expense_categories(): void
+    {
+        $response = $this->actingAs($this->owner)
+            ->postJson('/api/trips', [
+                'title' => 'カテゴリ確認旅行',
+                'start_date' => '2026-06-01',
+                'end_date' => '2026-06-03',
+            ]);
+
+        $response->assertCreated();
+        $tripId = $response->json('data.id');
+
+        // デフォルト5カテゴリが生成されることを確認
+        $this->assertDatabaseCount('expense_categories', 5);
+        $this->assertDatabaseHas('expense_categories', [
+            'trip_id' => $tripId,
+            'key' => 'transport',
+            'name' => '交通費',
+        ]);
+        $this->assertDatabaseHas('expense_categories', [
+            'trip_id' => $tripId,
+            'key' => 'food',
+            'name' => '食費',
+        ]);
+        $this->assertDatabaseHas('expense_categories', [
+            'trip_id' => $tripId,
+            'key' => 'souvenir',
+            'name' => 'お土産',
+        ]);
+        $this->assertDatabaseHas('expense_categories', [
+            'trip_id' => $tripId,
+            'key' => 'accommodation',
+            'name' => '宿泊費',
+        ]);
+        $this->assertDatabaseHas('expense_categories', [
+            'trip_id' => $tripId,
+            'key' => 'other',
+            'name' => 'その他',
+        ]);
+    }
+
     public function test_store_returns_422_without_required_fields(): void
     {
         $response = $this->actingAs($this->owner)

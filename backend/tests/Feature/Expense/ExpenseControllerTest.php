@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Expense;
 
 use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use App\Models\Trip;
 use App\Models\TripMember;
 use App\Models\User;
@@ -19,6 +20,12 @@ final class ExpenseControllerTest extends TestCase
 
     private Trip $trip;
 
+    private ExpenseCategory $transportCategory;
+
+    private ExpenseCategory $foodCategory;
+
+    private ExpenseCategory $souvenirCategory;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,6 +36,26 @@ final class ExpenseControllerTest extends TestCase
             'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'role' => 'owner',
+        ]);
+
+        // テスト用カテゴリを作成
+        $this->transportCategory = ExpenseCategory::factory()->create([
+            'trip_id' => $this->trip->id,
+            'name' => '交通費',
+            'key' => 'transport',
+            'sort_order' => 1,
+        ]);
+        $this->foodCategory = ExpenseCategory::factory()->create([
+            'trip_id' => $this->trip->id,
+            'name' => '食費',
+            'key' => 'food',
+            'sort_order' => 2,
+        ]);
+        $this->souvenirCategory = ExpenseCategory::factory()->create([
+            'trip_id' => $this->trip->id,
+            'name' => 'お土産',
+            'key' => 'souvenir',
+            'sort_order' => 3,
         ]);
     }
 
@@ -43,14 +70,14 @@ final class ExpenseControllerTest extends TestCase
             'user_id' => $this->user->id,
             'description' => '電車代',
             'amount' => 1500,
-            'category' => 'transport',
+            'expense_category_id' => $this->transportCategory->id,
         ]);
         Expense::factory()->create([
             'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'description' => '赤福',
             'amount' => 800,
-            'category' => 'food',
+            'expense_category_id' => $this->foodCategory->id,
         ]);
 
         $response = $this->actingAs($this->user)
@@ -59,7 +86,7 @@ final class ExpenseControllerTest extends TestCase
         $response->assertOk()
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'user_id', 'description', 'amount', 'category', 'paid_at', 'is_shared'],
+                    '*' => ['id', 'user_id', 'description', 'amount', 'category_id', 'category_name', 'category_key', 'paid_at', 'is_shared'],
                 ],
             ]);
         $this->assertCount(2, $response->json('data'));
@@ -70,16 +97,16 @@ final class ExpenseControllerTest extends TestCase
         Expense::factory()->create([
             'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
-            'category' => 'transport',
+            'expense_category_id' => $this->transportCategory->id,
         ]);
         Expense::factory()->create([
             'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
-            'category' => 'food',
+            'expense_category_id' => $this->foodCategory->id,
         ]);
 
         $response = $this->actingAs($this->user)
-            ->getJson("/api/trips/{$this->trip->id}/expenses?category=transport");
+            ->getJson("/api/trips/{$this->trip->id}/expenses?category_id={$this->transportCategory->id}");
 
         $response->assertOk();
         $this->assertCount(1, $response->json('data'));
@@ -102,21 +129,23 @@ final class ExpenseControllerTest extends TestCase
             ->postJson("/api/trips/{$this->trip->id}/expenses", [
                 'description' => '近鉄特急券',
                 'amount' => 3000,
-                'category' => 'transport',
+                'expense_category_id' => $this->transportCategory->id,
                 'paid_at' => '2026-04-01',
                 'is_shared' => true,
             ]);
 
         $response->assertCreated()
             ->assertJsonStructure([
-                'data' => ['id', 'user_id', 'description', 'amount', 'category', 'paid_at', 'is_shared'],
+                'data' => ['id', 'user_id', 'description', 'amount', 'category_id', 'category_name', 'category_key', 'paid_at', 'is_shared'],
             ])
             ->assertJson([
                 'data' => [
                     'user_id' => $this->user->id,
                     'description' => '近鉄特急券',
                     'amount' => 3000,
-                    'category' => 'transport',
+                    'category_id' => $this->transportCategory->id,
+                    'category_key' => 'transport',
+                    'category_name' => '交通費',
                     'paid_at' => '2026-04-01',
                     'is_shared' => true,
                 ],
@@ -136,7 +165,21 @@ final class ExpenseControllerTest extends TestCase
             ->postJson("/api/trips/{$this->trip->id}/expenses", []);
 
         $response->assertUnprocessable()
-            ->assertJsonValidationErrors(['description', 'amount', 'paid_at']);
+            ->assertJsonValidationErrors(['description', 'amount', 'paid_at', 'expense_category_id']);
+    }
+
+    public function test_store_returns_422_with_nonexistent_expense_category_id(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->postJson("/api/trips/{$this->trip->id}/expenses", [
+                'description' => 'テスト費用',
+                'amount' => 1000,
+                'expense_category_id' => 99999,
+                'paid_at' => '2026-04-01',
+            ]);
+
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors(['expense_category_id']);
     }
 
     // ========================================
@@ -148,6 +191,7 @@ final class ExpenseControllerTest extends TestCase
         $expense = Expense::factory()->create([
             'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
+            'expense_category_id' => $this->transportCategory->id,
         ]);
 
         $response = $this->actingAs($this->user)
@@ -174,21 +218,21 @@ final class ExpenseControllerTest extends TestCase
             'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'amount' => 3000,
-            'category' => 'transport',
+            'expense_category_id' => $this->transportCategory->id,
             'is_shared' => true,
         ]);
         Expense::factory()->create([
             'trip_id' => $this->trip->id,
             'user_id' => $user2->id,
             'amount' => 1000,
-            'category' => 'food',
+            'expense_category_id' => $this->foodCategory->id,
             'is_shared' => true,
         ]);
         Expense::factory()->create([
             'trip_id' => $this->trip->id,
             'user_id' => $this->user->id,
             'amount' => 500,
-            'category' => 'souvenir',
+            'expense_category_id' => $this->souvenirCategory->id,
             'is_shared' => false,
         ]);
 

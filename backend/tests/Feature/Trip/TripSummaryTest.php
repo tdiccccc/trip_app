@@ -6,6 +6,7 @@ namespace Tests\Feature\Trip;
 
 use App\Models\BoardPost;
 use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use App\Models\ItineraryItem;
 use App\Models\PackingItem;
 use App\Models\Photo;
@@ -26,6 +27,9 @@ final class TripSummaryTest extends TestCase
     private User $member;
 
     private Trip $trip;
+
+    /** @var array<string, ExpenseCategory> */
+    private array $categories;
 
     protected function setUp(): void
     {
@@ -51,6 +55,24 @@ final class TripSummaryTest extends TestCase
             'user_id' => $this->member->id,
             'role' => 'member',
         ]);
+
+        // デフォルトの費用カテゴリを作成
+        $this->categories = [];
+        $defaultCategories = [
+            ['key' => 'transport', 'name' => '交通費', 'sort_order' => 1],
+            ['key' => 'food', 'name' => '食費', 'sort_order' => 2],
+            ['key' => 'souvenir', 'name' => 'お土産', 'sort_order' => 3],
+            ['key' => 'accommodation', 'name' => '宿泊費', 'sort_order' => 4],
+            ['key' => 'other', 'name' => 'その他', 'sort_order' => 5],
+        ];
+        foreach ($defaultCategories as $cat) {
+            $this->categories[$cat['key']] = ExpenseCategory::factory()->create([
+                'trip_id' => $this->trip->id,
+                'name' => $cat['name'],
+                'key' => $cat['key'],
+                'sort_order' => $cat['sort_order'],
+            ]);
+        }
     }
 
     // ========================================
@@ -104,13 +126,13 @@ final class TripSummaryTest extends TestCase
             'trip_id' => $this->trip->id,
             'user_id' => $this->owner->id,
             'amount' => 3000,
-            'category' => 'transport',
+            'expense_category_id' => $this->categories['transport']->id,
         ]);
         Expense::factory()->create([
             'trip_id' => $this->trip->id,
             'user_id' => $this->member->id,
             'amount' => 1500,
-            'category' => 'food',
+            'expense_category_id' => $this->categories['food']->id,
         ]);
 
         // パッキング 5件、うち3件チェック済み
@@ -220,6 +242,14 @@ final class TripSummaryTest extends TestCase
     {
         $otherTrip = Trip::factory()->create(['created_by' => $this->owner->id]);
 
+        // 別の旅行にカテゴリを作成
+        $otherCategory = ExpenseCategory::factory()->create([
+            'trip_id' => $otherTrip->id,
+            'name' => '交通費',
+            'key' => 'transport',
+            'sort_order' => 1,
+        ]);
+
         // 別の旅行にデータを作成
         Photo::factory()->count(5)->create([
             'trip_id' => $otherTrip->id,
@@ -230,6 +260,7 @@ final class TripSummaryTest extends TestCase
             'trip_id' => $otherTrip->id,
             'user_id' => $this->owner->id,
             'amount' => 10000,
+            'expense_category_id' => $otherCategory->id,
         ]);
 
         // 対象の旅行には写真1枚だけ

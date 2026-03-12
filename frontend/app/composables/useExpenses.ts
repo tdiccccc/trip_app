@@ -4,11 +4,11 @@ import type { ApiResponse } from '~/types/auth'
 export const useExpenses = (tripId: MaybeRefOrGetter<string | number>) => {
   const { apiFetch } = useApiClient()
 
-  const fetchExpenses = (category?: MaybeRefOrGetter<string>) => {
+  const fetchExpenses = (categoryId?: MaybeRefOrGetter<number | null>) => {
     const url = computed(() => {
       const t = toValue(tripId)
-      const c = toValue(category)
-      return c ? `/api/trips/${t}/expenses?category=${c}` : `/api/trips/${t}/expenses`
+      const c = toValue(categoryId)
+      return c ? `/api/trips/${t}/expenses?category_id=${c}` : `/api/trips/${t}/expenses`
     })
     return useApiFetch<ApiResponse<Expense[]>>(url)
   }

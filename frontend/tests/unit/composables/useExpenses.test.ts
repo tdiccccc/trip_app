@@ -25,13 +25,13 @@ describe('useExpenses', () => {
     expect(toValue(arg)).toBe('/api/trips/1/expenses')
   })
 
-  it('fetchExpenses calls useApiFetch with category filter', () => {
+  it('fetchExpenses calls useApiFetch with category_id filter', () => {
     const { fetchExpenses } = useExpenses(1)
-    fetchExpenses('food')
+    fetchExpenses(3)
 
     expect(mockUseApiFetch).toHaveBeenCalled()
     const arg = mockUseApiFetch.mock.calls[0]![0]
-    expect(toValue(arg)).toBe('/api/trips/1/expenses?category=food')
+    expect(toValue(arg)).toBe('/api/trips/1/expenses?category_id=3')
   })
 
   it('fetchSummary calls useApiFetch with summary path', () => {
@@ -43,11 +43,11 @@ describe('useExpenses', () => {
     expect(toValue(arg)).toBe('/api/trips/1/expenses/summary')
   })
 
-  it('createExpense sends POST request', async () => {
+  it('createExpense sends POST request with expense_category_id', async () => {
     const input = {
       description: 'Lunch at Okage Yokocho',
       amount: 1500,
-      category: 'food',
+      expense_category_id: 1,
       paid_at: '2026-03-12',
     }
     mockFetch.mockResolvedValueOnce({ data: { id: 1, ...input } })
