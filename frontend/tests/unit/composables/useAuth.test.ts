@@ -75,7 +75,9 @@ describe('useAuth', () => {
 
   it('fetchUser sets user on success', async () => {
     const mockUser = { id: 1, name: 'Test', email: 'test@example.com' }
-    mockFetch.mockResolvedValueOnce({ data: mockUser })
+    mockFetch
+      .mockResolvedValueOnce(undefined) // csrf cookie
+      .mockResolvedValueOnce({ data: mockUser }) // api/user
 
     const { fetchUser, user } = useAuth()
     await fetchUser()
@@ -88,7 +90,9 @@ describe('useAuth', () => {
 
   it('fetchUser clears user on failure', async () => {
     useState('auth-user').value = { id: 1, name: 'Test', email: 'test@example.com' }
-    mockFetch.mockRejectedValueOnce(new Error('Unauthorized'))
+    mockFetch
+      .mockResolvedValueOnce(undefined) // csrf cookie
+      .mockRejectedValueOnce(new Error('Unauthorized')) // api/user
 
     const { fetchUser, user } = useAuth()
     await fetchUser()

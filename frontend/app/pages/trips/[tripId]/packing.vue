@@ -15,11 +15,11 @@ const tripId = route.params.tripId as string
 const { fetchItems, createItem, updateItem, deleteItem } = usePacking(tripId)
 
 // Filter tabs
-type AssigneeFilter = 'all' | 'taro' | 'hanako'
+type AssigneeFilter = 'all' | 'self' | 'partner'
 const FILTER_TABS: { key: AssigneeFilter; label: string }[] = [
   { key: 'all', label: '全て' },
-  { key: 'taro', label: 'たろう' },
-  { key: 'hanako', label: 'はなこ' },
+  { key: 'self', label: 'たろう' },
+  { key: 'partner', label: 'はなこ' },
 ]
 const selectedFilter = ref<AssigneeFilter>('all')
 
@@ -90,8 +90,8 @@ const handleAdd = async () => {
 
 // Assignee display
 const assigneeLabel = (assignee: string | null) => {
-  if (assignee === 'taro') return 'たろう'
-  if (assignee === 'hanako') return 'はなこ'
+  if (assignee === 'self') return 'たろう'
+  if (assignee === 'partner') return 'はなこ'
   return ''
 }
 </script>
@@ -150,10 +150,10 @@ const assigneeLabel = (assignee: string | null) => {
             <option value="">
               担当者なし
             </option>
-            <option value="taro">
+            <option value="self">
               たろう
             </option>
-            <option value="hanako">
+            <option value="partner">
               はなこ
             </option>
           </select>
