@@ -39,6 +39,15 @@ export const useAuth = () => {
 
   const fetchUser = async () => {
     try {
+      const config = useRuntimeConfig()
+      const baseURL = config.public.apiBase as string
+
+      // リロード時にXSRF-TOKENが失われるため、再取得する
+      await $fetch('/sanctum/csrf-cookie', {
+        baseURL,
+        credentials: 'include',
+      })
+
       const response = await apiFetch<ApiResponse<User>>('/api/user')
       user.value = response.data
     } catch {

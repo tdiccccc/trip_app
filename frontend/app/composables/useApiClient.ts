@@ -8,11 +8,22 @@ export const useApiClient = () => {
   const requestHeaders = import.meta.server ? useRequestHeaders(['cookie']) : {}
   const xsrfToken = useCookie('XSRF-TOKEN')
 
+  // CSR時はdocument.cookieから最新のXSRF-TOKENを直接読み取る
+  // useCookieのrefは外部からのクッキー変更（Set-Cookie）を自動同期しないため
+  const getXsrfToken = (): string | null => {
+    if (import.meta.server) {
+      return xsrfToken.value ?? null
+    }
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/)
+    return match ? decodeURIComponent(match[1]) : null
+  }
+
   const apiFetch = <T>(path: string, options: FetchOptions = {}) => {
     const headers: Record<string, string> = {}
 
-    if (xsrfToken.value) {
-      headers['X-XSRF-TOKEN'] = xsrfToken.value
+    const token = getXsrfToken()
+    if (token) {
+      headers['X-XSRF-TOKEN'] = token
     }
 
     // SSR時はブラウザのクッキーをリクエストヘッダーに転送
