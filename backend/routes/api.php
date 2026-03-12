@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
         // 旅行詳細
         Route::get('/', [TripController::class, 'show']);
 
+        // 旅行サマリー
+        Route::get('/summary', [TripController::class, 'summary']);
+
         // owner のみ（更新・削除）
         Route::middleware(EnsureTripOwner::class)->group(function (): void {
             Route::patch('/', [TripController::class, 'update']);
@@ -64,6 +67,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
         // 掲示板
         Route::get('/board', [BoardController::class, 'index']);
         Route::post('/board', [BoardController::class, 'store']);
+        Route::delete('/board/{id}', [BoardController::class, 'destroy']);
         Route::post('/board/{id}/reactions', [BoardController::class, 'storeReaction']);
 
         // パッキングリスト

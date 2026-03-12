@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Packages\Application\UseCases\Album\DeletePhotoUseCase;
 use Packages\Application\UseCases\Album\GetAlbumUseCase;
 use Packages\Application\UseCases\Album\UploadPhotoUseCase;
+use Packages\Domain\Exceptions\UnauthorizedOperationException;
 
 final class AlbumController extends Controller
 {
@@ -72,9 +73,16 @@ final class AlbumController extends Controller
     /**
      * DELETE /api/trips/{tripId}/photos/{id}
      */
-    public function destroy(int $tripId, int $id, DeletePhotoUseCase $useCase): Response
+    public function destroy(int $tripId, int $id, Request $request, DeletePhotoUseCase $useCase): JsonResponse|Response
     {
-        $useCase->execute($tripId, $id);
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        try {
+            $useCase->execute($tripId, $id, $user->id);
+        } catch (UnauthorizedOperationException $e) {
+            return response()->json(['message' => $e->getMessage()], 403);
+        }
 
         return response()->noContent();
     }

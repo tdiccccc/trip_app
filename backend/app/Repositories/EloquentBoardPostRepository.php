@@ -52,6 +52,11 @@ class EloquentBoardPostRepository implements BoardPostRepositoryInterface
         return $this->toEntity($model);
     }
 
+    public function delete(int $id): void
+    {
+        BoardPostModel::findOrFail($id)->delete();
+    }
+
     private function toEntity(BoardPostModel $model): BoardPost
     {
         return new BoardPost(

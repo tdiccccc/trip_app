@@ -16,4 +16,6 @@ interface BoardPostRepositoryInterface
     public function findById(int $id): ?BoardPost;
 
     public function save(BoardPost $post): BoardPost;
+
+    public function delete(int $id): void;
 }

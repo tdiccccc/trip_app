@@ -178,4 +178,32 @@ final class AlbumControllerTest extends TestCase
         $response->assertNoContent();
         $this->assertDatabaseMissing('photos', ['id' => $photo->id]);
     }
+
+    public function test_destroy_returns_403_when_not_owner_of_photo(): void
+    {
+        $otherUser = User::factory()->create();
+        TripMember::factory()->create([
+            'trip_id' => $this->trip->id,
+            'user_id' => $otherUser->id,
+            'role' => 'member',
+        ]);
+
+        $photo = Photo::factory()->create(['trip_id' => $this->trip->id, 'user_id' => $this->user->id]);
+
+        $response = $this->actingAs($otherUser)
+            ->deleteJson("/api/trips/{$this->trip->id}/photos/{$photo->id}");
+
+        $response->assertForbidden()
+            ->assertJson(['message' => 'この操作は投稿者本人のみ実行できます。']);
+        $this->assertDatabaseHas('photos', ['id' => $photo->id]);
+    }
+
+    public function test_destroy_returns_401_for_guest(): void
+    {
+        $photo = Photo::factory()->create(['trip_id' => $this->trip->id, 'user_id' => $this->user->id]);
+
+        $response = $this->deleteJson("/api/trips/{$this->trip->id}/photos/{$photo->id}");
+
+        $response->assertUnauthorized();
+    }
 }

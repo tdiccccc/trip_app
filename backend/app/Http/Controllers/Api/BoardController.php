@@ -8,10 +8,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBoardPostRequest;
 use App\Http\Requests\StoreReactionRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Packages\Application\UseCases\Board\AddReactionUseCase;
+use Packages\Application\UseCases\Board\DeleteBoardPostUseCase;
 use Packages\Application\UseCases\Board\GetBoardPostsUseCase;
 use Packages\Application\UseCases\Board\PostMessageUseCase;
 use Packages\Domain\Exceptions\DomainException;
+use Packages\Domain\Exceptions\UnauthorizedOperationException;
 use Packages\Domain\Repositories\BoardPostRepositoryInterface;
 
 final class BoardController extends Controller
@@ -87,5 +91,24 @@ final class BoardController extends Controller
                 ],
             ], 422);
         }
+    }
+
+    /**
+     * DELETE /api/trips/{tripId}/board/{id}
+     */
+    public function destroy(int $tripId, int $id, Request $request, DeleteBoardPostUseCase $useCase): JsonResponse|Response
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        try {
+            $useCase->execute($tripId, $id, $user->id);
+        } catch (UnauthorizedOperationException $e) {
+            return response()->json(['message' => $e->getMessage()], 403);
+        } catch (DomainException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+
+        return response()->noContent();
     }
 }

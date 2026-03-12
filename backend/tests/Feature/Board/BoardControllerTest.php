@@ -180,4 +180,67 @@ final class BoardControllerTest extends TestCase
 
         $response->assertUnauthorized();
     }
+
+    // ========================================
+    // DELETE /api/trips/{tripId}/board/{id}
+    // ========================================
+
+    public function test_destroy_deletes_board_post_and_returns_204(): void
+    {
+        $post = BoardPost::factory()->create([
+            'trip_id' => $this->trip->id,
+            'user_id' => $this->user->id,
+            'body' => '削除する投稿',
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->deleteJson("/api/trips/{$this->trip->id}/board/{$post->id}");
+
+        $response->assertNoContent();
+        $this->assertDatabaseMissing('board_posts', ['id' => $post->id]);
+    }
+
+    public function test_destroy_returns_403_when_not_owner_of_post(): void
+    {
+        $otherUser = User::factory()->create();
+        TripMember::factory()->create([
+            'trip_id' => $this->trip->id,
+            'user_id' => $otherUser->id,
+            'role' => 'member',
+        ]);
+
+        $post = BoardPost::factory()->create([
+            'trip_id' => $this->trip->id,
+            'user_id' => $this->user->id,
+            'body' => '他人の投稿',
+        ]);
+
+        $response = $this->actingAs($otherUser)
+            ->deleteJson("/api/trips/{$this->trip->id}/board/{$post->id}");
+
+        $response->assertForbidden()
+            ->assertJson(['message' => 'この操作は投稿者本人のみ実行できます。']);
+        $this->assertDatabaseHas('board_posts', ['id' => $post->id]);
+    }
+
+    public function test_destroy_returns_404_for_nonexistent_post(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->deleteJson("/api/trips/{$this->trip->id}/board/9999");
+
+        $response->assertNotFound()
+            ->assertJson(['message' => 'Not found.']);
+    }
+
+    public function test_destroy_returns_401_for_guest(): void
+    {
+        $post = BoardPost::factory()->create([
+            'trip_id' => $this->trip->id,
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->deleteJson("/api/trips/{$this->trip->id}/board/{$post->id}");
+
+        $response->assertUnauthorized();
+    }
 }
