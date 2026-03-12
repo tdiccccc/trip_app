@@ -7,7 +7,14 @@ const route = useRoute()
 const tripId = route.params.tripId as string
 
 const { fetchTrip, deleteTrip } = useTrips()
-const { data: response } = fetchTrip(tripId)
+const { data: response, refresh: refreshTrip } = fetchTrip(tripId)
+
+// Edit modal
+const showEditModal = ref(false)
+const handleUpdated = async () => {
+  showEditModal.value = false
+  await refreshTrip()
+}
 
 const trip = computed(() => response.value?.data ?? null)
 
@@ -84,9 +91,30 @@ const handleDelete = async () => {
   >
     <!-- Title -->
     <div class="text-center">
-      <h1 class="text-3xl font-bold text-primary-700">
-        {{ trip.title }}
-      </h1>
+      <div class="flex items-center justify-center gap-2">
+        <h1 class="text-3xl font-bold text-primary-700">
+          {{ trip.title }}
+        </h1>
+        <button
+          v-if="isOwner"
+          class="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100"
+          @click="showEditModal = true"
+        >
+          <svg
+            class="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+            />
+          </svg>
+        </button>
+      </div>
       <p class="mt-1 text-sm text-gray-400">
         {{ formatDateRange(trip.start_date, trip.end_date) }}
       </p>
@@ -287,6 +315,14 @@ const handleDelete = async () => {
         この旅行を削除
       </button>
     </div>
+
+    <!-- Edit modal -->
+    <TripEditModal
+      v-if="showEditModal"
+      :trip="trip"
+      @close="showEditModal = false"
+      @updated="handleUpdated"
+    />
   </div>
 
   <!-- Loading state -->
