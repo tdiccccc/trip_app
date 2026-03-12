@@ -13,19 +13,25 @@ const route = useRoute()
 const tripId = route.params.tripId as string
 
 const { fetchExpenses, fetchSummary, createExpense, deleteExpense } = useExpenses(tripId)
+const { fetchTrip } = useTrips()
+const { user } = useAuth()
+const { fetchExpenseCategories, FALLBACK_EXPENSE_CATEGORIES } = useMaster()
 
-// Category definitions
-const CATEGORIES: { key: string; label: string }[] = [
-  { key: 'food', label: '食事' },
-  { key: 'transport', label: '交通' },
-  { key: 'ticket', label: 'チケット' },
-  { key: 'souvenir', label: 'お土産' },
-  { key: 'hotel', label: '宿泊' },
-  { key: 'other', label: 'その他' },
-]
+// Fetch trip members
+const { data: tripResponse } = fetchTrip(tripId)
+const members = computed(() => tripResponse.value?.data?.members ?? [])
+
+// Fetch expense categories from master API
+const { data: categoriesResponse } = fetchExpenseCategories()
+const categories = computed(() => categoriesResponse.value?.data ?? FALLBACK_EXPENSE_CATEGORIES)
 
 const categoryLabel = (key: string) => {
-  return CATEGORIES.find((c) => c.key === key)?.label ?? key
+  return categories.value.find((c) => c.key === key)?.label ?? key
+}
+
+// Paid by label - resolve from trip members
+const paidByLabel = (userId: number) => {
+  return members.value.find((m) => m.id === userId)?.name ?? '不明'
 }
 
 // Filter
@@ -59,33 +65,45 @@ const handleDelete = async (id: number) => {
   }
 }
 
+// Today's date in YYYY-MM-DD format
+const todayStr = () => {
+  const d = new Date()
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
 // Add form
 const showForm = ref(false)
 const isSubmitting = ref(false)
 const formData = reactive<CreateExpenseInput>({
-  label: '',
+  description: '',
   amount: 0,
   category: 'food',
-  paid_by: 'taro',
-  note: '',
+  paid_at: todayStr(),
+  is_shared: true,
 })
 
 const resetForm = () => {
-  formData.label = ''
+  formData.description = ''
   formData.amount = 0
   formData.category = 'food'
-  formData.paid_by = 'taro'
-  formData.note = ''
+  formData.paid_at = todayStr()
+  formData.is_shared = true
 }
 
 const handleSubmit = async () => {
-  if (!formData.label.trim() || formData.amount <= 0 || isSubmitting.value) return
+  if (!formData.description.trim() || formData.amount <= 0 || isSubmitting.value) return
 
   isSubmitting.value = true
   try {
     await createExpense({
-      ...formData,
-      note: formData.note || undefined,
+      description: formData.description,
+      amount: formData.amount,
+      category: formData.category,
+      paid_at: formData.paid_at,
+      is_shared: formData.is_shared,
     })
     resetForm()
     showForm.value = false
@@ -106,15 +124,7 @@ const formatDate = (dateStr: string) => {
   const d = new Date(dateStr)
   const month = d.getMonth() + 1
   const day = d.getDate()
-  const hours = String(d.getHours()).padStart(2, '0')
-  const minutes = String(d.getMinutes()).padStart(2, '0')
-  return `${month}/${day} ${hours}:${minutes}`
-}
-
-const paidByLabel = (paidBy: string) => {
-  if (paidBy === 'taro') return 'たろう'
-  if (paidBy === 'hanako') return 'はなこ'
-  return paidBy
+  return `${month}/${day}`
 }
 </script>
 
@@ -184,7 +194,7 @@ const paidByLabel = (paidBy: string) => {
         @submit.prevent="handleSubmit"
       >
         <input
-          v-model="formData.label"
+          v-model="formData.description"
           type="text"
           placeholder="項目名"
           class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
@@ -202,34 +212,30 @@ const paidByLabel = (paidBy: string) => {
             class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
           >
             <option
-              v-for="cat in CATEGORIES"
+              v-for="cat in categories"
               :key="cat.key"
               :value="cat.key"
             >
               {{ cat.label }}
             </option>
           </select>
-          <select
-            v-model="formData.paid_by"
+          <input
+            v-model="formData.paid_at"
+            type="date"
             class="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
           >
-            <option value="taro">
-              たろう
-            </option>
-            <option value="hanako">
-              はなこ
-            </option>
-          </select>
         </div>
-        <input
-          v-model="formData.note"
-          type="text"
-          placeholder="メモ（任意）"
-          class="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200"
-        >
+        <label class="flex items-center gap-2 text-sm text-gray-600">
+          <input
+            v-model="formData.is_shared"
+            type="checkbox"
+            class="h-4 w-4 rounded border-gray-300 text-primary-500 focus:ring-primary-400"
+          >
+          割り勘にする
+        </label>
         <button
           type="submit"
-          :disabled="!formData.label.trim() || formData.amount <= 0 || isSubmitting"
+          :disabled="!formData.description.trim() || formData.amount <= 0 || isSubmitting"
           class="w-full rounded-xl bg-primary-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:bg-gray-300"
         >
           追加する
@@ -249,7 +255,7 @@ const paidByLabel = (paidBy: string) => {
         全て
       </button>
       <button
-        v-for="cat in CATEGORIES"
+        v-for="cat in categories"
         :key="cat.key"
         class="flex-shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors"
         :class="selectedCategory === cat.key
@@ -281,22 +287,22 @@ const paidByLabel = (paidBy: string) => {
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2">
               <p class="text-sm font-semibold text-gray-800">
-                {{ expense.label }}
+                {{ expense.description }}
               </p>
               <span class="rounded-full bg-primary-50 px-2 py-0.5 text-xs text-primary-700">
                 {{ categoryLabel(expense.category) }}
               </span>
             </div>
             <div class="mt-1 flex items-center gap-2 text-xs text-gray-400">
-              <span>{{ paidByLabel(expense.paid_by) }}</span>
-              <span>{{ formatDate(expense.created_at) }}</span>
+              <span>{{ paidByLabel(expense.user_id) }}</span>
+              <span>{{ formatDate(expense.paid_at) }}</span>
+              <span
+                v-if="expense.is_shared"
+                class="rounded-full bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500"
+              >
+                割り勘
+              </span>
             </div>
-            <p
-              v-if="expense.note"
-              class="mt-1 text-xs text-gray-400"
-            >
-              {{ expense.note }}
-            </p>
           </div>
           <div class="flex items-center gap-2">
             <p class="text-base font-bold text-gray-800">

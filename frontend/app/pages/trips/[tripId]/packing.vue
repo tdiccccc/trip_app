@@ -13,14 +13,36 @@ const route = useRoute()
 const tripId = route.params.tripId as string
 
 const { fetchItems, createItem, updateItem, deleteItem } = usePacking(tripId)
+const { fetchTrip } = useTrips()
+const { user } = useAuth()
+const { fetchAssignees, FALLBACK_ASSIGNEES } = useMaster()
 
-// Filter tabs
+// Fetch trip members
+const { data: tripResponse } = fetchTrip(tripId)
+const members = computed(() => tripResponse.value?.data?.members ?? [])
+
+// Fetch assignees from master API
+const { data: assigneesResponse } = fetchAssignees()
+const assignees = computed(() => assigneesResponse.value?.data ?? FALLBACK_ASSIGNEES)
+
+// Resolve current user and partner from trip members
+const currentUser = computed(() => {
+  if (!user.value || members.value.length === 0) return null
+  return members.value.find((m) => m.id === user.value!.id) ?? null
+})
+
+const partnerUser = computed(() => {
+  if (!user.value || members.value.length === 0) return null
+  return members.value.find((m) => m.id !== user.value!.id) ?? null
+})
+
+// Filter tabs - dynamically built from members
 type AssigneeFilter = 'all' | 'self' | 'partner'
-const FILTER_TABS: { key: AssigneeFilter; label: string }[] = [
+const FILTER_TABS = computed<{ key: AssigneeFilter; label: string }[]>(() => [
   { key: 'all', label: '全て' },
-  { key: 'self', label: 'たろう' },
-  { key: 'partner', label: 'はなこ' },
-]
+  { key: 'self', label: currentUser.value?.name ?? '自分' },
+  { key: 'partner', label: partnerUser.value?.name ?? 'パートナー' },
+])
 const selectedFilter = ref<AssigneeFilter>('all')
 
 // Fetch items
@@ -88,12 +110,22 @@ const handleAdd = async () => {
   }
 }
 
-// Assignee display
+// Assignee display - resolve from members or master assignees
 const assigneeLabel = (assignee: string | null) => {
-  if (assignee === 'self') return 'たろう'
-  if (assignee === 'partner') return 'はなこ'
-  return ''
+  if (!assignee) return ''
+  if (assignee === 'self') return currentUser.value?.name ?? '自分'
+  if (assignee === 'partner') return partnerUser.value?.name ?? 'パートナー'
+  // Fallback to master assignees
+  return assignees.value.find((a) => a.key === assignee)?.label ?? assignee
 }
+
+// Assignee options for select
+const assigneeOptions = computed(() => {
+  return [
+    { value: 'self', label: currentUser.value?.name ?? '自分' },
+    { value: 'partner', label: partnerUser.value?.name ?? 'パートナー' },
+  ]
+})
 </script>
 
 <template>
@@ -150,11 +182,12 @@ const assigneeLabel = (assignee: string | null) => {
             <option value="">
               担当者なし
             </option>
-            <option value="self">
-              たろう
-            </option>
-            <option value="partner">
-              はなこ
+            <option
+              v-for="opt in assigneeOptions"
+              :key="opt.value"
+              :value="opt.value"
+            >
+              {{ opt.label }}
             </option>
           </select>
           <button

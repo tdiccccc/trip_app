@@ -1,20 +1,20 @@
 export interface Expense {
   id: number
   trip_id: number
-  label: string
+  user_id: number
+  description: string
   amount: number
   category: string
-  paid_by: string
-  note: string | null
-  created_at: string
+  paid_at: string
+  is_shared: boolean
 }
 
 export interface CreateExpenseInput {
-  label: string
+  description: string
   amount: number
   category: string
-  paid_by: string
-  note?: string
+  paid_at?: string
+  is_shared?: boolean
 }
 
 export interface ExpenseSummary {

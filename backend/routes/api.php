@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BoardController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\ExportController;
 use App\Http\Controllers\Api\ItineraryController;
+use App\Http\Controllers\Api\MasterController;
 use App\Http\Controllers\Api\PackingController;
 use App\Http\Controllers\Api\SpotController;
 use App\Http\Controllers\Api\TripController;
@@ -27,6 +28,10 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     // ユーザー一覧（メンバー追加用）
     Route::get('/users', [UserController::class, 'index']);
+
+    // マスターデータ
+    Route::get('/master/expense-categories', [MasterController::class, 'expenseCategories']);
+    Route::get('/master/assignees', [MasterController::class, 'assignees']);
 
     // 旅行 CRUD（一覧・作成は全認証ユーザー）
     Route::get('/trips', [TripController::class, 'index']);

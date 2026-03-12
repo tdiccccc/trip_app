@@ -45,10 +45,10 @@ describe('useExpenses', () => {
 
   it('createExpense sends POST request', async () => {
     const input = {
-      label: 'Lunch at Okage Yokocho',
+      description: 'Lunch at Okage Yokocho',
       amount: 1500,
       category: 'food',
-      paid_by: 'Alice',
+      paid_at: '2026-03-12',
     }
     mockFetch.mockResolvedValueOnce({ data: { id: 1, ...input } })
 
