@@ -1,7 +1,9 @@
+# Cloud Run requires linux/amd64
+# Build with: docker build --platform linux/amd64 ...
 # ============================================================
 # Stage 1: Build
 # ============================================================
-FROM node:22-alpine AS builder
+FROM --platform=linux/amd64 node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -16,7 +18,7 @@ RUN npm run build
 # ============================================================
 # Stage 2: Production image
 # ============================================================
-FROM node:22-alpine
+FROM --platform=linux/amd64 node:22-alpine
 
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup

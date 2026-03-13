@@ -1,7 +1,9 @@
+# Cloud Run requires linux/amd64
+# Build with: docker build --platform linux/amd64 ...
 # ============================================================
 # Stage 1: Composer dependencies
 # ============================================================
-FROM composer:2 AS composer-deps
+FROM --platform=linux/amd64 composer:2 AS composer-deps
 
 WORKDIR /app
 COPY composer.json composer.lock ./
@@ -10,7 +12,7 @@ RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist --opti
 # ============================================================
 # Stage 2: Production image
 # ============================================================
-FROM php:8.4-cli-alpine
+FROM --platform=linux/amd64 php:8.4-cli-alpine
 
 # Install system dependencies for SQLite and S3 (Cloudflare R2)
 RUN apk add --no-cache \
@@ -28,12 +30,14 @@ COPY --from=composer-deps /app/vendor vendor/
 # Copy application source
 COPY . .
 
+# Clear bootstrap cache from local dev (may reference dev-only packages like laravel/pail)
+RUN rm -f bootstrap/cache/packages.php bootstrap/cache/services.php
+
 # Run Composer post-install scripts (package:discover, etc.)
 RUN php artisan package:discover --ansi 2>/dev/null || true
 
-# Cache configuration and routes for faster boot
-RUN php artisan config:cache || true \
-    && php artisan route:cache || true \
+# Cache routes and views (NOT config — config uses runtime env vars from Cloud Run)
+RUN php artisan route:cache || true \
     && php artisan view:cache || true
 
 # Create SQLite database directory with correct permissions
