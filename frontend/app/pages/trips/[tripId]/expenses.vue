@@ -207,8 +207,8 @@ const handleDeleteCategory = async (id: number) => {
 }
 
 // Format helpers
-const formatAmount = (amount: number) => {
-  return `\u00A5${amount.toLocaleString()}`
+const formatAmount = (amount: number | null | undefined) => {
+  return `\u00A5${(amount ?? 0).toLocaleString()}`
 }
 
 const formatDate = (dateStr: string) => {
@@ -366,7 +366,7 @@ const summaryCategories = computed(() => {
             合計金額
           </p>
           <p class="text-2xl font-bold">
-            {{ formatAmount(summary.total) }}
+            {{ formatAmount(summary.total_amount) }}
           </p>
         </div>
         <div class="text-right">

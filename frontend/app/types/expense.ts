@@ -39,7 +39,10 @@ export interface CreateExpenseInput {
 }
 
 export interface ExpenseSummary {
-  total: number
+  total_amount: number
+  shared_total: number
   per_person: number
   by_category: Record<string, number>
+  by_user: Record<number, number>
+  settlement: Record<number, number>
 }
