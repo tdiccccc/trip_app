@@ -66,6 +66,7 @@ class EloquentBoardPostRepository implements BoardPostRepositoryInterface
             body: $model->body,
             photoId: $model->photo_id,
             isBestShot: $model->is_best_shot,
+            createdAt: $model->created_at?->toIso8601String(),
         );
     }
 }

@@ -57,7 +57,7 @@ final class BoardControllerTest extends TestCase
         $response->assertOk()
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'user_id', 'body', 'photo_id', 'is_best_shot', 'reactions'],
+                    '*' => ['id', 'user_id', 'user_name', 'body', 'photo_id', 'is_best_shot', 'created_at', 'reactions'],
                 ],
             ]);
         $this->assertCount(1, $response->json('data'));

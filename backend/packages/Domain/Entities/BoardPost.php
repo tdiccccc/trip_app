@@ -13,6 +13,7 @@ final class BoardPost
         public readonly string $body,
         public readonly ?int $photoId,
         public readonly bool $isBestShot,
+        public readonly ?string $createdAt = null,
     ) {
     }
 }

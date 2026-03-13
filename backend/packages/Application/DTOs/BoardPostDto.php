@@ -15,10 +15,12 @@ final readonly class BoardPostDto
         public string $body,
         public ?int $photoId,
         public bool $isBestShot,
+        public ?string $createdAt = null,
+        public ?string $userName = null,
     ) {
     }
 
-    public static function fromEntity(BoardPost $post): self
+    public static function fromEntity(BoardPost $post, ?string $userName = null): self
     {
         return new self(
             id: $post->id,
@@ -27,6 +29,8 @@ final readonly class BoardPostDto
             body: $post->body,
             photoId: $post->photoId,
             isBestShot: $post->isBestShot,
+            createdAt: $post->createdAt,
+            userName: $userName,
         );
     }
 
@@ -39,9 +43,11 @@ final readonly class BoardPostDto
             'id' => $this->id,
             'trip_id' => $this->tripId,
             'user_id' => $this->userId,
+            'user_name' => $this->userName,
             'body' => $this->body,
             'photo_id' => $this->photoId,
             'is_best_shot' => $this->isBestShot,
+            'created_at' => $this->createdAt,
         ];
     }
 }
