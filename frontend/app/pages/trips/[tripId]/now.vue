@@ -8,7 +8,7 @@ definePageMeta({
 })
 
 useHead({
-  title: '今どこ - Ise Trip',
+  title: '今どこ - Trip App',
 })
 
 const route = useRoute()

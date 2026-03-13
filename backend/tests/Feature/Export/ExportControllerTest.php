@@ -156,7 +156,7 @@ final class ExportControllerTest extends TestCase
 
         $response->assertOk();
         $response->assertHeader('Content-Type', 'application/zip');
-        $response->assertHeader('Content-Disposition', 'attachment; filename="ise-trip-export.zip"');
+        $response->assertHeader('Content-Disposition', 'attachment; filename="trip-app-export.zip"');
         $this->assertNotEmpty($response->getContent());
     }
 

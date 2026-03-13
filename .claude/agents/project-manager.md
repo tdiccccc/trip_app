@@ -148,7 +148,7 @@ ls .github/workflows/ 2>/dev/null
 
 | ドキュメント | パス | 用途 |
 |-------------|------|------|
-| 企画書 | `docs/project/ise_trip_app_plan.md` | 機能要件、画面構成 |
+| 企画書 | `docs/project/trip_app_plan.md` | 機能要件、画面構成 |
 | 技術ガイド | `CONTRIBUTING.md` | アーキテクチャ、開発ルール |
 | API 仕様書 | `docs/api/index.md` | 全31エンドポイント定義 |
 | DB 設計 | `docs/db/index.md` | 9テーブルの設計サマリ |

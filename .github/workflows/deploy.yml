@@ -34,22 +34,22 @@ jobs:
       - name: Build backend image
         run: |
           docker build \
-            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:${{ github.sha }} \
-            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:latest \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/backend:${{ github.sha }} \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/backend:latest \
             -f backend/Dockerfile \
             backend/
 
       - name: Push backend image
         run: |
-          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:${{ github.sha }}
-          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:latest
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/backend:${{ github.sha }}
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/backend:latest
 
       - name: Deploy backend to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ise-trip-backend
+          service: trip-app-backend
           region: asia-northeast1
-          image: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/backend:${{ github.sha }}
+          image: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/backend:${{ github.sha }}
           flags: |
             --min-instances=0
             --max-instances=1
@@ -62,22 +62,22 @@ jobs:
       - name: Build frontend image
         run: |
           docker build \
-            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:${{ github.sha }} \
-            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:latest \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/frontend:${{ github.sha }} \
+            -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/frontend:latest \
             -f frontend/Dockerfile \
             frontend/
 
       - name: Push frontend image
         run: |
-          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:${{ github.sha }}
-          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:latest
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/frontend:${{ github.sha }}
+          docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/frontend:latest
 
       - name: Deploy frontend to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ise-trip-frontend
+          service: trip-app-frontend
           region: asia-northeast1
-          image: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ise-trip/frontend:${{ github.sha }}
+          image: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip-app/frontend:${{ github.sha }}
           flags: |
             --min-instances=0
             --max-instances=1

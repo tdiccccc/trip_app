@@ -24,7 +24,7 @@
           │         (asia-northeast1)             │
           │                                      │
           │  ┌──────────────┐ ┌───────────────┐  │
-          │  │ ise-trip-     │ │ ise-trip-     │  │
+          │  │ trip-app-     │ │ trip-app-     │  │
           │  │ frontend      │ │ backend       │  │
           │  │ (Nuxt 4)     │ │ (Laravel 12)  │  │
           │  │ 256Mi / CPU 1│ │ 512Mi / CPU 1 │  │
@@ -103,35 +103,35 @@
 | `GCP_WORKLOAD_IDENTITY_PROVIDER` | Workload Identity Federation 設定時に生成 | GitHub Actions → GCP 認証 |
 | `GCP_SERVICE_ACCOUNT` | GCP IAM で作成 | GitHub Actions の実行権限 |
 
-### Cloud Run 環境変数 - Backend（ise-trip-backend）
+### Cloud Run 環境変数 - Backend（trip-app-backend）
 
 | 環境変数名 | 値の例 | 説明 |
 |------------|--------|------|
 | `APP_ENV` | `production` | 実行環境（deploy.yml で設定済み） |
 | `APP_DEBUG` | `false` | デバッグ無効化（deploy.yml で設定済み） |
 | `APP_KEY` | `base64:...` | Laravel アプリケーションキー |
-| `APP_URL` | `https://ise-trip-backend-xxx.run.app` | バックエンド URL |
+| `APP_URL` | `https://trip-app-backend-xxx.run.app` | バックエンド URL |
 | `LOG_CHANNEL` | `stderr` | Cloud Logging 連携（deploy.yml で設定済み） |
 | `DB_CONNECTION` | `sqlite` | DB ドライバー |
 | `SESSION_DRIVER` | `database` | セッションドライバー |
 | `SESSION_DOMAIN` | `.run.app` または カスタムドメイン | Cookie ドメイン |
-| `SANCTUM_STATEFUL_DOMAINS` | `ise-trip-frontend-xxx.run.app` | Sanctum 許可ドメイン |
-| `FRONTEND_URL` | `https://ise-trip-frontend-xxx.run.app` | CORS 許可 URL |
+| `SANCTUM_STATEFUL_DOMAINS` | `trip-app-frontend-xxx.run.app` | Sanctum 許可ドメイン |
+| `FRONTEND_URL` | `https://trip-app-frontend-xxx.run.app` | CORS 許可 URL |
 | `FILESYSTEM_DISK` | `s3` | 本番ではR2を使用 |
 | `AWS_ACCESS_KEY_ID` | R2 API トークンから取得 | R2 認証 |
 | `AWS_SECRET_ACCESS_KEY` | R2 API トークンから取得 | R2 認証 |
 | `AWS_DEFAULT_REGION` | `auto` | R2 はリージョン不要 |
-| `AWS_BUCKET` | `ise-trip-photos` | R2 バケット名 |
+| `AWS_BUCKET` | `trip-app-photos` | R2 バケット名 |
 | `AWS_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` | R2 S3互換エンドポイント |
 | `AWS_USE_PATH_STYLE_ENDPOINT` | `true` | R2 必須設定 |
 | `AWS_URL` | `https://pub-xxx.r2.dev` or カスタムドメイン | 公開 URL |
 
-### Cloud Run 環境変数 - Frontend（ise-trip-frontend）
+### Cloud Run 環境変数 - Frontend（trip-app-frontend）
 
 | 環境変数名 | 値の例 | 説明 |
 |------------|--------|------|
 | `NODE_ENV` | `production` | 実行環境（deploy.yml で設定済み） |
-| `NUXT_PUBLIC_API_BASE` | `https://ise-trip-backend-xxx.run.app` | Laravel API のベース URL |
+| `NUXT_PUBLIC_API_BASE` | `https://trip-app-backend-xxx.run.app` | Laravel API のベース URL |
 
 ---
 

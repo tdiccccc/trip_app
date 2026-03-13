@@ -23,7 +23,7 @@ color: yellow
 ```
 docs/
 ├── project/
-│   └── ise_trip_app_plan.md    # 企画書（原本、基本変更しない）
+│   └── trip_app_plan.md    # 企画書（原本、基本変更しない）
 ├── api/
 │   └── index.md                # API エンドポイント仕様書
 ├── db/
@@ -155,7 +155,7 @@ cat backend/routes/api.php
 
 | ドキュメント | パス | 説明 |
 |-------------|------|------|
-| 企画書 | `docs/project/ise_trip_app_plan.md` | 原本。機能要件の根拠 |
+| 企画書 | `docs/project/trip_app_plan.md` | 原本。機能要件の根拠 |
 | 技術ガイド | `CONTRIBUTING.md` | アーキテクチャ、開発ルール |
 | プロジェクト設定 | `CLAUDE.md` | エージェント一覧、コマンド |
 | API 仕様書 | `docs/api/index.md` | 全エンドポイント定義 |

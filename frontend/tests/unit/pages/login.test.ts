@@ -37,7 +37,7 @@ describe('login page', () => {
   it('renders app title', async () => {
     const wrapper = await mountSuspended(LoginPage)
 
-    expect(wrapper.text()).toContain('Ise Trip')
+    expect(wrapper.text()).toContain('Trip App')
   })
 
   it('renders email and password labels', async () => {

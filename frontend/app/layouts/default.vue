@@ -67,7 +67,7 @@ const headerLink = computed(() => {
             :to="headerLink"
             class="text-lg font-bold text-primary-700"
           >
-            {{ tripTitle ?? 'Ise Trip' }}
+            {{ tripTitle ?? 'Trip App' }}
           </NuxtLink>
         </div>
         <button

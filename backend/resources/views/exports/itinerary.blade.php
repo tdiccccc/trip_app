@@ -78,7 +78,7 @@
     </style>
 </head>
 <body>
-    <h1>Ise Trip Itinerary</h1>
+    <h1>Trip App Itinerary</h1>
 
     @forelse($items as $date => $dayItems)
         <div class="date-section">

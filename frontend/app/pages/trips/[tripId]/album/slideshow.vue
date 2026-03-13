@@ -7,7 +7,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'スライドショー - Ise Trip',
+  title: 'スライドショー - Trip App',
 })
 
 const route = useRoute()

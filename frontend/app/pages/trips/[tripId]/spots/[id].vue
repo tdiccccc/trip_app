@@ -13,7 +13,7 @@ const { data: response, refresh } = fetchSpot(spotId)
 const spot = computed(() => response.value?.data ?? null)
 
 useHead({
-  title: computed(() => spot.value ? `${spot.value.name} - Ise Trip` : 'スポット詳細 - Ise Trip'),
+  title: computed(() => spot.value ? `${spot.value.name} - Trip App` : 'スポット詳細 - Trip App'),
 })
 
 // Memo form

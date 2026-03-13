@@ -19,7 +19,7 @@ const handleUpdated = async () => {
 const trip = computed(() => response.value?.data ?? null)
 
 useHead({
-  title: computed(() => trip.value ? `${trip.value.title} - Ise Trip` : 'Ise Trip'),
+  title: computed(() => trip.value ? `${trip.value.title} - Trip App` : 'Trip App'),
 })
 
 // Countdown timer

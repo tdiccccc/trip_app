@@ -6,7 +6,7 @@ definePageMeta({
 })
 
 useHead({
-  title: '旅行一覧 - Ise Trip',
+  title: '旅行一覧 - Trip App',
 })
 
 const { fetchTrips } = useTrips()

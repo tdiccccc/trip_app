@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Ise Trip Photobook</title>
+    <title>Trip App Photobook</title>
     <style>
         * {
             margin: 0;
@@ -79,7 +79,7 @@
     </style>
 </head>
 <body>
-    <h1>Ise Trip Photobook</h1>
+    <h1>Trip App Photobook</h1>
 
     @forelse($photos as $photo)
         <div class="photo-entry">

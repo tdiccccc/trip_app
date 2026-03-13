@@ -212,7 +212,7 @@ trip_app/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml               # GitHub Actions CI/CD（Cloud Run デプロイ）
-├── ise_trip_app_plan.md             # 企画書
+├── trip_app_plan.md             # 企画書
 └── CONTRIBUTING.md                  # このファイル
 ```
 

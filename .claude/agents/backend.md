@@ -151,7 +151,7 @@ public function index(GetSpotListUseCase $useCase): JsonResponse
 - `CONTRIBUTING.md` — 技術ガイド（アーキテクチャ、ディレクトリ構成、データの流れ）
 - `docs/route/index.md` — ルート定義書（API エンドポイント一覧）
 - `docs/db/index.md` — DB 設計ドキュメント（テーブル定義）
-- `ise_trip_app_plan.md` — 企画書（機能要件）
+- `trip_app_plan.md` — 企画書（機能要件）
 
 ## 注意事項
 

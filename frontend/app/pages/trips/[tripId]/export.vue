@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'エクスポート - Ise Trip',
+  title: 'エクスポート - Trip App',
 })
 
 const route = useRoute()
@@ -65,7 +65,7 @@ const exportOptions: ExportOption[] = [
     buttonLabel: 'ZIPをダウンロード',
     icon: 'archive',
     endpoint: `/api/trips/${tripId}/export/zip`,
-    filename: 'ise-trip-export.zip',
+    filename: 'trip-app-export.zip',
     contentType: 'application/zip',
     disabled: false,
   },

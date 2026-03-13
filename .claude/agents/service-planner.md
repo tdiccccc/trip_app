@@ -141,7 +141,7 @@ So that [得られる価値・感情].
 
 | ドキュメント | パス | 用途 |
 |-------------|------|------|
-| 企画書 | `docs/project/ise_trip_app_plan.md` | 元の企画・コンセプト |
+| 企画書 | `docs/project/trip_app_plan.md` | 元の企画・コンセプト |
 | 機能仕様 | `docs/funcs/index.md` | 全機能の仕様と実装状況 |
 | API 仕様書 | `docs/api/index.md` | 既存 API エンドポイント |
 | DB 設計 | `docs/db/index.md` | テーブル構成 |

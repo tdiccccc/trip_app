@@ -113,7 +113,7 @@ const { data, error } = await useFetch<SpotDTO[]>('/api/spots')
 
 - `CONTRIBUTING.md` — 技術ガイド（全体アーキテクチャ、ディレクトリ構成）
 - `docs/route/index.md` — ルート定義書（ページ構成、API エンドポイント、composables）
-- `ise_trip_app_plan.md` — 企画書（機能要件、画面構成）
+- `trip_app_plan.md` — 企画書（機能要件、画面構成）
 
 ## 注意事項
 

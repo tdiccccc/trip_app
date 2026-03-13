@@ -102,7 +102,7 @@ final class ExportController extends Controller
 
         return response($content, 200, [
             'Content-Type' => 'application/zip',
-            'Content-Disposition' => 'attachment; filename="ise-trip-export.zip"',
+            'Content-Disposition' => 'attachment; filename="trip-app-export.zip"',
         ]);
     }
 }

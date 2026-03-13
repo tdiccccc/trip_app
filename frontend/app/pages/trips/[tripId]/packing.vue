@@ -6,7 +6,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'パッキングリスト - Ise Trip',
+  title: 'パッキングリスト - Trip App',
 })
 
 const route = useRoute()

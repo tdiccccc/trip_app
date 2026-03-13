@@ -69,7 +69,7 @@ color: blue
 
 作業前に必ず以下を確認すること:
 
-- `ise_trip_app_plan.md` — 企画書（機能要件）
+- `trip_app_plan.md` — 企画書（機能要件）
 - `CONTRIBUTING.md` — 技術ガイド（DB設計セクション、ディレクトリ構成）
 - `docs/db/index.md` — 既存のDB設計ドキュメント（存在する場合）
 - `docs/route/index.md` — ルート定義書（API エンドポイントから必要なデータ構造を把握）

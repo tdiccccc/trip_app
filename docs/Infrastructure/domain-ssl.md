@@ -47,7 +47,7 @@ gcloud domains verify example.com
 
 ```bash
 gcloud run domain-mappings create \
-  --service=ise-trip-backend \
+  --service=trip-app-backend \
   --domain=api.example.com \
   --region=asia-northeast1
 ```
@@ -56,7 +56,7 @@ gcloud run domain-mappings create \
 
 ```bash
 gcloud run domain-mappings create \
-  --service=ise-trip-frontend \
+  --service=trip-app-frontend \
   --domain=app.example.com \
   --region=asia-northeast1
 ```
@@ -132,7 +132,7 @@ Cloudflare のプロキシ経由にする場合は、Cloudflare 側で SSL を�
 ### Backend
 
 ```bash
-gcloud run services update ise-trip-backend \
+gcloud run services update trip-app-backend \
   --region=asia-northeast1 \
   --update-env-vars="\
 APP_URL=https://api.example.com,\
@@ -144,7 +144,7 @@ FRONTEND_URL=https://app.example.com"
 ### Frontend
 
 ```bash
-gcloud run services update ise-trip-frontend \
+gcloud run services update trip-app-frontend \
   --region=asia-northeast1 \
   --update-env-vars="\
 NUXT_PUBLIC_API_BASE=https://api.example.com"

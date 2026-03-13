@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'ログイン - Ise Trip',
+  title: 'ログイン - Trip App',
 })
 
 const { login, isAuthenticated } = useAuth()
@@ -47,7 +47,7 @@ const handleLogin = async () => {
   <div class="flex min-h-dvh items-center justify-center px-4">
     <div class="w-full max-w-sm">
       <h1 class="mb-2 text-center text-2xl font-bold text-primary-700">
-        Ise Trip
+        Trip App
       </h1>
       <p class="mb-8 text-center text-sm text-gray-400">
         ログインして続けましょう

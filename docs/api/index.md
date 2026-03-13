@@ -2430,7 +2430,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 | ヘッダー | 値 |
 |---------|-----|
 | `Content-Type` | `application/zip` |
-| `Content-Disposition` | `attachment; filename="ise-trip-export.zip"` |
+| `Content-Disposition` | `attachment; filename="trip-app-export.zip"` |
 
 レスポンスボディは ZIP バイナリデータ。
 
@@ -2501,7 +2501,7 @@ CSRF トークンを Cookie にセットする。SPA 認証の前に必ず呼び
 - [ルート定義書](../route/index.md) -- フロントエンドルート定義（呼び出し API 記載）
 - [DB 設計: ER図](../db/ER.md) -- テーブルリレーション
 - [DB 設計: テーブル定義書](../db/table/index.md) -- 各テーブルのカラム詳細
-- [企画書](../project/ise_trip_app_plan.md) -- 機能要件
+- [企画書](../project/trip_app_plan.md) -- 機能要件
 
 ---
 
