@@ -36,7 +36,7 @@ final class UpdateTripUseCase
             destination: array_key_exists('destination', $data) ? $data['destination'] : $existing->destination,
             startDate: $data['start_date'] ?? $existing->startDate,
             endDate: $data['end_date'] ?? $existing->endDate,
-            coverImageUrl: $existing->coverImageUrl,
+            coverImageUrl: array_key_exists('cover_image_url', $data) ? $data['cover_image_url'] : $existing->coverImageUrl,
             createdBy: $existing->createdBy,
             createdAt: $existing->createdAt,
             updatedAt: $existing->updatedAt,

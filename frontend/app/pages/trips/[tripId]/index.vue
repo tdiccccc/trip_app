@@ -91,8 +91,61 @@ const handleDelete = async () => {
     v-if="trip"
     class="flex flex-col items-center gap-6 py-8"
   >
-    <!-- Title -->
-    <div class="text-center">
+    <!-- Cover image hero -->
+    <div
+      v-if="trip.cover_image_url"
+      class="relative w-full overflow-hidden rounded-2xl"
+    >
+      <img
+        :src="trip.cover_image_url"
+        :alt="trip.title"
+        class="h-48 w-full object-cover"
+      >
+      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+      <div class="absolute bottom-0 left-0 right-0 p-4">
+        <div class="flex items-end justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-white drop-shadow-sm">
+              {{ trip.title }}
+            </h1>
+            <p class="mt-0.5 text-sm text-white/80">
+              {{ formatDateRange(trip.start_date, trip.end_date) }}
+            </p>
+            <p
+              v-if="trip.destination"
+              class="text-sm text-white/70"
+            >
+              {{ trip.destination }}
+            </p>
+          </div>
+          <button
+            v-if="isOwner"
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm hover:bg-white/30"
+            @click="showEditModal = true"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Title (no cover image) -->
+    <div
+      v-else
+      class="text-center"
+    >
       <div class="flex items-center justify-center gap-2">
         <h1 class="text-3xl font-bold text-primary-700">
           {{ trip.title }}

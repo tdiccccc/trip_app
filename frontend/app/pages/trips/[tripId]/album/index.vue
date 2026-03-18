@@ -15,6 +15,7 @@ const tripId = route.params.tripId as string
 
 const { fetchPhotos, deletePhoto } = useAlbum(tripId)
 const { fetchSpots } = useSpots(tripId)
+const { updateTrip } = useTrips()
 
 // Spot filter
 const selectedSpotId = ref<number | undefined>(undefined)
@@ -52,6 +53,30 @@ const handleDeletePhoto = async () => {
     await refresh()
   } catch {
     // Error handling
+  }
+}
+
+// Cover image
+const settingCover = ref(false)
+const coverSetMessage = ref('')
+
+const setAsCover = async () => {
+  if (!selectedPhoto.value) return
+  settingCover.value = true
+  coverSetMessage.value = ''
+  try {
+    await updateTrip(tripId, { cover_image_url: selectedPhoto.value.storage_path })
+    coverSetMessage.value = 'カバー画像に設定しました'
+    setTimeout(() => {
+      coverSetMessage.value = ''
+    }, 2000)
+  } catch {
+    coverSetMessage.value = '設定に失敗しました'
+    setTimeout(() => {
+      coverSetMessage.value = ''
+    }, 2000)
+  } finally {
+    settingCover.value = false
   }
 }
 </script>
@@ -149,6 +174,14 @@ const handleDeletePhoto = async () => {
           class="max-h-[80vh] max-w-[90vw] rounded-lg object-contain"
         >
 
+        <!-- Toast message -->
+        <div
+          v-if="coverSetMessage"
+          class="absolute top-16 left-1/2 z-20 -translate-x-1/2 rounded-xl bg-white/90 px-4 py-2 text-sm font-medium text-gray-800 shadow-lg backdrop-blur-sm"
+        >
+          {{ coverSetMessage }}
+        </div>
+
         <!-- Bottom info bar -->
         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 pb-safe">
           <p
@@ -157,7 +190,27 @@ const handleDeletePhoto = async () => {
           >
             {{ selectedPhoto.caption }}
           </p>
-          <div class="flex justify-center">
+          <div class="flex justify-center gap-3">
+            <button
+              class="flex items-center gap-1.5 rounded-xl bg-white/20 px-4 py-2 text-sm text-white backdrop-blur-sm transition-colors hover:bg-white/30"
+              :disabled="settingCover"
+              @click="setAsCover"
+            >
+              <svg
+                class="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              {{ settingCover ? '設定中...' : 'カバーに設定' }}
+            </button>
             <button
               class="rounded-xl bg-red-500/80 px-4 py-2 text-sm text-white backdrop-blur-sm transition-colors hover:bg-red-600"
               @click="handleDeletePhoto"

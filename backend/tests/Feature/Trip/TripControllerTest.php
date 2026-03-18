@@ -273,6 +273,67 @@ final class TripControllerTest extends TestCase
             ]);
     }
 
+    public function test_update_cover_image_url(): void
+    {
+        $response = $this->actingAs($this->owner)
+            ->patchJson("/api/trips/{$this->trip->id}", [
+                'cover_image_url' => 'https://example.com/cover.jpg',
+            ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'data' => [
+                    'cover_image_url' => 'https://example.com/cover.jpg',
+                ],
+            ]);
+
+        $this->assertDatabaseHas('trips', [
+            'id' => $this->trip->id,
+            'cover_image_url' => 'https://example.com/cover.jpg',
+        ]);
+    }
+
+    public function test_update_cover_image_url_to_null(): void
+    {
+        // まずカバー画像を設定
+        $this->trip->update(['cover_image_url' => 'https://example.com/cover.jpg']);
+
+        $response = $this->actingAs($this->owner)
+            ->patchJson("/api/trips/{$this->trip->id}", [
+                'cover_image_url' => null,
+            ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'data' => [
+                    'cover_image_url' => null,
+                ],
+            ]);
+
+        $this->assertDatabaseHas('trips', [
+            'id' => $this->trip->id,
+            'cover_image_url' => null,
+        ]);
+    }
+
+    public function test_update_without_cover_image_url_preserves_existing(): void
+    {
+        $this->trip->update(['cover_image_url' => 'https://example.com/existing.jpg']);
+
+        $response = $this->actingAs($this->owner)
+            ->patchJson("/api/trips/{$this->trip->id}", [
+                'title' => 'タイトルだけ変更',
+            ]);
+
+        $response->assertOk()
+            ->assertJson([
+                'data' => [
+                    'title' => 'タイトルだけ変更',
+                    'cover_image_url' => 'https://example.com/existing.jpg',
+                ],
+            ]);
+    }
+
     public function test_update_returns_403_for_member(): void
     {
         $response = $this->actingAs($this->member)
