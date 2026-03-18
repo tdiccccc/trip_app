@@ -56,7 +56,7 @@ jobs:
             --memory=512Mi
             --cpu=1
             --allow-unauthenticated
-            --set-env-vars=APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr
+            --set-env-vars=APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,LITESTREAM_REPLICA_BUCKET=${{ secrets.LITESTREAM_REPLICA_BUCKET }}
 
       # ---------- Frontend ----------
       - name: Build frontend image

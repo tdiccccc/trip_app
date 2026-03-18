@@ -1,0 +1,8 @@
+dbs:
+  - path: /app/database/database.sqlite
+    replicas:
+      - type: gcs
+        bucket: ${LITESTREAM_REPLICA_BUCKET}
+        path: database.sqlite
+        retention: 72h
+        sync-interval: 1s

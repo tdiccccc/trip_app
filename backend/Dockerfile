@@ -19,6 +19,13 @@ RUN apk add --no-cache \
     sqlite-dev \
     && docker-php-ext-install pdo_sqlite
 
+# Install Litestream for SQLite replication to GCS
+ARG LITESTREAM_VERSION=v0.3.13
+RUN wget -O /tmp/litestream.tar.gz \
+    "https://github.com/benbjohnson/litestream/releases/download/${LITESTREAM_VERSION}/litestream-${LITESTREAM_VERSION}-linux-amd64.tar.gz" \
+    && tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz \
+    && rm /tmp/litestream.tar.gz
+
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
@@ -45,6 +52,9 @@ RUN mkdir -p database storage/app storage/framework/cache storage/framework/sess
     && touch database/database.sqlite \
     && chown -R appuser:appgroup /app/database /app/storage
 
+# Ensure entrypoint is executable
+RUN chmod +x /app/docker-entrypoint.sh
+
 # Switch to non-root user
 USER appuser
 
@@ -58,4 +68,5 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
 
 # Use php artisan serve for simplicity on Cloud Run
 # For higher traffic, switch to php-fpm + nginx or FrankenPHP
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT}
+# Litestream handles: restore from GCS → migrate → replicate + serve
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
