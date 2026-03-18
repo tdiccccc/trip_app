@@ -4,7 +4,7 @@
 
 伊勢旅行メモリーアプリの全機能一覧。
 複数旅行管理に対応し、各機能は旅行に紐づいて管理される。
-各機能の実装状況と対応するページ・API を記載する（最終更新: 2026-03-12）。
+各機能の実装状況と対応するページ・API を記載する（最終更新: 2026-03-13）。
 
 ---
 
@@ -23,10 +23,10 @@
 | 9 | パッキングリスト | 旅行に紐づく共有持ち物チェックリスト（担当分け対応） | 実装済み | `/trips/:tripId/packing` | `/api/trips/:tripId/packing` |
 | 10 | 費用メモ | 旅行に紐づく支出記録・カスタムカテゴリ管理・カテゴリ別集計・割り勘計算 | 実装済み | `/trips/:tripId/expenses` | `/api/trips/:tripId/expense-categories`, `/api/trips/:tripId/expenses`, `/api/trips/:tripId/expenses/summary` |
 | 11 | エクスポート | 旅行の記録を各種形式で出力 | 実装済み（動画エクスポートのみ未実装） | `/trips/:tripId/export` | `/api/trips/:tripId/export/*`（バックエンド実装済み） |
-| 12 | 権限制御強化 | 写真・掲示板投稿の削除を投稿者本人のみに制限 | 未実装 | - | `DELETE /api/trips/:tripId/photos/:id`, `DELETE /api/trips/:tripId/board/:id` |
-| 13 | 観光ルート記録 | しおりページにマップビューを追加し、スポット間のルートを地図で表示 | 未実装 | `/trips/:tripId/itinerary`（マップビュー） | 既存API利用 |
-| 14 | 今どこ | GPS現在地から最寄りスポットと次のスポットまでの距離を表示 | 未実装 | `/trips/:tripId/now` | 既存API利用 |
-| 15 | 旅行サマリー | 旅行の統計情報（写真数・スポット数・費用合計等）をまとめて表示 | 未実装 | `/trips/:tripId/summary` | `GET /api/trips/:tripId/summary` |
+| 12 | 権限制御強化 | 写真・掲示板投稿の削除を投稿者本人のみに制限 | 実装済み | -（APIレベル制御） | `DELETE /api/trips/:tripId/photos/:id`, `DELETE /api/trips/:tripId/board/:id` |
+| 13 | 観光ルート記録 | しおりページにマップビューを追加し、スポット間のルートを地図で表示 | 実装済み | `/trips/:tripId/itinerary`（マップビュー） | 既存API利用 |
+| 14 | 今どこ | GPS現在地から最寄りスポットと次のスポットまでの距離を表示 | 実装済み | `/trips/:tripId/now` | 既存API利用 |
+| 15 | 旅行サマリー | 旅行の統計情報（写真数・スポット数・費用合計等）をまとめて表示 | 実装済み | `/trips/:tripId/summary` | `GET /api/trips/:tripId/summary` |
 
 ---
 
@@ -154,8 +154,8 @@
 ### 12. 権限制御強化（ロック機能）
 
 - 旅行メタ情報の編集・削除は owner のみ（実装済み）
-- 写真の削除は投稿者本人のみに制限（要実装）
-- 掲示板投稿の削除は投稿者本人のみに制限（要実装）
+- 写真の削除は投稿者本人のみに制限（実装済み）
+- 掲示板投稿の削除は投稿者本人のみに制限（実装済み）
 - しおり・スポット・パッキング・費用は全メンバーが共同編集可能
 - 閲覧は全メンバーに許可
 - APIレベルで403 Forbiddenを返却（UIの非表示だけでなくdefense in depth）
