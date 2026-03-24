@@ -1,0 +1,121 @@
+name: Reset and Seed Database
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type "RESET" to confirm database reset (destructive operation)'
+        required: true
+        type: string
+
+concurrency:
+  group: seed-operation
+  cancel-in-progress: false
+
+jobs:
+  reset-seed:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Validate confirmation input
+        run: |
+          if [ "${{ inputs.confirmation }}" != "RESET" ]; then
+            echo "ERROR: Confirmation input must be exactly 'RESET'."
+            echo "You entered: '${{ inputs.confirmation }}'"
+            echo "Aborting to prevent accidental database reset."
+            exit 1
+          fi
+          echo "Confirmation accepted. Proceeding with database reset."
+
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Scale down backend service
+        run: |
+          echo "Scaling down trip-app-backend to 0 instances to prevent concurrent writes..."
+          gcloud run services update trip-app-backend \
+            --region=asia-northeast1 \
+            --max-instances=0 \
+            --quiet
+
+      - name: Create or update Cloud Run Job
+        run: |
+          IMAGE="asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip/backend:latest"
+          JOB_NAME="trip-app-seed"
+          REGION="asia-northeast1"
+
+          # Build environment variables string
+          ENV_VARS="APP_ENV=production"
+          ENV_VARS="${ENV_VARS},APP_KEY=${{ secrets.APP_KEY }}"
+          ENV_VARS="${ENV_VARS},APP_DEBUG=false"
+          ENV_VARS="${ENV_VARS},DB_CONNECTION=sqlite"
+          ENV_VARS="${ENV_VARS},LITESTREAM_REPLICA_BUCKET=${{ secrets.LITESTREAM_REPLICA_BUCKET }}"
+          ENV_VARS="${ENV_VARS},SEED_MODE=reset"
+
+          # Check if job exists
+          if gcloud run jobs describe "$JOB_NAME" --region="$REGION" --quiet 2>/dev/null; then
+            echo "Updating existing job..."
+            gcloud run jobs update "$JOB_NAME" \
+              --region="$REGION" \
+              --image="$IMAGE" \
+              --set-env-vars="$ENV_VARS" \
+              --command="/bin/sh" \
+              --args="/app/scripts/seed.sh" \
+              --task-timeout=300s \
+              --max-retries=0 \
+              --memory=512Mi \
+              --cpu=1 \
+              --quiet
+          else
+            echo "Creating new job..."
+            gcloud run jobs create "$JOB_NAME" \
+              --region="$REGION" \
+              --image="$IMAGE" \
+              --set-env-vars="$ENV_VARS" \
+              --command="/bin/sh" \
+              --args="/app/scripts/seed.sh" \
+              --task-timeout=300s \
+              --max-retries=0 \
+              --memory=512Mi \
+              --cpu=1 \
+              --quiet
+          fi
+
+      - name: Execute Cloud Run Job
+        run: |
+          echo "Executing database reset job (migrate:fresh --seed)..."
+          gcloud run jobs execute trip-app-seed \
+            --region=asia-northeast1 \
+            --wait \
+            --quiet
+
+      - name: Show job execution logs
+        if: always()
+        run: |
+          echo "Fetching job execution logs..."
+          gcloud logging read \
+            'resource.type="cloud_run_job" AND resource.labels.job_name="trip-app-seed"' \
+            --limit=100 \
+            --format="table(timestamp, textPayload)" \
+            --freshness=10m \
+            --order=asc
+
+      - name: Restore backend service
+        if: always()
+        run: |
+          echo "Restoring trip-app-backend to max-instances=1..."
+          gcloud run services update trip-app-backend \
+            --region=asia-northeast1 \
+            --max-instances=1 \
+            --quiet

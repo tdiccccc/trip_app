@@ -52,8 +52,9 @@ RUN mkdir -p database storage/app storage/framework/cache storage/framework/sess
     && touch database/database.sqlite \
     && chown -R appuser:appgroup /app/database /app/storage
 
-# Ensure entrypoint is executable
-RUN chmod +x /app/docker-entrypoint.sh
+# Ensure scripts are executable
+RUN chmod +x /app/docker-entrypoint.sh \
+    && chmod +x /app/scripts/seed.sh
 
 # Switch to non-root user
 USER appuser
