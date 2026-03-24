@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        // API専用バックエンドのため、未認証時のリダイレクト先をnullに設定
+        // route('login') が存在しないことによる RouteNotFoundException を防止
+        $middleware->redirectGuestsTo(fn () => null);
         $middleware->alias([
             'trip.member' => \App\Http\Middleware\EnsureTripMember::class,
             'trip.owner' => \App\Http\Middleware\EnsureTripOwner::class,
