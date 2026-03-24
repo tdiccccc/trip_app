@@ -38,11 +38,15 @@ jobs:
 
       - name: Scale down backend service
         run: |
-          echo "Scaling down trip-app-backend to 0 instances to prevent concurrent writes..."
+          echo "Scaling down trip-app-backend to prevent concurrent writes..."
           gcloud run services update trip-app-backend \
             --region=asia-northeast1 \
-            --max-instances=0 \
+            --min-instances=0 \
+            --update-env-vars=APP_MAINTENANCE=true \
             --quiet
+          # 既存インスタンスが終了するのを待つ
+          echo "Waiting for existing instances to drain..."
+          sleep 30
 
       - name: Create or update Cloud Run Job
         run: |
@@ -104,13 +108,13 @@ jobs:
             --limit=100 \
             --format="table(timestamp, textPayload)" \
             --freshness=10m \
-            --order=asc
+            --order=asc || true
 
       - name: Restore backend service
         if: always()
         run: |
-          echo "Restoring trip-app-backend to max-instances=1..."
+          echo "Restoring trip-app-backend..."
           gcloud run services update trip-app-backend \
             --region=asia-northeast1 \
-            --max-instances=1 \
+            --remove-env-vars=APP_MAINTENANCE \
             --quiet
