@@ -7,6 +7,8 @@ DB_PATH=/app/database/database.sqlite
 # Litestream restore (if replica exists)
 # ============================================================
 if [ -n "$LITESTREAM_REPLICA_BUCKET" ]; then
+    echo "[entrypoint] Removing existing database before restore..."
+    rm -f "$DB_PATH"
     echo "[entrypoint] Restoring database from GCS (if replica exists)..."
     litestream restore -if-replica-exists -o "$DB_PATH" -config /app/litestream.yml "$DB_PATH"
     echo "[entrypoint] Restore complete."
