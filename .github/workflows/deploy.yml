@@ -57,7 +57,7 @@ jobs:
             --memory=512Mi
             --cpu=1
             --allow-unauthenticated
-            --set-env-vars=APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,LITESTREAM_REPLICA_BUCKET=${{ secrets.LITESTREAM_REPLICA_BUCKET }},FRONTEND_URL=${{ secrets.FRONTEND_URL }},SANCTUM_STATEFUL_DOMAINS=${{ secrets.SANCTUM_STATEFUL_DOMAINS }},SESSION_SECURE_COOKIE=true
+            --set-env-vars=APP_ENV=production,APP_KEY=${{ secrets.APP_KEY }},APP_DEBUG=false,APP_URL=${{ secrets.FRONTEND_URL }},LOG_CHANNEL=stderr,DB_CONNECTION=sqlite,SESSION_DRIVER=database,LITESTREAM_REPLICA_BUCKET=${{ secrets.LITESTREAM_REPLICA_BUCKET }},FRONTEND_URL=${{ secrets.FRONTEND_URL }},SANCTUM_STATEFUL_DOMAINS=${{ secrets.SANCTUM_STATEFUL_DOMAINS }},SESSION_SECURE_COOKIE=true
 
       # バックエンドのURLを取得（フロントエンドのプロキシ先として使用）
       - name: Get backend URL
