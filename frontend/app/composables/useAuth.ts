@@ -6,12 +6,8 @@ export const useAuth = () => {
   const { apiFetch } = useApiClient()
 
   const login = async (email: string, password: string) => {
-    const config = useRuntimeConfig()
-    const baseURL = config.public.apiBase as string
-
-    // 1. CSRF Cookie 取得
+    // 1. CSRF Cookie 取得（同一オリジンのNitro proxyを経由）
     await $fetch('/sanctum/csrf-cookie', {
-      baseURL,
       credentials: 'include',
     })
 
@@ -39,14 +35,10 @@ export const useAuth = () => {
 
   const fetchUser = async () => {
     try {
-      const config = useRuntimeConfig()
-      const baseURL = config.public.apiBase as string
-
       // CSR時: リロード時にXSRF-TOKENが失われるため、再取得する
       // SSR時: ブラウザのCookieをそのまま転送するため不要
       if (import.meta.client) {
         await $fetch('/sanctum/csrf-cookie', {
-          baseURL,
           credentials: 'include',
         })
       }

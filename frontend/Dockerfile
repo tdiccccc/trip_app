@@ -13,6 +13,11 @@ RUN npm ci
 
 # Copy source and build
 COPY . .
+
+# ビルド時にNitro routeRulesのプロキシ先URLを設定
+# process.env.NUXT_API_BASE_URL が nuxt.config.ts の routeRules で参照される
+ARG NUXT_API_BASE_URL=http://localhost:8900
+ENV NUXT_API_BASE_URL=${NUXT_API_BASE_URL}
 RUN npm run build
 
 # ============================================================

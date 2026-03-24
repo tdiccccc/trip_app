@@ -23,8 +23,18 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    public: {
-      apiBase: 'http://localhost:8900',
+    // サーバーサイドのみ: Nitro proxy がバックエンドへ転送する際のURL
+    // 環境変数 NUXT_API_BASE_URL で上書き可能
+    apiBaseUrl: 'http://localhost:8900',
+  },
+
+  // Nitro でバックエンドへのリバースプロキシを設定
+  // クライアントからのリクエストは同一オリジン(フロントエンド)経由で送られるため
+  // CORS問題が発生しない。CookieもSame-Originで動作する。
+  nitro: {
+    routeRules: {
+      '/api/**': { proxy: `${process.env.NUXT_API_BASE_URL || 'http://localhost:8900'}/api/**` },
+      '/sanctum/**': { proxy: `${process.env.NUXT_API_BASE_URL || 'http://localhost:8900'}/sanctum/**` },
     },
   },
 

@@ -1,9 +1,6 @@
-import type { FetchOptions } from 'ofetch'
+import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
 
 export const useApiClient = () => {
-  const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase as string
-
   // SSR時のクッキーヘッダーをトップレベルで取得（Nuxtコンテキスト内で呼ぶ）
   const requestHeaders = import.meta.server ? useRequestHeaders(['cookie']) : {}
   const xsrfToken = useCookie('XSRF-TOKEN')
@@ -15,10 +12,10 @@ export const useApiClient = () => {
       return xsrfToken.value ?? null
     }
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/)
-    return match ? decodeURIComponent(match[1]) : null
+    return match?.[1] ? decodeURIComponent(match[1]) : null
   }
 
-  const apiFetch = <T>(path: string, options: FetchOptions = {}) => {
+  const apiFetch = <T>(path: string, options: NitroFetchOptions<NitroFetchRequest> = {}) => {
     const headers: Record<string, string> = {}
 
     const token = getXsrfToken()
@@ -32,7 +29,7 @@ export const useApiClient = () => {
     }
 
     return $fetch<T>(path, {
-      baseURL,
+      // baseURL不要: 同一オリジンのNitro proxyを経由してバックエンドへ転送
       credentials: 'include',
       headers,
       ...options,

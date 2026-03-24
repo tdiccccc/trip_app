@@ -45,6 +45,7 @@ jobs:
           docker push asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip/backend:latest
 
       - name: Deploy backend to Cloud Run
+        id: deploy-backend
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: trip-app-backend
@@ -56,12 +57,18 @@ jobs:
             --memory=512Mi
             --cpu=1
             --allow-unauthenticated
-            --set-env-vars=APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,LITESTREAM_REPLICA_BUCKET=${{ secrets.LITESTREAM_REPLICA_BUCKET }}
+            --set-env-vars=APP_ENV=production,APP_DEBUG=false,LOG_CHANNEL=stderr,LITESTREAM_REPLICA_BUCKET=${{ secrets.LITESTREAM_REPLICA_BUCKET }},FRONTEND_URL=${{ secrets.FRONTEND_URL }},SANCTUM_STATEFUL_DOMAINS=${{ secrets.SANCTUM_STATEFUL_DOMAINS }},SESSION_SECURE_COOKIE=true
+
+      # バックエンドのURLを取得（フロントエンドのプロキシ先として使用）
+      - name: Get backend URL
+        id: backend-url
+        run: echo "url=${{ steps.deploy-backend.outputs.url }}" >> "$GITHUB_OUTPUT"
 
       # ---------- Frontend ----------
       - name: Build frontend image
         run: |
           docker build \
+            --build-arg NUXT_API_BASE_URL=${{ steps.backend-url.outputs.url }} \
             -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip/frontend:${{ github.sha }} \
             -t asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/trip/frontend:latest \
             -f frontend/Dockerfile \
@@ -84,4 +91,4 @@ jobs:
             --memory=256Mi
             --cpu=1
             --allow-unauthenticated
-            --set-env-vars=NODE_ENV=production
+            --set-env-vars=NODE_ENV=production,NUXT_API_BASE_URL=${{ steps.backend-url.outputs.url }}
