@@ -22,8 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $e, Request $request) {
-            if ($request->is('api/*') || $request->expectsJson()) {
-                return response()->json(['message' => 'Unauthenticated.'], 401);
-            }
+            // API専用バックエンドのため、常にJSON 401を返す
+            return response()->json(['message' => 'Unauthenticated.'], 401);
         });
     })->create();
