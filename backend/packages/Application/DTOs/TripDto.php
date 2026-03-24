@@ -9,7 +9,7 @@ use Packages\Domain\Entities\Trip;
 final readonly class TripDto
 {
     /**
-     * @param TripMemberDto[] $members
+     * @param  TripMemberDto[]  $members
      */
     public function __construct(
         public int $id,
@@ -24,11 +24,10 @@ final readonly class TripDto
         public ?string $currentUserRole,
         public ?string $createdAt,
         public ?string $updatedAt,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param TripMemberDto[] $members
+     * @param  TripMemberDto[]  $members
      */
     public static function fromEntity(
         Trip $trip,

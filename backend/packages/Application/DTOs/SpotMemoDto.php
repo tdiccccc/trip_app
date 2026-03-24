@@ -13,8 +13,7 @@ final readonly class SpotMemoDto
         public int $spotId,
         public int $userId,
         public string $body,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(SpotMemo $memo): self
     {

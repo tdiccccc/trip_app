@@ -15,11 +15,10 @@ final class UpdateTripUseCase
     public function __construct(
         private readonly TripRepositoryInterface $tripRepository,
         private readonly TripMemberRepositoryInterface $tripMemberRepository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function execute(int $tripId, array $data): ?TripDto
     {

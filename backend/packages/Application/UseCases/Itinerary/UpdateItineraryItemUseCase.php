@@ -13,11 +13,10 @@ final class UpdateItineraryItemUseCase
 {
     public function __construct(
         private readonly ItineraryRepositoryInterface $itineraryRepository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function execute(int $tripId, int $id, array $data): ?ItineraryItemDto
     {

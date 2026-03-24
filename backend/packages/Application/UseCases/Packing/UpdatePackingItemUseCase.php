@@ -13,11 +13,10 @@ final class UpdatePackingItemUseCase
 {
     public function __construct(
         private readonly PackingItemRepositoryInterface $packingItemRepository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function execute(int $tripId, int $id, array $data): ?PackingItemDto
     {

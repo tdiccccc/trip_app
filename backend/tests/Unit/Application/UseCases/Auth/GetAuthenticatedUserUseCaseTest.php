@@ -11,7 +11,7 @@ final class GetAuthenticatedUserUseCaseTest extends TestCase
 {
     public function test_execute_returns_user_dto(): void
     {
-        $useCase = new GetAuthenticatedUserUseCase();
+        $useCase = new GetAuthenticatedUserUseCase;
 
         $dto = $useCase->execute(id: 5, name: '花子', email: 'hanako@example.com');
 

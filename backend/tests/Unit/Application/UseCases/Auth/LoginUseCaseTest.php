@@ -11,7 +11,7 @@ final class LoginUseCaseTest extends TestCase
 {
     public function test_execute_returns_user_dto(): void
     {
-        $useCase = new LoginUseCase();
+        $useCase = new LoginUseCase;
 
         $dto = $useCase->execute(id: 1, name: 'テスト太郎', email: 'taro@example.com');
 

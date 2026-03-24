@@ -12,8 +12,7 @@ final class GetSpotListUseCase
 {
     public function __construct(
         private readonly SpotRepositoryInterface $spotRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return SpotDto[]

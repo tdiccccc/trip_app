@@ -167,13 +167,13 @@ final class SessionPersistenceTest extends TestCase
     // 未認証リクエスト
     // ========================================
 
-    public function test_一度もログインしていない状態でGET_api_userが401を返す(): void
+    public function test_一度もログインしていない状態で_ge_t_api_userが401を返す(): void
     {
         $this->statefulGetJson('/api/user')
             ->assertUnauthorized();
     }
 
-    public function test_未認証でPOST_api_logoutが401を返す(): void
+    public function test_未認証で_pos_t_api_logoutが401を返す(): void
     {
         $this->statefulPostJson('/api/logout')
             ->assertUnauthorized();

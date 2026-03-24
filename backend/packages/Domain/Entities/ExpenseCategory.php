@@ -13,6 +13,5 @@ final class ExpenseCategory
         public readonly string $key,
         public readonly ?string $color,
         public readonly int $sortOrder,
-    ) {
-    }
+    ) {}
 }

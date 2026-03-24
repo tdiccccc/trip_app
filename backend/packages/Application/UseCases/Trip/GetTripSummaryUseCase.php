@@ -13,8 +13,7 @@ final class GetTripSummaryUseCase
     public function __construct(
         private readonly TripRepositoryInterface $tripRepository,
         private readonly TripSummaryRepositoryInterface $tripSummaryRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId): ?TripSummaryDto
     {

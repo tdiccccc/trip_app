@@ -22,8 +22,7 @@ final readonly class SpotDto
         public ?string $imageUrl,
         public string $category,
         public int $sortOrder,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(Spot $spot): self
     {

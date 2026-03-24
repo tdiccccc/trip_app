@@ -26,7 +26,7 @@ class EloquentSpotMemoRepository implements SpotMemoRepositoryInterface
     public function save(SpotMemo $memo): SpotMemo
     {
         $model = $memo->id === 0
-            ? new SpotMemoModel()
+            ? new SpotMemoModel
             : SpotMemoModel::findOrFail($memo->id);
 
         $model->fill([

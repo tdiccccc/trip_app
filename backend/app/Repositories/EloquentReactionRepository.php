@@ -25,7 +25,7 @@ class EloquentReactionRepository implements ReactionRepositoryInterface
     public function save(Reaction $reaction): Reaction
     {
         $model = $reaction->id === 0
-            ? new ReactionModel()
+            ? new ReactionModel
             : ReactionModel::findOrFail($reaction->id);
 
         $model->fill([

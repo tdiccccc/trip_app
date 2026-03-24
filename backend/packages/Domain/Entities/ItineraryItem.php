@@ -20,6 +20,5 @@ final class ItineraryItem
         public readonly ?string $endTime,
         public readonly ?Transport $transport,
         public readonly int $sortOrder,
-    ) {
-    }
+    ) {}
 }

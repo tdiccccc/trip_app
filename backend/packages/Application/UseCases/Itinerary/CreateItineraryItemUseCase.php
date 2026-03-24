@@ -13,8 +13,7 @@ final class CreateItineraryItemUseCase
 {
     public function __construct(
         private readonly ItineraryRepositoryInterface $itineraryRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(
         int $tripId,

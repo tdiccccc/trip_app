@@ -10,11 +10,10 @@ final class ReorderItineraryUseCase
 {
     public function __construct(
         private readonly ItineraryRepositoryInterface $itineraryRepository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<array{id: int, sort_order: int}> $items
+     * @param  array<array{id: int, sort_order: int}>  $items
      */
     public function execute(int $tripId, array $items): void
     {

@@ -13,8 +13,7 @@ final class AddReactionUseCase
 {
     public function __construct(
         private readonly ReactionRepositoryInterface $reactionRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId, int $boardPostId, int $userId, string $emoji): ReactionDto
     {

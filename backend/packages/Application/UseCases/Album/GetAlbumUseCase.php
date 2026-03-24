@@ -11,8 +11,7 @@ final class GetAlbumUseCase
 {
     public function __construct(
         private readonly PhotoRepositoryInterface $photoRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return PhotoDto[]

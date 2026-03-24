@@ -10,8 +10,7 @@ final class DeleteItineraryItemUseCase
 {
     public function __construct(
         private readonly ItineraryRepositoryInterface $itineraryRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId, int $id): void
     {

@@ -20,8 +20,7 @@ final readonly class ExpenseDto
         public string $categoryKey,
         public string $paidAt,
         public bool $isShared,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(Expense $expense, ?ExpenseCategory $category = null): self
     {

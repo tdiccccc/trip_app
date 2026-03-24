@@ -17,8 +17,7 @@ final readonly class BoardPostDto
         public bool $isBestShot,
         public ?string $createdAt = null,
         public ?string $userName = null,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(BoardPost $post, ?string $userName = null): self
     {

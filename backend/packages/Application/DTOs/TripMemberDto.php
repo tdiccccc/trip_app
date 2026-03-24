@@ -15,8 +15,7 @@ final readonly class TripMemberDto
         public ?string $userName,
         public string $role,
         public ?string $joinedAt,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(TripMember $member, ?string $userName = null): self
     {

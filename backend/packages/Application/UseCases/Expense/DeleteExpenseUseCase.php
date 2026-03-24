@@ -10,8 +10,7 @@ final class DeleteExpenseUseCase
 {
     public function __construct(
         private readonly ExpenseRepositoryInterface $expenseRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId, int $id): void
     {

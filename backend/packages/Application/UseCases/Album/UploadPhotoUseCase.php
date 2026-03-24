@@ -13,8 +13,7 @@ final class UploadPhotoUseCase
 {
     public function __construct(
         private readonly PhotoRepositoryInterface $photoRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(
         int $tripId,

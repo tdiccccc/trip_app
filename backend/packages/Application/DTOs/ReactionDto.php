@@ -13,8 +13,7 @@ final readonly class ReactionDto
         public int $boardPostId,
         public int $userId,
         public string $emoji,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(Reaction $reaction): self
     {

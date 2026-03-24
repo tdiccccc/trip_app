@@ -16,6 +16,5 @@ final class TripMember
         public readonly ?string $joinedAt,
         public readonly ?string $createdAt,
         public readonly ?string $updatedAt,
-    ) {
-    }
+    ) {}
 }

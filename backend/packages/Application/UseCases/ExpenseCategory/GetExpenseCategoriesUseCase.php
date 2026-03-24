@@ -11,8 +11,7 @@ final class GetExpenseCategoriesUseCase
 {
     public function __construct(
         private readonly ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return ExpenseCategoryDto[]

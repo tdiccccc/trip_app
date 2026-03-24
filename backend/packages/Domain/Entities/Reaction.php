@@ -11,6 +11,5 @@ final class Reaction
         public readonly int $boardPostId,
         public readonly int $userId,
         public readonly string $emoji,
-    ) {
-    }
+    ) {}
 }

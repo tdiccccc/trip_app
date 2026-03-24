@@ -91,6 +91,6 @@ final class ExpenseCategoryController extends Controller
         $key = (string) preg_replace('/[^a-z0-9]+/', '-', $key);
         $key = trim($key, '-');
 
-        return $key !== '' ? $key : 'custom-' . time();
+        return $key !== '' ? $key : 'custom-'.time();
     }
 }

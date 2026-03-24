@@ -17,6 +17,5 @@ final class Expense
         public readonly int $categoryId,
         public readonly string $paidAt,
         public readonly bool $isShared,
-    ) {
-    }
+    ) {}
 }

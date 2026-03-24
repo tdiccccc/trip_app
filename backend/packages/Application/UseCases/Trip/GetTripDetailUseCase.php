@@ -14,8 +14,7 @@ final class GetTripDetailUseCase
     public function __construct(
         private readonly TripRepositoryInterface $tripRepository,
         private readonly TripMemberRepositoryInterface $tripMemberRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId, int $userId): ?TripDto
     {

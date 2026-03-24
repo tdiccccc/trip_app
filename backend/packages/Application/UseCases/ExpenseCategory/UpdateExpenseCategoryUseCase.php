@@ -13,11 +13,10 @@ final class UpdateExpenseCategoryUseCase
 {
     public function __construct(
         private readonly ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function execute(int $id, array $data): ExpenseCategoryDto
     {

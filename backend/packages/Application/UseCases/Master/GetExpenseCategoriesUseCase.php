@@ -15,8 +15,7 @@ final class GetExpenseCategoriesUseCase
 {
     public function __construct(
         private readonly ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int, array<string, mixed>>

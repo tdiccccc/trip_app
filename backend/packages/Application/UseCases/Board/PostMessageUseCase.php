@@ -12,8 +12,7 @@ final class PostMessageUseCase
 {
     public function __construct(
         private readonly BoardPostRepositoryInterface $boardPostRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId, int $userId, string $body, ?int $photoId, bool $isBestShot): BoardPostDto
     {

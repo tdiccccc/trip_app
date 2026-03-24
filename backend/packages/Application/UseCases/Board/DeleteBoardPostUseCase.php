@@ -11,8 +11,7 @@ final class DeleteBoardPostUseCase
 {
     public function __construct(
         private readonly BoardPostRepositoryInterface $boardPostRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws UnauthorizedOperationException

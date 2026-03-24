@@ -12,8 +12,7 @@ final class CreateSpotMemoUseCase
 {
     public function __construct(
         private readonly SpotMemoRepositoryInterface $spotMemoRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId, int $spotId, int $userId, string $body): SpotMemoDto
     {

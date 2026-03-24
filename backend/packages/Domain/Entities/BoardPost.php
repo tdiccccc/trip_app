@@ -14,6 +14,5 @@ final class BoardPost
         public readonly ?int $photoId,
         public readonly bool $isBestShot,
         public readonly ?string $createdAt = null,
-    ) {
-    }
+    ) {}
 }

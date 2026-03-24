@@ -17,8 +17,7 @@ final class GetSpotDetailUseCase
         private readonly SpotRepositoryInterface $spotRepository,
         private readonly SpotMemoRepositoryInterface $spotMemoRepository,
         private readonly PhotoRepositoryInterface $photoRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{spot: SpotDto, memos: SpotMemoDto[], photos: PhotoDto[]}|null

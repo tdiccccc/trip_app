@@ -19,11 +19,10 @@ final class CreateTripUseCase
         private readonly TripRepositoryInterface $tripRepository,
         private readonly TripMemberRepositoryInterface $tripMemberRepository,
         private readonly InitializeDefaultCategoriesUseCase $initializeDefaultCategoriesUseCase,
-    ) {
-    }
+    ) {}
 
     /**
-     * @param int[] $memberIds
+     * @param  int[]  $memberIds
      */
     public function execute(
         int $userId,

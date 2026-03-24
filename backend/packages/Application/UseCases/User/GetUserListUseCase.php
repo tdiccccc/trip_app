@@ -11,8 +11,7 @@ final class GetUserListUseCase
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return UserDto[]

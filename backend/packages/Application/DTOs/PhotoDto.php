@@ -20,8 +20,7 @@ final readonly class PhotoDto
         public int $fileSize,
         public ?string $caption,
         public ?string $takenAt,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(Photo $photo): self
     {

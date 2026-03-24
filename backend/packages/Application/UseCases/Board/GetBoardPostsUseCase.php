@@ -16,8 +16,7 @@ final class GetBoardPostsUseCase
         private readonly BoardPostRepositoryInterface $boardPostRepository,
         private readonly ReactionRepositoryInterface $reactionRepository,
         private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int, array{post: BoardPostDto, reactions: ReactionDto[]}>

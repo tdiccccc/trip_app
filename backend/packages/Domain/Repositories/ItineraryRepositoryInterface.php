@@ -20,7 +20,7 @@ interface ItineraryRepositoryInterface
     public function delete(int $id): void;
 
     /**
-     * @param array<array{id: int, sort_order: int}> $items
+     * @param  array<array{id: int, sort_order: int}>  $items
      */
     public function updateSortOrders(array $items): void;
 }

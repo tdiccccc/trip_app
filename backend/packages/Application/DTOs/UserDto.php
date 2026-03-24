@@ -12,8 +12,7 @@ final readonly class UserDto
         public int $id,
         public string $name,
         public string $email,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(User $user): self
     {

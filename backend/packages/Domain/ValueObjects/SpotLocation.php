@@ -9,6 +9,7 @@ use Packages\Domain\Exceptions\DomainException;
 final class SpotLocation
 {
     public readonly float $latitude;
+
     public readonly float $longitude;
 
     public function __construct(float $latitude, float $longitude)

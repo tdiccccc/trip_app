@@ -4,6 +4,4 @@ declare(strict_types=1);
 
 namespace Packages\Domain\Exceptions;
 
-class DomainException extends \RuntimeException
-{
-}
+class DomainException extends \RuntimeException {}

@@ -11,6 +11,5 @@ final class SpotMemo
         public readonly int $spotId,
         public readonly int $userId,
         public readonly string $body,
-    ) {
-    }
+    ) {}
 }

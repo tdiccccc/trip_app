@@ -11,8 +11,7 @@ final class GetItineraryUseCase
 {
     public function __construct(
         private readonly ItineraryRepositoryInterface $itineraryRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return ItineraryItemDto[]

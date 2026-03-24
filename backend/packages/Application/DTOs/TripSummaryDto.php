@@ -7,7 +7,7 @@ namespace Packages\Application\DTOs;
 final readonly class TripSummaryDto
 {
     /**
-     * @param array<string, int> $expenseByCategory
+     * @param  array<string, int>  $expenseByCategory
      */
     public function __construct(
         public int $photoCount,
@@ -23,8 +23,7 @@ final readonly class TripSummaryDto
         public ?string $firstPhotoAt,
         public ?string $lastPhotoAt,
         public int $tripDays,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>

@@ -10,8 +10,7 @@ final class DeleteTripUseCase
 {
     public function __construct(
         private readonly TripRepositoryInterface $tripRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId): void
     {

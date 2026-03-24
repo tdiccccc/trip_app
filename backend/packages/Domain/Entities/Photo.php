@@ -20,6 +20,5 @@ final class Photo
         public readonly int $fileSize,
         public readonly ?string $caption,
         public readonly ?string $takenAt,
-    ) {
-    }
+    ) {}
 }

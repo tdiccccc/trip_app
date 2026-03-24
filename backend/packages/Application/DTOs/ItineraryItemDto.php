@@ -20,8 +20,7 @@ final readonly class ItineraryItemDto
         public ?string $endTime,
         public ?string $transport,
         public int $sortOrder,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(ItineraryItem $item): self
     {

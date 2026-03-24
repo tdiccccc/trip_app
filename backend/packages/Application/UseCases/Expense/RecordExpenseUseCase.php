@@ -15,8 +15,7 @@ final class RecordExpenseUseCase
     public function __construct(
         private readonly ExpenseRepositoryInterface $expenseRepository,
         private readonly ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(
         int $tripId,

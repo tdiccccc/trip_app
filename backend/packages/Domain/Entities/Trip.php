@@ -17,6 +17,5 @@ final class Trip
         public readonly int $createdBy,
         public readonly ?string $createdAt,
         public readonly ?string $updatedAt,
-    ) {
-    }
+    ) {}
 }

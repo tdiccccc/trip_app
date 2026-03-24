@@ -6,7 +6,6 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 final class AuthControllerTest extends TestCase
@@ -33,8 +32,8 @@ final class AuthControllerTest extends TestCase
     public function test_login_with_valid_credentials_returns_user_data(): void
     {
         $response = $this->withHeaders([
-                'Origin' => 'http://localhost',
-            ])
+            'Origin' => 'http://localhost',
+        ])
             ->postJson('/api/login', [
                 'email' => 'test@example.com',
                 'password' => 'password123',

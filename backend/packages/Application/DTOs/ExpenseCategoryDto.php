@@ -15,8 +15,7 @@ final readonly class ExpenseCategoryDto
         public string $key,
         public ?string $color,
         public int $sortOrder,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(ExpenseCategory $category): self
     {

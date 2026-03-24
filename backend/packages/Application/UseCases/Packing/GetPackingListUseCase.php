@@ -11,8 +11,7 @@ final class GetPackingListUseCase
 {
     public function __construct(
         private readonly PackingItemRepositoryInterface $packingItemRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return PackingItemDto[]

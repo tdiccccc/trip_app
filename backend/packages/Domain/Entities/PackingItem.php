@@ -17,6 +17,5 @@ final class PackingItem
         public readonly Assignee $assignee,
         public readonly ?string $category,
         public readonly int $sortOrder,
-    ) {
-    }
+    ) {}
 }

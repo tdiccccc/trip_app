@@ -14,8 +14,7 @@ final class GetTripListUseCase
     public function __construct(
         private readonly TripRepositoryInterface $tripRepository,
         private readonly TripMemberRepositoryInterface $tripMemberRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @return TripDto[]

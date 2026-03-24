@@ -113,12 +113,12 @@ return new class extends Migration
         });
 
         // expense_category_id を category 文字列に変換してデータ移行
-        DB::statement("
+        DB::statement('
             INSERT INTO expenses_old (id, trip_id, user_id, description, amount, category, paid_at, is_shared, created_at, updated_at)
             SELECT e.id, e.trip_id, e.user_id, e.description, e.amount, ec.key, e.paid_at, e.is_shared, e.created_at, e.updated_at
             FROM expenses e
             INNER JOIN expense_categories ec ON e.expense_category_id = ec.id
-        ");
+        ');
 
         Schema::drop('expenses');
         Schema::rename('expenses_old', 'expenses');

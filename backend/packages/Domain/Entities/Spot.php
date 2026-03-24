@@ -22,6 +22,5 @@ final class Spot
         public readonly ?string $imageUrl,
         public readonly SpotCategory $category,
         public readonly int $sortOrder,
-    ) {
-    }
+    ) {}
 }

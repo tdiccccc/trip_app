@@ -262,7 +262,7 @@ final class ExpenseCategoryControllerTest extends TestCase
             ]);
     }
 
-    public function test_update_存在しないIDで404を返す(): void
+    public function test_update_存在しない_i_dで404を返す(): void
     {
         $response = $this->actingAs($this->user)
             ->putJson("/api/trips/{$this->trip->id}/expense-categories/99999", [
@@ -330,7 +330,7 @@ final class ExpenseCategoryControllerTest extends TestCase
         $this->assertDatabaseHas('expense_categories', ['id' => $category->id]);
     }
 
-    public function test_destroy_存在しないIDで404を返す(): void
+    public function test_destroy_存在しない_i_dで404を返す(): void
     {
         $response = $this->actingAs($this->user)
             ->deleteJson("/api/trips/{$this->trip->id}/expense-categories/99999");

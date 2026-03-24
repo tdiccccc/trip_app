@@ -10,8 +10,7 @@ final class DeletePackingItemUseCase
 {
     public function __construct(
         private readonly PackingItemRepositoryInterface $packingItemRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId, int $id): void
     {

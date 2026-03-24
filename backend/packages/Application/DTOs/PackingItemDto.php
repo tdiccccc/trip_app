@@ -17,8 +17,7 @@ final readonly class PackingItemDto
         public string $assignee,
         public ?string $category,
         public int $sortOrder,
-    ) {
-    }
+    ) {}
 
     public static function fromEntity(PackingItem $item): self
     {

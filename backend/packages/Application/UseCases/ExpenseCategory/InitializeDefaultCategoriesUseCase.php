@@ -20,8 +20,7 @@ final class InitializeDefaultCategoriesUseCase
 
     public function __construct(
         private readonly ExpenseCategoryRepositoryInterface $expenseCategoryRepository,
-    ) {
-    }
+    ) {}
 
     public function execute(int $tripId): void
     {
